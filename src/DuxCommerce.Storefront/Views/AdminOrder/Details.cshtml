@@ -1,0 +1,34 @@
+@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.AdminOrder.ViewModels.OrderDetailsVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+@{ var payment = Model.OrderModel.Order.Payments.FirstOrDefault(); }
+
+<h1>@T["View Order"] - @Model.OrderModel.Order.OrderNumber</h1>
+@await Html.PartialAsync("_OrderLinks", Model.Links)
+<div class="row order-details">
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>@T["Billing Address"]</h2>
+                <partial name="_DisplayAddress" for="OrderModel.Order.BillingAddress"/>
+                <h2>@T["Payment Method"]</h2>
+                <p>@payment?.PaymentMethodName</p>
+            </div>
+            <div class="col-md-6">
+                <h2>@T["Shipping Address"]</h2>
+                <partial name="_DisplayAddress" for="OrderModel.Order.ShippingAddress"/>
+                <h2>@T["Shipping Method"]</h2>
+                <p>@Model.OrderModel.Order.ShippingMethodName</p>
+            </div>
+        </div>
+        @await DisplayAsync(Model.OrderModel)
+    </div>
+    <div class="col-md-3">
+        <h2>@T["Customer"]</h2>
+        <a asp-controller="AdminCustomer" asp-action="Edit" asp-route-customerId="@Model.Customer.Id">
+            @Model.OrderModel.Order.ShopperEmail
+        </a>
+    </div>
+</div>

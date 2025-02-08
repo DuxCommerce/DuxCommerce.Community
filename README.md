@@ -1,3 +1,3 @@
-# DuxCommerce: a free eCommerce software solution for Orchard Core
+# DuxCommerce: a free eCommerce solution for Orchard Core
 
-The purpose of this repository is to act as a community center for DuxCommerce.
+DuxCommerce is a free eCommerce solution built on Orchard Core framework, with the goal of becoming one of the best eCommerce platforms on Microsoft .NET.

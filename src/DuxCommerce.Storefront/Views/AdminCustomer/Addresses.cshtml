@@ -1,0 +1,13 @@
+@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.AdminCustomer.ViewModels.AdminCustomerVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<h1>@T["Edit Customer"]</h1>
+
+@await Html.PartialAsync("_CustomerLinks", Model.Links)
+@await Html.PartialAsync("_CustomerAddresses", Model.Customer, new ViewDataDictionary(ViewData) { { "Controller", "AdminCustomer" } })
+
+<partial name="_Popup"/>
+
+<script asp-name="@ResourceNames.Popup" at="Foot" depends-on="jQuery"></script>

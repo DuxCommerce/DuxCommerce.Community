@@ -1,0 +1,29 @@
+@model DuxCommerce.Storefront.Views.Shared.ViewModels.ProductSearchVm
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="form-label float-end" asp-for="ProductName">@T["Name"]</label>
+            </div>
+            <div class="col-md-9">
+                <input id="productName" asp-for="ProductName" class="form-control" type="text">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="form-label float-end" asp-for="SelectedCategoryId">@T["Category"]</label>
+            </div>
+            <div class="col-md-9">
+                <select asp-for="SelectedCategoryId" asp-items="Model.Categories" class="form-control"></select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary search">@T["Search"]</button>
+    </div>
+</div>

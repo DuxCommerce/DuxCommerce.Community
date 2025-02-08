@@ -1,0 +1,48 @@
+﻿@using DuxCommerce.OrchardCore
+@using DuxCommerce.OrchardCore.Customers
+@using DuxCommerce.Storefront
+@using DuxCommerce.Storefront.Views.Product.ViewModels
+@using DuxCommerce.Storefront.Views.Product.VmBuilders
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using OrchardCore.DisplayManagement
+@using OrchardCore.DisplayManagement.ModelBinding
+@using OrchardCore.ResourceManagement.TagHelpers
+@using ScriptTagHelper = OrchardCore.ResourceManagement.TagHelpers.ScriptTagHelper
+@inject IShopperInfoProvider ShopperInfoProvider
+@inject ProductHomeBuilder ProductHomeBuilder
+@inject IDisplayManager<ProductHome> ProductHomeDisplayManager
+@inject IUpdateModelAccessor UpdateModelAccessor
+
+@{
+    var productId = Model.ContentItem.ContentItemId;
+    var userId = ShopperInfoProvider.GetUserId();
+    var productHome = await ProductHomeBuilder.BuildModel(userId, Model.ContentItem);
+    var model = await ProductHomeDisplayManager.BuildDisplayAsync(productHome, UpdateModelAccessor.ModelUpdater);
+}
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+<script asp-name="@ResourceNames.JQuery" at="Foot"></script>
+
+@if (model.Nav != null)
+{
+    <nav>@await DisplayAsync(model.Nav)</nav>
+}
+
+<form asp-controller="ShoppingCart" asp-action="AddItem" method="post" name="product" asp-area="@Constants.AreaName">
+    <input type="hidden" name="prototypeId" value="@productId"/>
+    <input type="hidden" id="productId" name="productId" value="@productId"/>
+
+    <div class="product row">
+        <div class="product-images col-md-6">
+            @await DisplayAsync(model.Aside)
+        </div>
+
+        <div class="product-details col-md-6">
+            @await DisplayAsync(model.Content)
+        </div>
+
+        <div class="product-description col-md-12">
+            @await DisplayAsync(model.Footer)
+        </div>
+    </div>
+</form>

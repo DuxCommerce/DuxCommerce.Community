@@ -1,0 +1,58 @@
+@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.ShippingProfile.ViewModels.ShippingMethodsVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<h1>@T["Shipping Methods"]</h1>
+
+@await Html.PartialAsync("_ZoneLinks", Model.Links)
+
+<div class="row">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th class="col-md-2">@T["Name"]</th>
+            <th class="col-md-2">@T["Type"]</th>
+            <th class="col-md">@T["Rates"]</th>
+            <th class="col-md-4">
+                <a class="btn btn-primary float-end" asp-route-groupId="@Model.GroupId" asp-route-zoneId="@Model.ZoneId" asp-action="AddMethod">@T["Add"]</a>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var method in Model.Methods)
+        {
+            <tr>
+                <td>@method.Name</td>
+                <td>@method.MethodType</td>
+                <td>
+                    <div class="grid-3-columns">
+                        <span>@T["Min"]</span>
+                        <span>@T["Max"]</span>
+                        <span>@T["Fee"]</span>
+                        @foreach (var rate in method.Rates)
+                        {
+                            <span>@rate.Min.ToString("0.00")</span>
+                            <span>@rate.Max.ToString("0.00")</span>
+                            <span>@rate.Fee.ToString("0.00")</span>
+                        }
+                    </div>
+                </td>
+                <td class="text-end">
+                    <a asp-action="EditMethod" asp-route-groupId="@Model.GroupId" asp-route-zoneId="@Model.ZoneId" asp-route-MethodId="@method.Id" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                        <i class="fas fa-pen-to-square small"></i>
+                    </a>
+                    <a class="btn btn-primary btn-sm btn-danger" asp-action="DeleteMethod" asp-route-groupId="@Model.GroupId" asp-route-zoneId="@Model.ZoneId" asp-route-MethodId="@method.Id" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Delete"]" itemprop="RemoveUrl UnsafeUrl">
+                        <i class="fas fa-trash-alt small"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<div class="d-flex justify-content-start">
+    <div>
+        <a asp-action="Index" class="btn btn-secondary">@T["Back"]</a>
+    </div>
+</div>

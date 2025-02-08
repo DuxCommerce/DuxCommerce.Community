@@ -1,0 +1,113 @@
+@using DuxCommerce.OrchardCore
+@using OrchardCore.Mvc.Core.Utilities
+@model DuxCommerce.Payments.PayPal.Views.Settings.ViewModels.PayPalSettingsVm
+
+<style asp-name="@ResourceNames.MultiSelect"></style>
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<div class="container">
+    <h1>@Model.SettingsModel.DisplayName</h1>
+    <form asp-controller="Settings" asp-action="Setup" method="post">
+        <input type="hidden" asp-for="SettingsModel.MethodType"/>
+        <div class="row mb-3 form-group">
+            <div class="col-md-3">
+                <label class="form-label float-end" asp-for="SettingsModel.DisplayName">@T["Display Name"]</label>
+            </div>
+            <div class="col-md-9">
+                <div class="input-group">
+                    <input type="text" asp-for="SettingsModel.DisplayName" class="form-control" required/>
+                    <span asp-validation-for="SettingsModel.DisplayName"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3 form-group">
+            <div class="col-md-3">
+                <label class="form-label float-end" asp-for="SettingsModel.IsTestMode">@T["Is Test Mode?"]</label>
+            </div>
+            <div class="col-md-9">
+                <div class="input-group">
+                    <input type="checkbox" asp-for="SettingsModel.IsTestMode" class="check-box"/>
+                    <span asp-validation-for="SettingsModel.IsTestMode"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3 form-group">
+            <div class="col-md-3">
+                <label class="form-label float-end" asp-for="SettingsModel.ClientId">@T["Client ID"]</label>
+            </div>
+            <div class="col-md-9">
+                <div class="input-group">
+                    <input type="text" asp-for="SettingsModel.ClientId" class="form-control" required/>
+                    <span asp-validation-for="SettingsModel.ClientId"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3 form-group">
+            <div class="col-md-3">
+                <label class="form-label float-end" asp-for="SettingsModel.Secret">@T["Secret"]</label>
+            </div>
+            <div class="col-md-9">
+                <div class="input-group">
+                    <input type="text" asp-for="SettingsModel.Secret" class="form-control" required/>
+                    <span asp-validation-for="SettingsModel.Secret"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3 form-group">
+            <div class="col-md-3">
+                <label class="form-label float-end" asp-for="SettingsModel.DisplayOrder">@T["Display Order"]</label>
+            </div>
+            <div class="col-md-9">
+                <div class="input-group">
+                    <input type="number" asp-for="SettingsModel.DisplayOrder" class="form-control" min="0" required/>
+                    <span asp-validation-for="SettingsModel.DisplayOrder"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3 form-group">
+            <div class="col-md-3">
+                <label class="form-label float-end" asp-for="SettingsModel.AvailableCountries">@T["Available Countries"]</label>
+            </div>
+            <div class="col-md-9">
+                <div class="multi-select-wrapper">
+                    <select asp-for="SettingsModel.AvailableCountries" multiple id="countryList">
+                        @{
+                            var countryCodes = Model.SettingsModel.AvailableCountries?.ToList();
+
+                            foreach (var country in Model.Countries)
+                            {
+                                if (countryCodes != null && countryCodes.Contains(country.TwoLetterCode))
+                                {
+                                    <option value="@country.TwoLetterCode" selected>@country.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@country.TwoLetterCode">@country.Name</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                <span asp-validation-for="SettingsModel.AvailableCountries"></span>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <div>
+                <a href="@Url.GetBaseUrl()/Admin/PaymentMethod/Index" class="btn btn-secondary">@T["Cancel"]</a>
+            </div>
+            <div>
+                <button class="btn btn-primary" type="submit">@T["Save"]</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script asp-name="@ResourceNames.MultiSelect"></script>
+
+<script type="text/javascript">
+    $('#countryList').multiselect({
+        columns: 1,
+        search: true,
+        selectAll: true
+    });
+</script>

@@ -1,0 +1,79 @@
+@using DuxCommerce.OrchardCore
+@using DuxCommerce.OrchardCore.Catalog.Products
+@using DuxCommerce.Storefront.Extensions
+@model DuxCommerce.Storefront.Views.Inventory.ViewModels.InventoryIndexVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<h1>@T["Inventory"]</h1>
+<form asp-action="Index" method="get">
+    @await Html.PartialAsync("_ProductSearch", Model.ProductSearch)
+</form>
+<div class="row mb-5">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class="col-md-1">@T["Image"]</th>
+                <th>@T["Name"]</th>
+                <th>@T["SKU"]</th>
+                <th>@T["Low Stock"]</th>
+                <th>@T["In Stock"]</th>
+                <th>@T["Reserved"]</th>
+                <th>@T["Available"]</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var inventory in Model.Inventories)
+            {
+                var contentItem = Model.ProductMap[inventory.ProductId];
+                var image = contentItem.GetImage<ProductImagePart>();
+
+                var routeData = new { inventory.ProductId };
+                var available = inventory.InStock - inventory.Reserved;
+
+                <tr>
+                    <td>
+                        <a edit-for="@contentItem">
+                            <img src="@Orchard.AssetUrl(image.Path, 50, 50)" alt="@image.Text">
+                        </a>
+                    </td>
+                    <td>
+                        <a edit-for="@contentItem">
+                            <span>@inventory.Name @inventory.ChoiceNames</span>
+                        </a>
+                    </td>
+                    <td>
+                        @inventory.Sku
+                    </td>
+                    <td>
+                        @inventory.LowStockPoint
+                    </td>
+                    <td>
+                        @inventory.InStock
+                    </td>
+                    <td>
+                        @inventory.Reserved
+                    </td>
+                    <td>
+                        @available
+                    </td>
+                    <td>
+                        <a onclick="showPopup('@Url.Action("Edit", "Inventory", routeData, Context.Request.Scheme)', '@T["Adjust Inventory"]')"
+                           class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                            <i class="fas fa-pen-to-square small"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    @await DisplayAsync(Model.Pager)
+</div>
+
+<partial name="_Popup"/>
+
+<script asp-name="@ResourceNames.Popup"></script>

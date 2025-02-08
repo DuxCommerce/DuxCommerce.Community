@@ -1,0 +1,101 @@
+@model DuxCommerce.Storefront.Views.Shared.ViewModels.AddressVm
+
+@{
+    var stateId = "stateId" + Model.Suffix;
+}
+
+<input type="hidden" asp-for="Address.Id"/>
+
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Address.FirstName">@T["First Name"]</label>
+    </div>
+    <div class="col-md-9">
+        <input class="form-control" type="text" asp-for="Address.FirstName"/>
+        <span asp-validation-for="Address.FirstName"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Address.LastName">@T["Last Name"]</label>
+    </div>
+    <div class="col-md-9">
+        <input class="form-control" type="text" asp-for="Address.LastName"/>
+        <span asp-validation-for="Address.LastName"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Address.AddressLine1">@T["Line 1"]</label>
+    </div>
+    <div class="col-md-9">
+        <input class="form-control" type="text" asp-for="Address.AddressLine1"/>
+        <span asp-validation-for="Address.AddressLine1"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Address.AddressLine2">@T["Line 2"]</label>
+    </div>
+    <div class="col-md-9">
+        <input class="form-control" type="text" asp-for="Address.AddressLine2"/>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Address.City">@T["City"]</label>
+    </div>
+    <div class="col-md-9">
+        <input class="form-control" type="text" asp-for="Address.City"/>
+        <span asp-validation-for="Address.City"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Address.CountryCode">@T["Country"]</label>
+    </div>
+    <div class="col-md-9">
+        <select asp-for="Address.CountryCode" asp-items="Model.Countries" onchange="selectCountry(this, '@Model.Suffix');" class="form-control">
+        </select>
+        <span asp-validation-for="Address.CountryCode"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Address.StateId">@T["State/Province"]</label>
+    </div>
+    <div class="col-md-9">
+        <select asp-for="Address.StateId" asp-items="Model.States" class="form-control" id="@stateId"></select>
+        <span asp-validation-for="Address.StateId"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Address.PostalCode">@T["Postal Code"]</label>
+    </div>
+    <div class="col-md-9">
+        <input class="form-control" type="text" asp-for="Address.PostalCode"/>
+        <span asp-validation-for="Address.PostalCode"></span>
+    </div>
+</div>
+
+<script at="Foot" depends-on="jQuery">
+
+    function selectCountry(countryDropDownList, suffix) {
+        // Populate states for selected country
+        let countryCode = $(countryDropDownList).children("option:selected").val();
+        
+        $.get("@Url.Action("CountryStates", "Country")", { CountryCode: countryCode }, function (states) {
+            let stateId = "#stateId" + suffix;
+            populateStates(stateId, states);
+        })
+    }
+
+    function populateStates(stateDropDownId, states) {
+        $(stateDropDownId).empty();
+        
+        $.each(states, function (index, state) {
+            $(stateDropDownId).append("<option value='" + state.id + "'>" + state.name + "</option>")
+        });
+    }
+</script>

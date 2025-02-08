@@ -1,0 +1,84 @@
+﻿@using DuxCommerce.OrchardCore
+@using DuxCommerce.StoreBuilder.Catalog.DataTypes
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using OrchardCore.ResourceManagement.TagHelpers
+@model DuxCommerce.Storefront.Views.LinkedOption.ViewModels.LinkedOptionVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+@{
+    var optionChoices = (Model.SharedOption.Choices ?? Array.Empty<ChoiceRow>())
+        .OrderBy(x => x.DisplayOrder)
+        .ThenBy(x => x.CreatedAtUtc);
+
+    var linkedOption = Model.ProductOptions.SharedOptions.First(x => x.OptionId == Model.SharedOption.Id);
+}
+
+<h1>@T["Edit Option"]</h1>
+<form asp-action="Edit" asp-route-productId="@Model.ProductOptions.ProductId"
+      asp-route-optionId="@Model.SharedOption.Id" method="post" enctype="multipart/form-data">
+    <div class="row mb-3 form-group">
+        <div class="col-md-3">
+            <label class="form-label float-end" asp-for="SharedOption.OptionName">@T["Option Name"]</label>
+        </div>
+        <div class="col-md-9">
+            <span>@Model.SharedOption.OptionName</span>
+        </div>
+    </div>
+    <div class="row mb-3 form-group">
+        <div class="col-md-3">
+            <label class="form-label float-end" asp-for="SharedOption.DisplayName">@T["Display Name"]</label>
+        </div>
+        <div class="col-md-9">
+            <span>@Model.SharedOption.DisplayName</span>
+        </div>
+    </div>
+    <div class="row mb-3 form-group">
+        <div class="col-md-3">
+            <label class="form-label float-end" asp-for="SharedOption.DisplayType">@T["Display Type"]</label>
+        </div>
+        <div class="col-md-9">
+            <span>@Model.SharedOption.DisplayType</span>
+        </div>
+    </div>
+    <div class="row mb-3 form-group">
+        <div class="col-md-3">
+            <label class="form-label float-end" asp-for="SharedOption.Choices">@T["Choices"]</label>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <td class="col-md-4">@T["Name"]</td>
+                            <td class="col-md-2">@T["Default?"]</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var choice in optionChoices)
+                        {
+                        <tr>
+                            <td>@choice.Name</td>
+                            <td>
+                                <input type="radio" name="choiceId" id="@choice.Id" checked="@choice.Id.Equals(linkedOption.DefaultChoice)"
+                                    value="@choice.Id"/>
+                            </td>
+                        </tr>
+                        }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between">
+        <div>
+            <a asp-action="Index" asp-controller="ProductOption" asp-route-productId="@Model.ProductOptions.ProductId"
+               class="btn btn-secondary">@T["Back"]</a>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,115 @@
+@using DuxCommerce.StoreBuilder.Catalog.SimpleTypes
+@using DuxCommerce.Storefront
+@model DuxCommerce.Storefront.Views.Product.ViewModels.ProductOptionsVm
+
+@if (Model?.Options.Any() ?? false)
+{
+    var options = Model.Options.OrderBy(x => x.DisplayOrder).ThenBy(x => x.CreatedAtUtc).ToList();
+
+    <div class="product-options mb-3">
+        @for (var i = 0; i < options.Count; i++)
+        {
+            var option = options[i];
+            var name = $"ChoiceIds[{i}]";
+
+            <div class="product-option mb-4">
+                <label class="option-name">@option.DisplayName</label>
+                @{
+                    var choices = option.Choices.OrderBy(x => x.DisplayOrder).ThenBy(x => x.CreatedAtUtc);
+
+                    switch (option.DisplayType)
+                    {
+                        case nameof(DisplayType.DropDownList):
+                            <select name="@name" onchange="$('#customize').click();" required>
+
+                                @foreach (var choice in choices)
+                                {
+                                    if (choice.IsDefault)
+                                    {
+                                        <option value="@choice.Id" selected="">@choice.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@choice.Id">@choice.Name</option>
+                                    }
+                                }
+                            </select>
+
+                            break;
+                        case nameof(DisplayType.RadioButtonGroup):
+                            @foreach (var choice in choices)
+                            {
+                                if (choice.IsDefault)
+                                {
+                                    <input type="radio" id="choice-@choice.Id" name="@name" value="@choice.Id"
+                                           onchange="$('#customize').click();" checked="checked"/>
+                                    <label for="choice-@choice.Id">
+                                        @choice.Name
+                                    </label>
+                                }
+                                else
+                                {
+                                    <input type="radio" id="choice-@choice.Id" name="@name" value="@choice.Id"
+                                           onchange="$('#customize').click();"/>
+                                    <label for="choice-@choice.Id">
+                                        @choice.Name
+                                    </label>
+                                }
+                            }
+
+                            break;
+                    }
+                }
+            </div>
+        }
+    </div>
+    <input id="customize" type="submit" class="d-none"/>
+
+    <script at="Foot" depends-on="jQuery">
+        $(document).ready(function() {        
+            let submit;
+            
+            $('#addToCart').on('click', function() {
+                submit = $(this).attr('id');
+            });
+            
+            $(`#customize`).on('click', function() {
+                submit = $(this).attr('id');
+            });
+            
+            $('form[name="product"]').on('submit', function(event) {            
+                if (submit === "addToCart")
+                    return;
+                
+                event.preventDefault();
+              
+                let payload = $(this).serializeArray();
+                $.ajax({
+                    method: "POST",
+                    url: "@Url.Action("Customize", "Product", new { Area = Constants.AreaName })",
+                    data: payload,
+                    success: function (variant) {
+                        $('#productId').val(variant.id);
+                        $('.product-name h1').text(variant.name);
+                        $('.product-sku span').text(variant.sku);
+                        $('.price-inc-tax .price').text(variant.priceIncTax);
+                        $('.price-excl-tax .price').text(variant.priceExcTax);
+                        
+                        if (variant.isPurchasable) {
+                            $('#addToCart').removeClass("disabled");
+                            $('.stock-message').addClass("d-none");
+                        } else {
+                            $('#addToCart').addClass("disabled");
+                            $('.stock-message').removeClass("d-none");
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                });
+            });
+            
+            $(`#customize`).click();
+        });
+    </script>
+}

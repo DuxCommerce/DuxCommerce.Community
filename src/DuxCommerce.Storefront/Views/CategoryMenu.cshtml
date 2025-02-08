@@ -1,0 +1,48 @@
+﻿@model DuxCommerce.Storefront.Views.StoreHome.ViewModels.CategoryMenuVm
+
+@if (Model.Parents.Any())
+{
+    <div class="category-navbar d-flex flex-row justify-content-center">
+        @foreach (var parentRow in Model.Parents)
+        {
+            var parentItem = Model.CategoryMap[parentRow.Id];
+
+            <div class="parent-category">
+                @if (!Model.ChildMap.ContainsKey(parentRow.Id))
+                {
+                    <a display-for="@parentItem">@parentRow.Name</a>
+                }
+                else
+                {
+                    <a display-for="@parentItem">@parentRow.Name</a>
+                    <div class="category-dropdown">
+                        <div class="d-flex flex-row justify-content-center">
+                            @{
+                                var children = Model.ChildMap[parentRow.Id].OrderBy(x => x.SortOrder);
+                                foreach (var childRow in children)
+                                {
+                                    var childItem = Model.CategoryMap[childRow.Id];
+
+                                    <div class="child-category d-flex flex-column">
+                                        <a display-for="@childItem">@childRow.Name</a>
+                                        @{
+                                            if (Model.ChildMap.TryGetValue(childRow.Id, out var grandChildren))
+                                            {
+                                                foreach (var grandChildRow in grandChildren)
+                                                {
+                                                    var grandChildItem = Model.CategoryMap[grandChildRow.Id];
+
+                                                    <a display-for="@grandChildItem">@grandChildRow.Name</a>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}

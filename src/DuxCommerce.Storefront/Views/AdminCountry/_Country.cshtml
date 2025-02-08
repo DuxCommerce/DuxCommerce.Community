@@ -1,0 +1,67 @@
+@model DuxCommerce.Storefront.Views.AdminCountry.ViewModels.CountryVm
+
+<div asp-validation-summary="ModelOnly"></div>
+<input asp-for="CountryModel.Id" type="hidden"/>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="CountryModel.Name">@T["Name"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="CountryModel.Name" class="form-control" required/>
+        <span asp-validation-for="CountryModel.Name"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="CountryModel.TwoLetterCode">@T["Two Letter Code"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="CountryModel.TwoLetterCode" class="form-control" required/>
+        <span asp-validation-for="CountryModel.TwoLetterCode"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="CountryModel.ThreeLetterCode">@T["Three Letter Code"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="CountryModel.ThreeLetterCode" class="form-control" required/>
+        <span asp-validation-for="CountryModel.ThreeLetterCode"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="CountryModel.NumericCode">@T["Numeric Code"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="CountryModel.NumericCode" class="form-control" required/>
+        <span asp-validation-for="CountryModel.NumericCode"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="CountryModel.BillingEnabled">@T["Billing Enabled?"]</label>
+    </div>
+    <div class="col-md-9">
+        <input type="checkbox" asp-for="CountryModel.BillingEnabled" class="check-box"/>
+        <span asp-validation-for="CountryModel.BillingEnabled"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="CountryModel.ShippingEnabled">@T["Shipping Enabled?"]</label>
+    </div>
+    <div class="col-md-9">
+        <input type="checkbox" asp-for="CountryModel.ShippingEnabled" class="check-box"/>
+        <span asp-validation-for="CountryModel.ShippingEnabled"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="CountryModel.DisplayOrder">@T["Display Order"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="CountryModel.DisplayOrder" class="form-control" required/>
+        <span asp-validation-for="CountryModel.DisplayOrder"></span>
+    </div>
+</div>

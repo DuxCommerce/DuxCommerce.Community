@@ -1,0 +1,59 @@
+@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.TaxZone.ViewModels.TaxRatesVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+@{
+    string GetCodeName(string taxCodeId)
+    {
+        return Model.TaxCodes.Single(x => x.Id == taxCodeId).Name;
+    }
+}
+
+<h1>@T["Tax Rates"]</h1>
+@await Html.PartialAsync("_ZoneLinks", Model.Links)
+<div class="row">
+    <div class="table-responsive">
+        <table class="table mb-3">
+            <thead>
+            <tr>
+                <th class="col-md-2">@T["Name"]</th>
+                <th class="col-md">@T["Rates"]</th>
+                <th class="col-md-4">
+                    <a class="btn btn-primary float-end" asp-route-zoneId="@Model.ZoneId" asp-action="AddTaxRate">@T["Add Rate"]</a>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var taxRate in Model.TaxRates)
+            {
+                <tr>
+                    <td>@taxRate.Name</td>
+                    <td>
+                        <div class="grid-2-columns">
+                            @foreach (var rate in taxRate.CodeRates)
+                            {
+                                <span>@GetCodeName(rate.TaxCodeId)</span>
+                                <span>@rate.Amount.ToString("0.00")%</span>
+                            }
+                        </div>
+                    </td>
+                    <td class="text-end">
+                        <a class="btn btn-primary btn-sm" asp-action="EditTaxRate" asp-route-zoneId="@Model.ZoneId" asp-route-Id="@taxRate.Id" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                            <i class="fas fa-pen-to-square small"></i>
+                        </a>
+                        <a asp-action="DeleteTaxRate" asp-route-zoneId="@Model.ZoneId" asp-route-Id="@taxRate.Id" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Delete"]" itemprop="RemoveUrl UnsafeUrl">
+                            <i class="fas fa-trash-alt small"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="d-flex justify-content-start">
+    <div>
+        <a asp-action="Index" class="btn btn-secondary">@T["Back"]</a>
+    </div>
+</div>

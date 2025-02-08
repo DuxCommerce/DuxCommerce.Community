@@ -1,0 +1,12 @@
+@model DuxCommerce.Storefront.Views.AdminCountry.ViewModels.StateVm
+
+@{ Layout = null; }
+
+<form asp-controller="AdminCountry" asp-action="CreateState" asp-route-countryId="@Model.CountryId" method="post">
+    @await Html.PartialAsync("_State", Model)
+    <div>
+        <div>
+            <input class="btn btn-primary float-end" type="submit" value="@T["Save"]"/>
+        </div>
+    </div>
+</form>

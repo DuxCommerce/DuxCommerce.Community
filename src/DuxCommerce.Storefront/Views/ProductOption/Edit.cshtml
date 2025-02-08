@@ -1,0 +1,78 @@
+@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.ProductOption.ViewModels.PrivateOptionVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+@{
+    var addTitle = T["Add Choice"];
+    var routeData = new { Model.ProductId, Model.Option.OptionId };
+    var editTitle = T["Edit Choice"];
+}
+
+<h1>@T["Edit Option"]</h1>
+<form asp-action="Edit" asp-route-optionId="@Model.Option.OptionId" method="post" enctype="multipart/form-data">
+    <input asp-for="ProductId" type="hidden"/>
+    @await Html.PartialAsync("_Option", Model)
+    <div class="row mb-3 form-group">
+        <div class="col-md-3">
+            <label class="form-label float-end" asp-for="Choices">@T["Choices"]</label>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <td class="col-md-4">@T["Name"]</td>
+                            <td class="col-md-2">@T["Default?"]</td>
+                            <td class="col-md-2">@T["Display Order"]</td>
+                            <td class="text-end">
+                                <a onclick="showPopup('@Url.Action("CreateChoice", "ProductOption", routeData, Context.Request.Scheme)', '@addTitle')"
+                                   class="btn btn-primary">
+                                    @T["Add"]
+                                </a>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @{
+                            foreach (var choice in Model.Choices)
+                            {
+                                var routeDataEdit = new { Model.ProductId, Model.Option.OptionId, ChoiceId = choice.Id };
+                                <tr>
+                                    <td>@choice.Name</td>
+                                    <td>
+                                        <input type="radio" name="enabled" id="@choice.Id" checked="@choice.IsDefault" disabled/>
+                                    </td>
+                                    <td>@choice.DisplayOrder</td>
+                                    <td class="text-end">
+                                        <a onclick="showPopup('@Url.Action("EditChoice", "ProductOption", routeDataEdit, Context.Request.Scheme)', '@editTitle')"
+                                           class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                                            <i class="fas fa-pen-to-square small"></i>
+                                        </a>
+                                        <a asp-action="DeleteChoice" method="post" asp-route-productId="@Model.ProductId" asp-route-optionId="@Model.Option.OptionId" asp-route-choiceId="@choice.Id" class="btn btn-primary btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Delete"]" itemprop="RemoveUrl UnsafeUrl">
+                                            <i class="fas fa-trash-alt small"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between">
+        <div>
+            <a asp-action="Index" asp-route-productId="@Model.ProductId" class="btn btn-secondary">@T["Back"]</a>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        </div>
+    </div>
+</form>
+
+<partial name="_Popup"/>
+
+<script asp-name="@ResourceNames.Popup"></script>

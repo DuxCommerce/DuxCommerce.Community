@@ -1,0 +1,43 @@
+﻿@model DuxCommerce.Storefront.Views.Product.ViewModels.ProductImagesVm
+
+@{
+    var imageCount = Model.Images?.Paths?.Length;
+
+    if (imageCount > 0)
+    {
+        var mainPath = Model.Images.Paths[0];
+        var mainText = Model.Images.MediaTexts?[0] ?? string.Empty;
+
+        <div class="main-image">
+            <img src="@Orchard.AssetUrl(mainPath)" alt="@mainText" class="rounded"/>
+        </div>
+    }
+
+    if (imageCount > 1)
+    {
+        <div class="thumbnail-images">
+            <ul class="list-group list-group-horizontal">
+                @for (var index = 0; index < Model.Images?.Paths?.Length; index++)
+                {
+                    var path = Model.Images.Paths[index];
+                    var alt = Model.Images.MediaTexts?[index] ?? string.Empty;
+                    <li class="list-group-item">
+                        <img src="@Orchard.AssetUrl(path, 50, 50)" alt="@alt"/>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <script at="Foot" depends-on="jQuery">
+            $(document).ready(function() {
+                $('.product-images .thumbnail-images ul li img').on('mouseover', function() {
+                    let src = $(this).attr('src').split('?')[0];
+                    let alt = $(this).attr('alt');
+                    
+                    $('.product-images .main-image img').attr('src', src);
+                    $('.product-images .main-image img').attr('alt', alt);
+                });
+            });
+        </script>
+    }
+}

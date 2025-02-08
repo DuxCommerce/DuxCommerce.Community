@@ -1,0 +1,53 @@
+@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.TaxCode.ViewModels.TaxCodeIndexVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<h1>@T["Tax Codes"]</h1>
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class="col-md-4">@T["Name"]</th>
+                <th class="col-md-4">@T["Is Default?"]</th>
+                <th class="col-md-4 text-end">
+                    <a onclick="showPopup('@Url.Action("Create", "TaxCode", null, Context.Request.Scheme)', '@T["Add Code"]')"
+                       class="btn btn-primary">
+                        @T["Add"]
+                    </a>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                foreach (var taxCode in Model.TaxCodes)
+                {
+                    var editRoute = new { TaxCodeId = taxCode.Id };
+                    <tr>
+                        <td>@taxCode.Name</td>
+                        <td>
+                            <input type="checkbox" name="Enabled" checked="@taxCode.IsDefault" disabled/>
+                        </td>
+                        <td class="text-end">
+                            <a onclick="showPopup('@Url.Action("Edit", "TaxCode", editRoute, Context.Request.Scheme)', '@T["Edit Code"]')" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                                <i class="fas fa-pen-to-square small"></i>
+                            </a>
+                            @if (!taxCode.IsDefault && !Model.UsedTaxCodeIds.Contains(taxCode.Id))
+                            {
+                                <a asp-action="Delete" asp-route-taxCodeId="@taxCode.Id" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Delete"]" itemprop="RemoveUrl UnsafeUrl">
+                                    <i class="fas fa-trash-alt small"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<partial name="_Popup"/>
+
+<script asp-name="@ResourceNames.Popup"></script>

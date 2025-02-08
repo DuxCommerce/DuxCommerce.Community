@@ -1,0 +1,20 @@
+@model DuxCommerce.Storefront.Views.AdminOrder.ViewModels.OrderLinks
+
+@{
+    string Display(bool display)
+    {
+        return display ? "active" : string.Empty;
+    }
+}
+
+<ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+        <a class="nav-link @Display(Model.SummaryLink)" asp-action="Details" asp-route-id="@Model.OrderId">@T["Summary"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @Display(Model.PaymentsLink)" asp-action="Payments" asp-route-id="@Model.OrderId">@T["Payments"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @Display(Model.ShipmentsLink)" asp-action="Shipments" asp-route-id="@Model.OrderId">@T["Shipments"]</a>
+    </li>
+</ul>

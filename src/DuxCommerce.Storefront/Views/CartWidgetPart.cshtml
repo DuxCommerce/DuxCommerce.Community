@@ -1,0 +1,8 @@
+﻿@using DuxCommerce.Storefront
+@model DuxCommerce.OrchardCore.Carts.CartWidgetVm
+
+<a asp-action="Index" asp-controller="ShoppingCart" asp-area="@Constants.AreaName">
+    <div class="item-count">
+        <span>@Model.ItemCount</span>
+    </div>
+</a>

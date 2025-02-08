@@ -1,0 +1,19 @@
+﻿@using DuxCommerce.OrchardCore
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model DuxCommerce.Storefront.Views.YourAddresses.ViewModels.CustomerVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<div class="row mt-3">
+    <div class="col-lg-2">
+        @await Html.PartialAsync("_AccountLinks", Model.AccountLinks)
+    </div>
+    <div class="col-lg-10">
+        @await Html.PartialAsync("_CustomerAddresses", Model.Customer, new ViewDataDictionary(ViewData) { { "Controller", "YourAddresses" } })
+    </div>
+</div>
+
+<partial name="_Popup"/>
+
+<script asp-name="@ResourceNames.JQuery"></script>
+<script asp-name="@ResourceNames.Popup"></script>

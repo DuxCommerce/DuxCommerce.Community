@@ -1,0 +1,43 @@
+@model DuxCommerce.Storefront.Views.Currency.ViewModels.CurrencyIndexVm
+
+<h1>@T["Currencies"]</h1>
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class="col-md-3">@T["English Name"]</th>
+                <th class="col-md-3">@T["Native Name"]</th>
+                <th class="col-md">@T["Symbol"]</th>
+                <th class="col-md">@T["Currency Code"]</th>
+                <th class="col-md">@T["Display Locale"]</th>
+                <th class="col-md">@T["Formatting"]</th>
+                <th class="col-md-2">
+                    <a class="btn btn-primary float-end" asp-action="Create">@T["Add"]</a>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var currency in Model.Currencies)
+            {
+                <tr>
+                    <td>@currency.EnglishName</td>
+                    <td>@currency.NativeName</td>
+                    <td>@currency.Symbol</td>
+                    <td>@currency.Code</td>
+                    <td>@currency.DisplayLocale</td>
+                    <td>@currency.CustomFormatting</td>
+                    <td class="text-end">
+                        <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-currencyId="@currency.Id" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                            <i class="fas fa-pen-to-square small"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-currencyId="@currency.Id" class="btn btn-primary btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Delete"]" itemprop="RemoveUrl UnsafeUrl">
+                            <i class="fas fa-trash-alt small"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

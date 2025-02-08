@@ -1,0 +1,26 @@
+﻿@model DuxCommerce.Storefront.Views.Product.ViewModels.ProductGeneralVm
+
+<div class="product-name mb-3">
+    <h1>@Model.Product.Name</h1>
+</div>
+
+@if (Model.Product.StockEnabled)
+{
+    <div class="stock-message d-none mb-3">
+        <span class="out-of-stock">@T["The product is out of stock"]</span>
+    </div>
+}
+
+@if (Model.Product.Sku != null)
+{
+    <div class="product-sku mb-3">
+        <span>@Model.Product.Sku</span>
+    </div>
+}
+
+@if (Model.Product.Summary != null)
+{
+    <div class="product-summary mb-3">
+        @Html.Raw(Model.Product.Summary)
+    </div>
+}

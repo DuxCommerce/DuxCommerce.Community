@@ -1,0 +1,170 @@
+@using DuxCommerce.OrchardCore
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using OrchardCore.ResourceManagement.TagHelpers
+@using ScriptTagHelper = OrchardCore.ResourceManagement.TagHelpers.ScriptTagHelper
+@model DuxCommerce.Storefront.Views.StoreProfile.ViewModels.StoreProfileVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+<script asp-name="@ResourceNames.JQuery"></script>
+
+<h1>@T["Store Profile"]</h1>
+<form asp-controller="StoreProfile" asp-action="Edit" method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+    <input asp-for="Profile.Id" type="hidden"/>
+
+    <div class="accordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#contact-info">
+                    @T["Contacts"]
+                </button>
+            </h2>
+            <div id="contact-info" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="Profile.StoreName">@T["Store Name"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" asp-for="Profile.StoreName"/>
+                            <span asp-validation-for="Profile.StoreName"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="Profile.BusinessName">@T["Business Name"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" asp-for="Profile.BusinessName"/>
+                            <span asp-validation-for="Profile.BusinessName"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="Profile.ContactEmail">@T["Contact Email"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" asp-for="Profile.ContactEmail"/>
+                            <span asp-validation-for="Profile.ContactEmail"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="Profile.SenderEmail">@T["Order Email"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" asp-for="Profile.SenderEmail"/>
+                            <span asp-validation-for="Profile.SenderEmail"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="Profile.PhoneNumber">@T["Phone Number"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" asp-for="Profile.PhoneNumber"/>
+                            <span asp-validation-for="Profile.PhoneNumber"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#address">
+                    @T["Address"]
+                </button>
+            </h2>
+            <div id="address" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    <partial name="_EditAddress" for="AddressVm"/>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#locale">
+                    @T["Locale"]
+                </button>
+            </h2>
+            <div id="locale" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="Profile.TimeZoneId">@T["Time Zone"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select asp-for="Profile.TimeZoneId" asp-items="Model.TimeZones" class="form-control">
+                            </select>
+                            <span asp-validation-for="Profile.TimeZoneId"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="Profile.Currency">@T["Currency"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select asp-for="Profile.Currency" asp-items="Model.Currencies" class="form-control">
+                            </select>
+                            <span asp-validation-for="Profile.Currency"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="Profile.UnitSystem">@T["Unit System"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select asp-for="Profile.UnitSystem" asp-items="Model.UnitSystems" class="form-control">
+                            </select>
+                            <span asp-validation-for="Profile.UnitSystem"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="Profile.WeightUnit">@T["Default Weight Unit"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select asp-for="Profile.WeightUnit" asp-items="Model.WeightUnits" class="form-control">
+                            </select>
+                            <span asp-validation-for="Profile.WeightUnit"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="Profile.LengthUnit">@T["Default Length Unit"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select asp-for="Profile.LengthUnit" asp-items="Model.LengthUnits" class="form-control">
+                            </select>
+                            <span asp-validation-for="Profile.LengthUnit"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <input class="btn btn-primary float-end" type="submit" value="Save"/>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+$(document).ready(function () {    
+    $("#@Html.IdFor(m => m.Profile.UnitSystem)").change(function () {
+        let systemId = $(this).val();
+        
+        $.get("@Url.Action("Units", "UnitSystem")", { SystemId: systemId }, function (units) {
+            PopulateDropDown("#@Html.IdFor(m => m.Profile.WeightUnit)", units.WeightUnits);
+            PopulateDropDown("#@Html.IdFor(m => m.Profile.LengthUnit)", units.LengthUnits);
+        });
+    });  
+});
+
+function PopulateDropDown(dropDownId, list) {
+    $(dropDownId).empty();
+    $.each(list, function (index, row) {
+        $(dropDownId).append("<option value='" + row.id + "'>" + row.name + "</option>")
+    });
+}
+</script>

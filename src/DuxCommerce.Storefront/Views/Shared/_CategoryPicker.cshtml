@@ -1,0 +1,75 @@
+@using DuxCommerce.OrchardCore.Catalog.Categories
+@using DuxCommerce.Storefront.Extensions
+@using OrchardCore.Contents.TagHelpers
+@model DuxCommerce.Storefront.Views.Shared.ViewModels.CategoryPickerVm
+
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class="col-md-1">
+                    <label for="selectAll">
+                        <input type="checkbox" id="selectAll" name="selectAll"/>&nbsp;@T["Select All"]
+                    </label>
+                </th>
+                <th>@T["Name"]</th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                var index = 0;
+
+                foreach (var categoryTrail in Model.CategoryTrails)
+                {
+                    var contentItem = Model.CategoryMap[categoryTrail.CategoryId];
+                    var image = contentItem.GetImage<CategoryImagePart>();
+
+                    if (!Model.IdsExcluded.Contains(categoryTrail.CategoryId))
+                    {
+                        <tr>
+                            <td>
+                                <input type="hidden" name="Categories[@index].CategoryId" value="@categoryTrail.CategoryId"/>
+                                <input type="checkbox" name="Categories[@index].Selected"/>
+                                <a edit-for="@contentItem">
+                                    <img src="@Orchard.AssetUrl(image.Path, 50, 50)" alt="@image.Text">
+                                </a>
+                            </td>
+                            <td>
+                                <a edit-for="@contentItem">@categoryTrail.FriendlyName</a>
+                            </td>
+                        </tr>
+
+                        index++;
+                    }
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script at="Foot" depends-on="jQuery">
+    $(document).ready(function() {
+        
+        $('#selectAll').click(function(e){
+            let table= $(e.target).closest('table');            
+            let checkboxes = $('td input:checkbox',table);
+            
+            checkboxes.prop('checked',this.checked);            
+            setValue(checkboxes, this.checked);
+        });
+        
+        $("td input:checkbox").on('change', function() {
+          setValue($(this), $(this).is(':checked'))
+        });
+        
+        function setValue(checkboxes, checked) {
+            if (checked) {
+                checkboxes.attr('value', 'true');
+            } else {
+                checkboxes.attr('value', 'false');
+            }            
+        }
+    });
+</script>

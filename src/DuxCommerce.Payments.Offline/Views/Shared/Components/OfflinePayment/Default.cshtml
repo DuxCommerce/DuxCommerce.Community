@@ -1,0 +1,11 @@
+@model DuxCommerce.Payments.Offline.Views.Shared.Components.OfflinePayment.OfflinePaymentVm
+
+<form asp-area="DuxCommerce.Payments.Offline" asp-controller="Checkout" asp-action="ConfirmPayment" method="post">
+    <div>
+        @Html.Raw(Model.Instructions)
+    </div>
+    <div class="form-group">
+        <input class="btn btn-primary float-end" type="submit" value="@T["Submit"]"/>
+        <a href="/Checkout/CheckoutOptions" class="btn btn-secondary float-start">@T["Back"]</a>
+    </div>
+</form>

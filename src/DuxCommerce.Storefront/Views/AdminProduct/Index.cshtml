@@ -1,0 +1,75 @@
+@using DuxCommerce.OrchardCore
+@using DuxCommerce.OrchardCore.Catalog.Products
+@using DuxCommerce.StoreBuilder.Catalog.DataTypes
+@using DuxCommerce.Storefront.Extensions
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using OrchardCore.Autoroute.Models
+@using OrchardCore.ContentManagement
+@using OrchardCore.Contents.TagHelpers
+@using OrchardCore.ResourceManagement.TagHelpers
+@model DuxCommerce.Storefront.Views.AdminProduct.ViewModels.ProductIndexVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<h1>@T["Products"]</h1>
+<form asp-action="Index" method="get">
+    @await Html.PartialAsync("_ProductSearch", Model.ProductSearch)
+</form>
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class="col-md-1">@T["Image"]</th>
+                <th>@T["Name"]</th>
+                <th>@T["Permalink"]</th>
+                <th>@T["SKU"]</th>
+                <th>@T["Track Stock?"]</th>
+                <th>@T["Price"]</th>
+                <th>
+                    @{ var route = new { area = "OrchardCore.Contents", controller = "Admin", action = "Create", id = "Product", returnUrl = FullRequestPath }; }
+                    <a class="btn btn-primary create float-end" href="@Url.RouteUrl(route)">@T["Create"]</a>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @for (var index = 0; index < Model.Products.Count(); index++)
+            {
+                var contentItem = Model.Products.ElementAt(index);
+                var image = contentItem.GetImage<ProductImagePart>();
+                var routePart = contentItem.As<AutoroutePart>();
+                var product = (ProductRow)contentItem.As<ProductPart>().Row;
+
+                <tr>
+                    <td>
+                        <a edit-for="@contentItem">
+                            <img src="@Orchard.AssetUrl(image.Path, 50, 50)" alt="@image.Text">
+                        </a>
+                    </td>
+                    <td>
+                        <a edit-for="@contentItem">
+                            <span>@product.Name</span>
+                        </a>
+                    </td>
+                    <td>@routePart.Path</td>
+                    <td>@product.Sku</td>
+                    <td>
+                        <input type="checkbox" name="Enabled" checked="@product.StockEnabled" disabled/>
+                    </td>
+                    <td>@product.Price.ToCurrency(Model.Currency)</td>
+                    <td class="text-end">
+                        <a edit-for="@contentItem" asp-route-returnUrl="@FullRequestPath" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                            <i class="fas fa-pen-to-square small"></i>
+                        </a>
+                        <a asp-action="Delete" method="post" asp-route-productId="@product.Id" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Delete"]" itemprop="RemoveUrl UnsafeUrl">
+                            <i class="fas fa-trash-alt small"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    @await DisplayAsync(Model.Pager)
+</div>

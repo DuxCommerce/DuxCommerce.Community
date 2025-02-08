@@ -1,0 +1,18 @@
+@model DuxCommerce.Storefront.Views.Shared.ViewModels.AccountLinksVm
+
+@{
+    string CssClass(bool display)
+    {
+        return display ? "list-group-item active" : "list-group-item";
+    }
+}
+
+
+<div class="list-group">
+    <a class="@CssClass(Model.Orders)" asp-route-area="DuxCommerce.Storefront" asp-controller="YourOrders" asp-action="Index">
+        <i class="fa-solid fa-truck fa-fw" aria-hidden="true"></i> @T["Orders"]
+    </a>
+    <a class="@CssClass(Model.Addresses)" asp-route-area="DuxCommerce.Storefront" asp-controller="YourAddresses" asp-action="Index">
+        <i class="fa-solid fa-address-book fa-fw" aria-hidden="true"></i> @T["Addresses"]
+    </a>
+</div>

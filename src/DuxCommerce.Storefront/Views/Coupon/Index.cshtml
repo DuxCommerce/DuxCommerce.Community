@@ -1,0 +1,46 @@
+@using DuxCommerce.Storefront.Extensions
+@model DuxCommerce.Storefront.Views.Coupon.ViewModels.CouponIndexVm
+
+<h1>@T["Coupons"]</h1>
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class="col-md-2">@T["Name"]</th>
+                <th class="col-md">@T["Type"]</th>
+                <th class="col-md-2">@T["Code"]</th>
+                <th class="col-md-2">@T["Active?"]</th>
+                <th class="col-md-2">@T["Start"]</th>
+                <th class="col-md-2">@T["End"]</th>
+                <th class="col-md-4">
+                    <a class="btn btn-primary float-end" asp-action="Create">@T["Create"]</a>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var coupon in Model.Coupons)
+            {
+                <tr>
+                    <td>@coupon.Name</td>
+                    <td>@coupon.Type</td>
+                    <td>@coupon.Code</td>
+                    <td>
+                        <input type="checkbox" name="Enabled" checked="@coupon.Activated" disabled/>
+                    </td>
+                    <td>@coupon.Rule.Time.StartTime.ToLocalTime(Model.TimeZone)</td>
+                    <td>@coupon.Rule.Time.EndTime.ToLocalTime(Model.TimeZone)</td>
+                    <td class="text-end">
+                        <a asp-action="Edit" asp-route-couponId="@coupon.Id" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                            <i class="fas fa-pen-to-square small"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-couponId="@coupon.Id" class="btn btn-primary btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Delete"]" itemprop="RemoveUrl UnsafeUrl">
+                            <i class="fas fa-trash-alt small"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

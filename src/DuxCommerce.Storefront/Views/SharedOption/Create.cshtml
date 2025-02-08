@@ -1,0 +1,14 @@
+@model DuxCommerce.Storefront.Views.Shared.ViewModels.SharedOptionVm
+
+<h1>@T["Add Option"]</h1>
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    @await Html.PartialAsync("_Option", Model)
+    <div class="d-flex justify-content-between">
+        <div>
+            <a asp-action="Index" class="btn btn-secondary">@T["Cancel"]</a>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        </div>
+    </div>
+</form>

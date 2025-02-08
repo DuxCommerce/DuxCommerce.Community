@@ -1,0 +1,12 @@
+@model DuxCommerce.Storefront.Views.TaxCode.ViewModels.TaxCodeVm
+
+@{ Layout = null; }
+
+<form asp-action="Create" method="post">
+    @await Html.PartialAsync("_Taxcode", Model)
+    <div>
+        <div>
+            <input class="btn btn-primary float-end" type="submit" value="@T["Save"]"/>
+        </div>
+    </div>
+</form>

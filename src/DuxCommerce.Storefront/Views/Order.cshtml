@@ -1,0 +1,164 @@
+@using DuxCommerce.OrchardCore.Catalog.Products
+@using DuxCommerce.Storefront.Extensions
+@using OrchardCore.Contents.TagHelpers
+@model DuxCommerce.OrchardCore.Checkout.OrderVm
+
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-hover order-table">
+            <thead>
+            <tr>
+                <th class="col-md-1"></th>
+                <th>@T["Items"]</th>
+                <th class="col-md-1">@T["Price"]</th>
+                <th class="col-md-1">@T["Quantity"]</th>
+                <th class="col-md-1 text-end">@T["Total"]</th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                foreach (var item in Model.Order.Items)
+                {
+                    var itemExists = Model.ProductMap.ContainsKey(item.ProductId)
+                                     || Model.ProductMap.ContainsKey(item.PrototypeId);
+
+                    Model.ProductMap.TryGetValue(item.PrototypeId, out var contentItem);
+
+                    var price = item.Price - item.PriceDiscount;
+                    var image = Model.ProductMap.GetImage<ProductImagePart>(item.ProductId);
+
+                    <tr>
+                        <td>
+                            @if (!itemExists)
+                            {
+                                <img src="@Orchard.AssetUrl(image.Path, 100, 100)" alt="@image.Text">
+                            }
+                            else if (Model.IsAdminOrder)
+                            {
+                                <a edit-for="@contentItem">
+                                    <img src="@Orchard.AssetUrl(image.Path, 100, 100)" alt="@image.Text">
+                                </a>
+                            }
+                            else
+                            {
+                                <a display-for="@contentItem">
+                                    <img src="@Orchard.AssetUrl(image.Path, 100, 100)" alt="@image.Text">
+                                </a>
+                            }
+                        </td>
+                        <td>
+                            @if (!itemExists)
+                            {
+                                <span>@item.ProductName</span>
+                                <span>@item.ChoiceNames</span>
+                            }
+                            else if (Model.IsAdminOrder)
+                            {
+                                <a edit-for="@contentItem">
+                                    <span>@item.ProductName</span>
+                                    <span>@item.ChoiceNames</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a display-for="@contentItem">
+                                    <span>@item.ProductName</span>
+                                    <span>@item.ChoiceNames</span>
+                                </a>
+                            }
+                        </td>
+                        <td>@price.ToCurrency(Model.Currency)</td>
+                        <td>@item.Quantity</td>
+                        <td class="text-end">@item.Subtotal.ToCurrency(Model.Currency)</td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+
+        <table class="table table-hover table-borderless order-summary-table">
+            <tbody style="border: none">
+            <tr>
+                <td class="col-md-3"></td>
+                <td class="col-md-6"></td>
+                <td class="col-md-1">
+                    <span>@T["Subtotal"]</span>
+                </td>
+                <td class="col-md-1"></td>
+                <td class="col-md-1 text-end">@Model.Order.SubTotal.ToCurrency(Model.Currency)</td>
+            </tr>
+
+            @if (Model.Order.PromotionDiscount > 0)
+            {
+                <tr>
+                    <td colspan="2"></td>
+                    <td>
+                        <span>@T["Discount"]</span>
+                    </td>
+                    <td class="col-md-1"></td>
+                    <td class="text-end">-@Model.Order.PromotionDiscount.ToCurrency(Model.Currency)</td>
+                </tr>
+            }
+
+            @if (Model.Order.CouponDiscount > 0)
+            {
+                <tr>
+                    <td colspan="2"></td>
+                    <td>
+                        <span>@T["Coupon"]</span>
+                    </td>
+                    <td class="col-md-1"></td>
+                    <td class="text-end">-@Model.Order.CouponDiscount.ToCurrency(Model.Currency)</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="2"></td>
+                <td>
+                    <span>@T["Shipping"]</span>
+                </td>
+                <td class="col-md-1"></td>
+                <td class="text-end">
+                    @{
+                        var shippingTotal = Model.Order.ShippingFee - Model.Order.ShippingDiscount;
+                    }
+                    @shippingTotal.ToCurrency(Model.Currency)
+                </td>
+            </tr>
+
+            @if (Model.BreakDownTax)
+            {
+                foreach (var tax in Model.Taxes)
+                {
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>
+                            <span>@tax.Name</span>
+                        </td>
+                        <td class="col-md-1"></td>
+                        <td class="text-end">@tax.Amount.ToCurrency(Model.Currency)</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="2"></td>
+                    <td>
+                        <span>@T["Tax"]</span>
+                    </td>
+                    <td class="col-md-1"></td>
+                    <td class="text-end">@Model.Order.TaxTotal.ToCurrency(Model.Currency)</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="2"></td>
+                <td>
+                    <span>@T["Total"]</span>
+                </td>
+                <td class="col-md-1"></td>
+                <td class="text-end">@Model.Order.OrderTotal.ToCurrency(Model.Currency)</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

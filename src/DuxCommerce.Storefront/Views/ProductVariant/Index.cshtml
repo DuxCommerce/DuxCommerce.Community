@@ -1,0 +1,100 @@
+@using DuxCommerce.OrchardCore
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using OrchardCore.ResourceManagement.TagHelpers
+@model DuxCommerce.Storefront.Views.ProductVariant.ViewModels.ProductVariantsVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<div asp-validation-summary="ModelOnly"></div>
+<h1>@T["Edit Product"] - @Model.Product.Name</h1>
+@await Html.PartialAsync("_ProductLinks", Model.Links)
+@{ var choiceCount = Model.Variants?.Count ?? 0; }
+<div class="row">
+    <form asp-controller="ProductVariant" method="post">
+        <input type="hidden" name="productId" value="@Model.Product.Id"/>
+        <div class="row">
+            <div class="d-flex flex-row-reverse">
+                <input class="btn btn-primary float-end" type="submit" asp-action="GenerateVariants" value="@T["Generate"]"/>
+            </div>
+            @if (choiceCount > 0)
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>@T["Choice"]</th>
+                            <th>@T["Price"]</th>
+                            <th>@T["Retail"]</th>
+                            <th>@T["Cost"]</th>
+                            <th>@T["Weight"]</th>
+                            <th>@T["Track <br>Stock?"]</th>
+                            <th>@T["Allow Out <br>Of Stock?"]</th>
+                            <th>@T["SKU"]</th>
+                            <th>@T["In Stock"]</th>
+                            <th>@T["Reserved"]</th>
+                            <th>@T["Low Stock <br>Point"]</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @for (var index = 0; index < Model.Variants.Count; index++)
+                        {
+                            var i = index;
+
+                            <tr>
+                                <td>
+                                    <input type="hidden" asp-for="Variants[i].VariantId">
+                                    @Model.Variants[i].ChoiceName
+                                </td>
+                                <td>
+                                    <input class="price" asp-for="Variants[i].Price" type="number" min="0" required>
+                                </td>
+                                <td>
+                                    <input class="price" asp-for="Variants[i].Retail" type="number" min="0" required>
+                                </td>
+                                <td>
+                                    <input class="price" asp-for="Variants[i].Cost" type="number" min="0" required>
+                                </td>
+                                <td>
+                                    <input class="quantity" asp-for="Variants[i].Weight" type="number" min="0" required>
+                                </td>
+                                <td>
+                                    <input type="checkbox" asp-for="Variants[i].StockEnabled" class="check-box"/>
+                                </td>
+                                <td>
+                                    <input type="checkbox" asp-for="Variants[i].AllowOutOfStock" class="check-box"/>
+                                </td>
+                                <td>
+                                    <input asp-for="Variants[i].Sku">
+                                </td>
+                                <td>
+                                    @Model.Variants[i].InStock
+                                </td>
+                                <td>
+                                    @Model.Variants[i].Reserved
+                                </td>
+                                <td>
+                                    <input class="quantity" asp-for="Variants[i].LowStockPoint" type="number" min="0" required="">
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <a asp-action="Index" asp-controller="ProductOption" asp-route-productId="@Model.Product.Id" class="btn btn-secondary">@T["Back"]</a>
+                    </div>
+                    <div>
+                        <input class="btn btn-primary" type="submit" value="@T["Save"]"/>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <span>@T["There are no variants."]</span>
+                </div>
+            }
+        </div>
+    </form>
+</div>

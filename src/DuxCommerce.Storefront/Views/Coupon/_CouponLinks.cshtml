@@ -1,0 +1,27 @@
+@using DuxCommerce.StoreBuilder.Marketing.DomainTypes
+@model DuxCommerce.Storefront.Views.Coupon.ViewModels.CouponLinks
+
+@{
+    string Display(bool display)
+    {
+        return display ? "active" : string.Empty;
+    }
+}
+
+<ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+        <a class="nav-link @Display(Model.General)" asp-action="Edit" asp-route-couponid="@Model.Coupon.Id">@T["General"]</a>
+    </li>
+    @if (Model.Coupon.Type == nameof(ProductCoupon) && Model.Coupon.Rule.Product.Type == nameof(ProductRule.Products))
+    {
+        <li class="nav-item">
+            <a class="nav-link @Display(Model.Products)" asp-action="Products" asp-route-couponid="@Model.Coupon.Id">@T["Products"]</a>
+        </li>
+    }
+    else if (Model.Coupon.Type == nameof(ProductCoupon) && Model.Coupon.Rule.Product.Type == nameof(ProductRule.Categories))
+    {
+        <li class="nav-item">
+            <a class="nav-link @Display(Model.Categories)" asp-action="Categories" asp-route-couponid="@Model.Coupon.Id">@T["Categories"]</a>
+        </li>
+    }
+</ul>

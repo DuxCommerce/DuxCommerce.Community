@@ -1,0 +1,322 @@
+@using DuxCommerce.OrchardCore
+@using DuxCommerce.Storefront.Extensions
+@model DuxCommerce.Storefront.Views.Coupon.ViewModels.CouponVm
+
+<style asp-name="@ResourceNames.FlatPicker"></style>
+
+<div asp-validation-summary="ModelOnly"></div>
+<input asp-for="Coupon.Id" type="hidden"/>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Coupon.Name">@T["Coupon Name"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="Coupon.Name" class="form-control" required/>
+        <span asp-validation-for="Coupon.Name"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Coupon.Code">@T["Coupon Code"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="Coupon.Code" class="form-control" required/>
+        <span asp-validation-for="Coupon.Code"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Coupon.Type">@T["Coupon Type"]</label>
+    </div>
+    <div class="col-md-9" id="couponTypeSelect">
+        <select asp-for="Coupon.Type" asp-items="Model.CouponTypes" id="couponType" class="form-control"></select>
+        <span asp-validation-for="Coupon.Type"></span>
+    </div>
+    <div class="col-md-9" id="couponTypeDisplay">
+        <input asp-for="Coupon.Type" type="hidden"/>
+        <span>@Model.Coupon.Type</span>
+    </div>
+</div>
+<div class="row mb-3 form-group" id="discountType">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Coupon.Discount.Type">@T["Discount Type"]</label>
+    </div>
+    <div class="col-md-9">
+        @foreach (var discount in Model.DiscountTypes)
+        {
+            <div class="row">
+                <label>
+                    <input type="radio" asp-for="Coupon.Discount.Type" id="@discount.Type" value="@discount.Type"/>@discount.Name
+                </label>
+            </div>
+        }
+        <span asp-validation-for="Coupon.Discount.Type"></span>
+        <div id="amountOff" class="d-inline-flex">
+            <input class="form-control w-50" asp-for="Coupon.Discount.AmountOff" type="number" min="0" step="any"/>
+        </div>
+        <div id="percentOff" class="d-inline-flex">
+            <input class="form-control w-50" asp-for="Coupon.Discount.PercentOff" type="number" min="0" step="any"/>
+        </div>
+    </div>
+</div>
+<div class="row mb-3 form-group" id="productRule">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Coupon.Rule.Product.Type">@T["Which Products?"]</label>
+    </div>
+    <div class="col-md-9">
+        @foreach (var rule in Model.ProductRules)
+        {
+            <div class="row">
+                <label>
+                    <input type="radio" asp-for="Coupon.Rule.Product.Type" id="@rule.Type" value="@rule.Type"/>@rule.Name
+                </label>
+            </div>
+        }
+        <span asp-validation-for="Coupon.Rule.Product.Type"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Coupon.Rule.Min.Type">@T["Minimum Requirements"]</label>
+    </div>
+    <div class="col-md-9">
+        @foreach (var rule in Model.MinRules)
+        {
+            <div class="row">
+                <label>
+                    <input type="radio" asp-for="Coupon.Rule.Min.Type" id="@rule.Type" value="@rule.Type"/>@rule.Name
+                </label>
+            </div>
+        }
+        <span asp-validation-for="Coupon.Rule.Min.Type"></span>
+        <div id="itemQuantityRow" class="d-inline-flex">
+            <input type="number" class="form-control w-50" asp-for="Coupon.Rule.Min.ItemQuantity" min="0"/>
+        </div>
+        <div id="purchaseAmountRow" class="d-inline-flex">
+            <input class="form-control w-50" asp-for="Coupon.Rule.Min.PurchaseAmount" type="number" min="0" step="any"/>
+        </div>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Coupon.Rule.Customer.Type">@T["Which Customers?"]</label>
+    </div>
+    <div class="col-md-9">
+        @foreach (var rule in Model.CustomerRules)
+        {
+            <div class="row">
+                <label>
+                    <input type="radio" asp-for="Coupon.Rule.Customer.Type" id="@rule.Type" value="@rule.Type"/>@rule.Name
+                </label>
+            </div>
+        }
+        <span asp-validation-for="Coupon.Rule.Customer.Type"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group" id="countryRule">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Coupon.Rule.Country.Type">@T["Which Countries?"]</label>
+    </div>
+    <div class="col-md-9">
+        @foreach (var rule in Model.CountryRules)
+        {
+            <div class="row">
+                <label>
+                    <input type="radio" asp-for="Coupon.Rule.Country.Type" id="@rule.Type" value="@rule.Type"/>@rule.Name
+                </label>
+            </div>
+        }
+        <span asp-validation-for="Coupon.Rule.Country.Type"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end">@T["Usage Restriction"]</label>
+    </div>
+    <div class="col-md-9">
+        <div>
+            <label class="d-inline-block">
+                <input type="checkbox" asp-for="Coupon.Rule.Usage.LimitStoreUsage" id="limitStoreUsage" class="check-box"/>
+                @T["Limit number of uses per store"]
+            </label>
+        </div>
+        <div id="storeLimit" class="d-inline-flex mb-3">
+            <input type="number" class="form-control w-50" asp-for="Coupon.Rule.Usage.StoreLimit" min="0"/>
+            <span>@T["times"]</span>
+        </div>
+        <div>
+            <label>
+                <input type="checkbox" asp-for="Coupon.Rule.Usage.OneUsePerCustomer" class="check-box"/>
+                @T["Limit to one use per customer"]
+            </label>
+        </div>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end">@T["Duration"]</label>
+    </div>
+    <div class="col-md-9">
+        <div class="mb-3">
+            <label asp-for="Coupon.Rule.Time.StartTime">@T["Start time"]</label>
+            <input type="text" class="form-control w-25" name="Coupon.Rule.Time.StartTime" id="startTime"/>
+            <span asp-validation-for="Coupon.Rule.Time.StartTime"></span>
+        </div>
+        <div>
+            <label asp-for="Coupon.Rule.Time.EndTime">@T["End time"]</label>
+            <input type="text" class="form-control w-25" name="Coupon.Rule.Time.EndTime" id="endTime"/>
+            <span asp-validation-for="Coupon.Rule.Time.EndTime"></span>
+        </div>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end">@T["Activate This Coupon?"]</label>
+    </div>
+    <div class="col-md-9">
+        <div class="input-group">
+            <label>
+                <input type="checkbox" asp-for="Coupon.Activated" class="check-box"/>
+                @T["Yes, make this coupon available to customers"]
+            </label>
+        </div>
+    </div>
+</div>
+
+<script asp-name="@ResourceNames.FlatPicker"></script>
+<script>
+    flatpickr("#startTime", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        defaultDate: "@Model.Coupon.Rule.Time.StartTime.ToLocalTime(Model.TimeZone).ToString("yyyy-MM-dd HH:mm")"
+    });
+    
+    flatpickr("#endTime", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        defaultDate: "@Model.Coupon.Rule.Time.EndTime.ToLocalTime(Model.TimeZone).ToString("yyyy-MM-dd HH:mm")"
+    });
+</script>
+
+<script asp-name="@ResourceNames.JQuery"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $.fn.hide = function () {
+          this.addClass('d-none');
+        }    
+            
+        $.fn.show = function () {
+          this.removeClass('d-none');
+        }
+        
+        function displayCouponType() {
+            let couponTypeSelect = $("#couponTypeSelect");
+            let couponTypeDisplay = $("#couponTypeDisplay");
+            
+            let couponId = $("#@Html.IdFor(m => m.Coupon.Id)").val();
+            
+            if (couponId) {
+                couponTypeSelect.hide();
+                couponTypeDisplay.show();
+            } else {
+                couponTypeSelect.show();
+                couponTypeDisplay.hide();            
+            }
+        }
+        
+        function displayCouponInputs(couponType) {
+            displayCouponType();
+            
+            let discountType = $("#discountType");
+            let productRule = $("#productRule");
+            let countryRule = $("#countryRule");
+            
+            switch (couponType) {
+                case "ProductCoupon":
+                    discountType.show();
+                    productRule.show();
+                    countryRule.hide();
+                    
+                    break;
+                case "OrderCoupon":
+                    discountType.show();
+                    productRule.hide();
+                    countryRule.hide();
+                    
+                    break;
+                default: // ShippingCoupon
+                    discountType.hide();
+                    productRule.hide();
+                    countryRule.show();
+                    
+                    break;
+            }
+        }
+        
+        function displayDiscountInputs(discountType) {
+            let percentOff = $("#percentOff");
+            let amountOff = $("#amountOff");
+            
+            if(discountType === "PercentOff") {
+                percentOff.show();
+                amountOff.hide();
+            } else {
+                percentOff.hide();
+                amountOff.show();
+            }
+        }
+        
+        function displayMinInputs(minType) {
+            let itemQuantityRow = $("#itemQuantityRow");
+            let purchaseAmountRow = $("#purchaseAmountRow");
+            
+            if(minType === "ItemQuantity") {
+                itemQuantityRow.show();
+                purchaseAmountRow.hide();
+            } else if (minType === "PurchaseAmount") {
+                itemQuantityRow.hide();
+                purchaseAmountRow.show();
+            } else {
+                itemQuantityRow.hide();
+                purchaseAmountRow.hide();
+            }
+        }
+        
+        function displayUsageInput(display) {
+            let storeLimit = $("#storeLimit");
+            
+            if (display) {
+                storeLimit.show();
+            } else {
+                storeLimit.hide();
+            }        
+        }
+                
+        $('#couponType').change(function() {
+            let couponType = $(this).val();
+            displayCouponInputs(couponType);
+        });
+        
+        $("input[name='Coupon.Discount.Type']").click(function(){
+            let discountType = $("input[name='Coupon.Discount.Type']:checked").val();
+            displayDiscountInputs(discountType);
+        });
+        
+        $("input[name='Coupon.Rule.Min.Type']").click(function(){
+            let minType = $("input[name='Coupon.Rule.Min.Type']:checked").val();
+            displayMinInputs(minType);
+        });
+        
+        $("#limitStoreUsage").change(function () {
+            displayUsageInput(this.checked);        
+        });
+                
+        displayCouponInputs("@Model.Coupon.Type");
+        
+        displayDiscountInputs("@Model.Coupon.Discount?.Type");
+        
+        displayMinInputs("@Model.Coupon.Rule.Min.Type");
+        
+        displayUsageInput(true);
+    });
+</script>

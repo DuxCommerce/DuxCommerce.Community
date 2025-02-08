@@ -1,0 +1,92 @@
+@using DuxCommerce.OrchardCore
+@using DuxCommerce.StoreBuilder.Settings.DataStores
+@using DuxCommerce.StoreBuilder.Settings.DataTypes
+@using DuxCommerce.StoreBuilder.Shipping.DataTypes
+@model DuxCommerce.Storefront.Views.ShippingProfile.ViewModels.ShippingProfileVm
+@inject IStateStore StateStore
+@inject ICountryStore CountryStore
+
+@{
+    string GetCountryNames(ShippingZoneRow zone)
+    {
+        var countries = string.Empty;
+        foreach (var shippingCountry in zone.CountryStates)
+        {
+            if (countries != string.Empty)
+                countries += ",";
+
+            var country = Model.Countries[shippingCountry.CountryCode];
+            countries += country.Name;
+        }
+
+        return countries;
+    }
+
+    async Task<string> ToFriendlyAddress(AddressRow address)
+    {
+        var country = await CountryStore.GetCountry(address.CountryCode);
+        var state = await StateStore.Get(address.StateId);
+
+        return $"{address.AddressLine1}, {address.AddressLine2} {address.City} {state.Name} {address.PostalCode}, {country.Name}";
+    }
+}
+
+<h1>@T["Shipping Profile"]</h1>
+@{
+    foreach (var group in Model.Profile.OriginGroups)
+    {
+        var routeData = new { group.OriginId };
+
+        <div class="origin-group">
+            <div class="mb-3">
+                <h2>@T["Shipping Origin"]</h2>
+                <span>@await ToFriendlyAddress(Model.Origins[group.OriginId].Address)</span>
+                <a onclick="showPopup('@Url.Action("EditAddress", "ShippingProfile", routeData, Context.Request.Scheme)', '@T["Update Address"]')"
+                   class="btn btn-primary">
+                    @T["Edit"]
+                </a>
+            </div>
+            <div>
+                <h2>@T["Shipping to"]</h2>
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-3">@T["Zone Name"]</th>
+                                <th class="col-md">@T["Countries"]</th>
+                                <th class="col-md-3">
+                                    <a class="btn btn-primary float-end" asp-route-groupId="@group.Id" asp-action="CreateZone">@T["Add Zone"]</a>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var zone in group.Zones)
+                            {
+                                <tr>
+                                    <td>@zone.Name</td>
+                                    <td>@GetCountryNames(zone)</td>
+                                    <td class="text-end">
+                                        <a asp-action="EditZone" asp-route-groupId="@group.Id" asp-route-zoneId="@zone.Id" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                                            <i class="fas fa-pen-to-square small"></i>
+                                        </a>
+                                        <a asp-action="DeleteZone" asp-route-groupId="@group.Id" asp-route-zoneId="@zone.Id" class="btn btn-primary btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Delete"]" itemprop="RemoveUrl UnsafeUrl">
+                                            <i class="fas fa-trash-alt small"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+
+<partial name="_Popup"/>
+
+<script asp-name="@ResourceNames.JQuery"></script>
+<script asp-name="@ResourceNames.Popup"></script>

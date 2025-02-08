@@ -1,0 +1,18 @@
+@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.Promotion.ViewModels.PromotionVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<h1>@T["Edit Promotion"]</h1>
+@await Html.PartialAsync("_PromotionLinks", Model.Links)
+<form asp-controller="Promotion" asp-action="Edit" asp-route-promotionId="@Model.Promotion.Id" method="post">
+    @await Html.PartialAsync("_Promotion", Model)
+    <div class="d-flex justify-content-between">
+        <div>
+            <a asp-action="Index" class="btn btn-secondary">@T["Cancel"]</a>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        </div>
+    </div>
+</form>

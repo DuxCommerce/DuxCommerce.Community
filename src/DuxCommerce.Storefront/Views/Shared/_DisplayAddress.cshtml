@@ -1,0 +1,46 @@
+@using DuxCommerce.StoreBuilder.Settings.DataStores
+@using DuxCommerce.StoreBuilder.Settings.DataTypes
+@model DuxCommerce.StoreBuilder.Settings.DataTypes.AddressRow
+@inject IStateStore StateStore
+@inject ICountryStore CountryStore
+
+@{
+    async Task RenderAddress(AddressRow address)
+    {
+        var country = await CountryStore.GetCountry(address.CountryCode);
+        var state = await StateStore.Get(address.StateId);
+
+        var fullName = address.FirstName + " " + address.LastName;
+
+        @fullName
+        <br/>
+
+        @address.AddressLine1
+        <br/>
+
+        if (address.AddressLine2 != null)
+        {
+            @address.AddressLine2
+            <br/>
+        }
+
+        @address.City
+        <br/>
+
+
+        @state.Name
+        <br/>
+
+        if (address.PostalCode != null)
+        {
+            @address.PostalCode
+            <br/>
+        }
+
+        @country.Name
+    }
+}
+
+<div>
+    @{ await RenderAddress(Model); }
+</div>

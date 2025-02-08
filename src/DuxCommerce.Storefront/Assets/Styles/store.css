@@ -1,0 +1,142 @@
+﻿/* store front */
+
+.category-navbar a {
+    padding: 0.5rem 0.5rem;
+    font-weight: 600;
+}
+
+.price-inc-tax .price,
+.price-excl-tax .price,
+.product-option .option-name,
+.sort-options label,
+.featured-category .category-name,
+.products .breadcrumb-item {
+    font-weight: 600;
+}
+
+.parent-category {
+    padding: 1rem 1rem;
+}
+
+.category-dropdown {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    width: 100%;
+    left: 0;
+}
+
+.parent-category:hover .category-dropdown {
+    display: block;
+}
+
+.featured-category {
+    text-align: center;
+}
+
+.product-images .main-image img,
+.category-image a img,
+.product .product-image a img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.shopping-cart .listing-price {
+    text-decoration: line-through;
+}
+
+.checkout-steps {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 2em;
+}
+
+.checkout-steps .step {
+    display: block;
+    width: 100%;
+    border: 1px solid #dddddd;
+    text-align: center;
+    background: #efefef;
+}
+
+.checkout-steps .step.active {
+    border-color: deepskyblue;
+    background-color: white;
+}
+
+.order-summary-table td span {
+    font-weight: 600;
+}
+
+.stock-message .out-of-stock {
+    color: red;
+}
+
+/* store admin */
+
+.grid-3-columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-2-columns {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.multi-select-wrapper {
+    margin: auto;
+    position: relative;
+}
+
+.form-label {
+    font-weight: 600;
+}
+
+.order-summary-table td span {
+    font-weight: 600;
+}
+
+table td input.price,
+table td input.quantity {
+    width: 80px;
+}
+
+/* shared styles */
+
+.product-name h1,
+.shopping-cart h1,
+.checkout-addresses h1,
+.checkout-options h1,
+.payment-confirmation h1,
+.order-confirmation h1 {
+    font-size: 1.5rem;
+}
+
+.shopping-cart h2,
+.checkout-addresses h2,
+.checkout-options h2,
+.payment-confirmation h2,
+.order-confirmation h2,
+.order-details h2,
+.order-payments h2,
+.order-shipments h2 {
+    font-size: 1.25rem;
+}
+
+.shopping-cart h3,
+.checkout-addresses h3,
+.checkout-options h3,
+.payment-confirmation h3,
+.order-confirmation h3,
+.order-details h3 {
+    font-size: 1rem;
+}
+
+address {
+    margin-bottom: 0;
+}
+
+.btn {
+    margin-left: 10px;
+}

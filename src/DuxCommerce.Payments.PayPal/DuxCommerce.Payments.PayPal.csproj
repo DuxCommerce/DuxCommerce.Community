@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DuxCommerce.OrchardCore" Version="0.9.1" />
+    <PackageReference Include="DuxCommerce.StoreBuilder" Version="0.9.1" />
+    <PackageReference Include="FSharp.Core" Version="8.0.101" />
+    <PackageReference Include="OrchardCore.Admin.Abstractions" Version="2.1.3" />
+    <PackageReference Include="OrchardCore.Module.Targets" Version="2.1.3" />
+    <PackageReference Include="OrchardCore.ContentTypes.Abstractions" Version="2.1.3" />
+    <PackageReference Include="PayPalCheckoutSdk" Version="1.0.4" />
+    <PackageReference Include="PayPalHttp" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Views\_ViewImports.cshtml">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Settings\Setup.cshtml">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Shared\Components\Checkout\Default.cshtml">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views\Shared\Components\PayPalPayment\Default.cshtml" />
+  </ItemGroup>
+  
+</Project>

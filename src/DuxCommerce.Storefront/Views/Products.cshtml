@@ -1,0 +1,54 @@
+﻿@using DuxCommerce.Storefront
+@using DuxCommerce.Storefront.Extensions
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using OrchardCore.Contents.TagHelpers
+@model DuxCommerce.Storefront.Views.Category.ViewModels.ProductsVm
+
+@if (Model.Products?.Any() ?? false)
+{
+    <div class="product-grid row">
+        @foreach (var product in Model.Products)
+        {
+            var contentItem = Model.ProductMap[product.Id];
+
+            <div class="col-xl-3 col-6">
+                <div class="product mb-3">
+                    <div class="product-image">
+                        <a display-for="@contentItem">
+                            <img src="@Orchard.AssetUrl(product.ImagePath)" alt="@product.ImageText" class="rounded">
+                        </a>
+                    </div>
+                    <div class="product-name">
+                        <a display-for="@contentItem">
+                            <span>@product.Name</span>
+                        </a>
+                    </div>
+                    @if (product.Prices.ShowPriceIncTax)
+                    {
+                        <div class="product-price">
+                            <span>@product.Prices.PriceIncTax.ToCurrency(Model.Currency) inc tax</span>
+                        </div>
+                    }
+                    @if (product.Prices.ShowPriceExcTax)
+                    {
+                        <div class="product-price">
+                            <span>@product.Prices.PriceExcTax.ToCurrency(Model.Currency) excl tax</span>
+                        </div>
+                    }
+                    @if (product.HasOptions)
+                    {
+                        <a display-for="@contentItem" class="btn btn-primary">@T["View Details"]</a>
+                    }
+                    else
+                    {
+                        <form asp-controller="ShoppingCart" asp-action="AddItem" asp-area="@Constants.AreaName" method="post">
+                            <input class="btn btn-primary" type="submit" value="Add to Cart"/>
+                            <input type="hidden" name="productId" value="@product.Id"/>
+                            <input type="hidden" name="prototypeId" value="@product.PrototypeId"/>
+                        </form>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}

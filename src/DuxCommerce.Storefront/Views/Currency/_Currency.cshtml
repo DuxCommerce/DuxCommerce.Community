@@ -1,0 +1,58 @@
+@model DuxCommerce.Storefront.Views.Currency.ViewModels.CurrencyVm
+
+<div asp-validation-summary="ModelOnly"></div>
+<input asp-for="CurrencyModel.Id" type="hidden"/>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="CurrencyModel.EnglishName">@T["English Name"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="CurrencyModel.EnglishName" class="form-control" required/>
+        <span asp-validation-for="CurrencyModel.EnglishName"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="CurrencyModel.NativeName">@T["Native Name"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="CurrencyModel.NativeName" class="form-control" required/>
+        <span asp-validation-for="CurrencyModel.NativeName"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="CurrencyModel.Symbol">@T["Symbol"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="CurrencyModel.Symbol" class="form-control" required/>
+        <span asp-validation-for="CurrencyModel.Symbol"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="CurrencyModel.Code">@T["Currency Code"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="CurrencyModel.Code" class="form-control" required/>
+        <span asp-validation-for="CurrencyModel.Code"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="CurrencyModel.DisplayLocale">@T["Display Locale"]</label>
+    </div>
+    <div class="col-md-9">
+        <select asp-for="CurrencyModel.DisplayLocale" asp-items="Model.Locales" class="form-control"></select>
+        <span asp-validation-for="CurrencyModel.DisplayLocale"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="CurrencyModel.CustomFormatting">@T["Custom Formatting"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="CurrencyModel.CustomFormatting" class="form-control"/>
+        <span asp-validation-for="CurrencyModel.CustomFormatting"></span>
+    </div>
+</div>

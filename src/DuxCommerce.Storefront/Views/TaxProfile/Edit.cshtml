@@ -1,0 +1,139 @@
+@using DuxCommerce.OrchardCore
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using OrchardCore.ResourceManagement.TagHelpers
+@using ScriptTagHelper = OrchardCore.ResourceManagement.TagHelpers.ScriptTagHelper
+@model DuxCommerce.Storefront.Views.TaxProfile.ViewModels.TaxProfileVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<h1>@T["Tax Profile"]</h1>
+<form asp-controller="TaxProfile" asp-action="Edit" method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+    <input asp-for="ProfileModel.Id" type="hidden"/>
+    <div class="accordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tax-options">
+                    @T["Tax Options"]
+                </button>
+            </h2>
+            <div id="tax-options" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="ProfileModel.TaxCalculationType">@T["Calculate tax"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select asp-for="ProfileModel.TaxCalculationType" asp-items="Model.TaxCalculationTypes"></select>
+                            <span asp-validation-for="ProfileModel.TaxCalculationType"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="ProfileModel.PricesIncludeTax">
+                                @T["Product Prices"]
+                            </label>
+                        </div>
+                        <div class="col-md-9">
+                            <label>
+                                <input type="checkbox" asp-for="ProfileModel.PricesIncludeTax" class="check-box"/>
+                                @T["Prices include tax"]
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="ProfileModel.BreakdownTaxOnFrontEnd">
+                                @T["Tax Charges in Cart"]
+                            </label>
+                        </div>
+                        <div class="col-md-9">
+                            <label>
+                                <input type="checkbox" asp-for="ProfileModel.BreakdownTaxOnFrontEnd" class="check-box"/>
+                                @T["Show all applied tax rates"]
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="ProfileModel.BreakdownTaxOnBackEnd">
+                                @T["Tax Charges in Orders"]
+                            </label>
+                        </div>
+                        <div class="col-md-9">
+                            <label>
+                                <input type="checkbox" asp-for="ProfileModel.BreakdownTaxOnBackEnd" class="check-box"/>
+                                @T["Show all applied tax rates"]
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tax-address">
+                    @T["Default Tax Address"]
+                </button>
+            </h2>
+            <div id="tax-address" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="ProfileModel.DefaultTaxAddress.CountryCode">@T["Country"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select asp-for="ProfileModel.DefaultTaxAddress.CountryCode" asp-items="Model.Countries" class="form-control">
+                            </select>
+                            <span asp-validation-for="ProfileModel.DefaultTaxAddress.CountryCode"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="ProfileModel.DefaultTaxAddress.StateId">@T["State or Province"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select asp-for="ProfileModel.DefaultTaxAddress.StateId" asp-items="Model.States" class="form-control"></select>
+                            <span asp-validation-for="ProfileModel.DefaultTaxAddress.StateId"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-end" asp-for="ProfileModel.DefaultTaxAddress.PostalCode">@T["Postal Code"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" asp-for="ProfileModel.DefaultTaxAddress.PostalCode"/>
+                            <span asp-validation-for="ProfileModel.DefaultTaxAddress.PostalCode"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-end">
+        <div>
+            <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        </div>
+    </div>
+</form>
+
+<script asp-name="@ResourceNames.JQuery"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function () {    
+    $("#@Html.IdFor(m => m.ProfileModel.DefaultTaxAddress.CountryCode)").change(function () {
+        let code = $(this).val();
+        $.get("@Url.Action("CountryStates", "Country")", { CountryCode: code }, function (states) {
+            PopulateStates("#@Html.IdFor(m => m.ProfileModel.DefaultTaxAddress.StateId)", states);
+        });
+    });  
+});
+
+function PopulateStates(dropDownId, states) {
+    $(dropDownId).empty();
+    $.each(states, function (index, state) {
+        $(dropDownId).append("<option value='" + state.id + "'>" + state.name + "</option>")
+    });
+}
+</script>

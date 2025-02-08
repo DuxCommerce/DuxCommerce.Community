@@ -1,0 +1,29 @@
+@using DuxCommerce.OrchardCore.Catalog.Products
+@using DuxCommerce.StoreBuilder.Catalog.DataTypes
+@using DuxCommerce.Storefront
+@using OrchardCore.ContentManagement
+@model DuxCommerce.Storefront.Views.AdminProduct.ViewModels.ProductLinksVm
+
+@{
+    string Display(bool display)
+    {
+        return display ? "active" : string.Empty;
+    }
+
+    if (Model.ContentItem != null)
+    {
+        var product = (ProductRow)Model.ContentItem.As<ProductPart>().Row;
+
+        <ul class="nav nav-tabs mb-3">
+            <li class="nav-item">
+                <a edit-for="@Model.ContentItem" asp-route-returnUrl="@FullRequestPath" class="nav-link @Display(Model.EditLink)">@T["General"]</a>
+            </li>
+            @if (product.HasOptions)
+            {
+                <li class="nav-item">
+                    <a class="nav-link @Display(Model.OptionsLink)" asp-action="Index" asp-controller="ProductOption" asp-route-productId="@product.Id" asp-area="@Constants.AreaName">@T["Options"]</a>
+                </li>
+            }
+        </ul>
+    }
+}

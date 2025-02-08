@@ -1,0 +1,17 @@
+@model DuxCommerce.Storefront.Views.ShippingProfile.ViewModels.ShippingZoneVm
+
+<h1>@T["Edit Zone"]</h1>
+
+@await Html.PartialAsync("_ZoneLinks", Model.Links)
+
+<form asp-controller="ShippingProfile" asp-action="EditZone" method="post">
+    @await Html.PartialAsync("_ShippingZone", Model)
+    <div class="d-flex justify-content-between">
+        <div>
+            <a asp-action="Index" class="btn btn-secondary">@T["Cancel"]</a>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        </div>
+    </div>
+</form>

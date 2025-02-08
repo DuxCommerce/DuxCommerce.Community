@@ -1,0 +1,33 @@
+@using DuxCommerce.Storefront.Extensions
+@model DuxCommerce.Storefront.Views.AdminCustomer.ViewModels.CustomersVm
+
+<h1>@T["Customers"]</h1>
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>@T["Name"]</th>
+                <th>@T["Phone"]</th>
+                <th>@T["Joined"]</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var customer in Model.Customers)
+            {
+                <tr>
+                    <td>@customer.FirstName&nbsp;@customer.LastName</td>
+                    <td>@customer.PhoneNumber</td>
+                    <td>@customer.CreatedAtUtc.ToLocalTime(Model.TimeZone)</td>
+                    <td class="text-end">
+                        <a asp-action="Edit" asp-route-customerId="@customer.Id" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                            <i class="fas fa-pen-to-square small"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

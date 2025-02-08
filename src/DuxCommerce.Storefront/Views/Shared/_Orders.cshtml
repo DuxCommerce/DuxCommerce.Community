@@ -1,0 +1,40 @@
+@using DuxCommerce.Storefront.Extensions
+@model DuxCommerce.Storefront.Views.Shared.ViewModels.OrdersVm
+
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>@T["Order Number"]</th>
+                <th>@T["Date"]</th>
+                <th>@T["Customer"]</th>
+                <th>@T["Total"]</th>
+                <th>@T["Status"]</th>
+                <th>@T["Payment"]</th>
+                <th>@T["Shipping"]</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var orderVm in Model.Orders)
+            {
+                <tr>
+                    <td>@orderVm.Order.OrderNumber</td>
+                    <td>@orderVm.Order.CreatedAtUtc.ToLocalTime(Model.TimeZone)</td>
+                    <td>@orderVm.Order.ShopperEmail</td>
+                    <td>@orderVm.Order.OrderTotal.ToCurrency(orderVm.Currency)</td>
+                    <td>@orderVm.Order.OrderStatus</td>
+                    <td>@orderVm.Order.PaymentStatus</td>
+                    <td>@orderVm.Order.ShippingStatus</td>
+                    <td>
+                        <a asp-controller="AdminOrder" asp-action="Details" asp-route-id="@orderVm.Order.Id" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["View Order"]">
+                            <i class="fas fa-eye small"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

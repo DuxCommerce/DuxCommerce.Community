@@ -1,0 +1,17 @@
+@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.Currency.ViewModels.CurrencyVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<h1>@T["Create Currency"]</h1>
+<form asp-controller="Currency" asp-action="Create" method="post">
+    @await Html.PartialAsync("_Currency", Model)
+    <div class="d-flex justify-content-between">
+        <div>
+            <a asp-action="Index" class="btn btn-secondary">@T["Cancel"]</a>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        </div>
+    </div>
+</form>

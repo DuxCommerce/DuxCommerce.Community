@@ -1,0 +1,13 @@
+@model DuxCommerce.Storefront.Views.ShippingProfile.ViewModels.OriginAddressVm
+
+@{ Layout = null; }
+
+<div asp-validation-summary="ModelOnly"></div>
+<form asp-controller="ShippingProfile" asp-action="EditAddress" asp-route-originId="@Model.OriginId" method="post">
+    <partial name="_EditAddress" for="AddressVm"/>
+    <div>
+        <div>
+            <input class="btn btn-primary float-end" type="submit" value="@T["Save"]"/>
+        </div>
+    </div>
+</form>

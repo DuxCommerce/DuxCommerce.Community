@@ -1,0 +1,13 @@
+@model DuxCommerce.Storefront.Views.TaxCode.ViewModels.TaxCodeVm
+
+<div asp-validation-summary="ModelOnly"></div>
+<input asp-for="CodeModel.Id" type="hidden"/>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="CodeModel.Name">@T["Name"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="CodeModel.Name" class="form-control" required/>
+        <span asp-validation-for="CodeModel.Name"></span>
+    </div>
+</div>

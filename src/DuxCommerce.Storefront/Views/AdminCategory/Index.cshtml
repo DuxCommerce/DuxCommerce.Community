@@ -1,0 +1,55 @@
+@using DuxCommerce.OrchardCore.Catalog.Categories
+@using DuxCommerce.Storefront.Extensions
+@using OrchardCore.Autoroute.Models
+@using OrchardCore.ContentManagement
+@using OrchardCore.Contents.TagHelpers
+@model DuxCommerce.Storefront.Views.AdminCategory.ViewModels.CategoryIndexVm
+
+<h1>@T["Categories"]</h1>
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class="col-md-1">@T["Image"]</th>
+                <th>@T["Name"]</th>
+                <th>@T["Permalink"]</th>
+                <th>@T["Sort Order"]</th>
+                <th>
+                    @{ var route = new { area = "OrchardCore.Contents", controller = "Admin", action = "Create", id = "Category", returnUrl = FullRequestPath }; }
+                    <a class="btn btn-primary create float-end" href="@Url.RouteUrl(route)">@T["Create"]</a>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var category in Model.CategoryTrails)
+            {
+                var contentItem = Model.CategoryMap[category.CategoryId];
+                var image = contentItem.GetImage<CategoryImagePart>();
+                var permalink = contentItem.As<AutoroutePart>().Path;
+
+                <tr>
+                    <td>
+                        <a edit-for="@contentItem">
+                            <img src="@Orchard.AssetUrl(image.Path, 50, 50)" alt="@image.Text">
+                        </a>
+                    </td>
+                    <td>
+                        <a edit-for="@contentItem">@category.FriendlyName</a>
+                    </td>
+                    <td>@permalink</td>
+                    <td>@category.SortOrder</td>
+                    <td class="text-end">
+                        <a edit-for="@contentItem" asp-route-returnUrl="@FullRequestPath" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                            <i class="fas fa-pen-to-square small"></i>
+                        </a>
+                        <a asp-action="Delete" method="post" asp-route-id="@category.CategoryId" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Delete"]" itemprop="RemoveUrl UnsafeUrl">
+                            <i class="fas fa-trash-alt small"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

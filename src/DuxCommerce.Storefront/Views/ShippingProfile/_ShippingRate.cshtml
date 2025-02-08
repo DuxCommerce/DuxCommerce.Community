@@ -1,0 +1,36 @@
+@model DuxCommerce.StoreBuilder.Shipping.Requests.ShippingRateModel
+
+<div asp-validation-summary="ModelOnly"></div>
+
+<input asp-for="GroupId" type="hidden"/>
+<input asp-for="ZoneId" type="hidden"/>
+<input asp-for="MethodId" type="hidden"/>
+<input asp-for="RateId" type="hidden"/>
+
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Min">@T["Min"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="Min" class="form-control" type="number" min="0" step="any" required/>
+        <span asp-validation-for="Min"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Min">@T["Max"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="Max" class="form-control" type="number" min="0" step="any" required/>
+        <span asp-validation-for="Max"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Min">@T["Rate"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="Fee" class="form-control" type="number" min="0" step="any" required/>
+        <span asp-validation-for="Fee"></span>
+    </div>
+</div>

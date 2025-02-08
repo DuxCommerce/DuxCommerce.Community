@@ -1,0 +1,13 @@
+@model DuxCommerce.Storefront.Views.Shared.ViewModels.CustomerAddressVm
+
+@{ Layout = null; }
+
+<div asp-validation-summary="ModelOnly"></div>
+<form asp-controller="YourAddresses" asp-action="EditAddress" asp-route-customerId="@Model.CustomerId" method="post">
+    <partial name="_EditAddress" for="AddressVm"/>
+    <div>
+        <div>
+            <input class="btn btn-primary float-end" type="submit" value="@T["Save"]"/>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,74 @@
+@using DuxCommerce.OrchardCore.Catalog.Products
+@using DuxCommerce.StoreBuilder.Catalog.DataTypes
+@using DuxCommerce.Storefront.Extensions
+@using OrchardCore.ContentManagement
+@model DuxCommerce.Storefront.Views.Shared.ViewModels.ProductPickerVm
+
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class="col-md-1">
+                    <label for="selectAll">
+                        <input type="checkbox" id="selectAll" name="selectAll"/>&nbsp;@T["Select All"]
+                    </label>
+                </th>
+                <th>@T["Name"]</th>
+                <th>@T["Price"]</th>
+            </tr>
+            </thead>
+            <tbody>
+            @for (var i = 0; i < Model.Products.Count(); i++)
+            {
+                var contentItem = Model.Products.ElementAt(i);
+                var image = contentItem.GetImage<ProductImagePart>();
+                var product = (ProductRow)contentItem.As<ProductPart>().Row;
+
+                <tr>
+                    <td>
+                        <input type="hidden" name="Products[@i].ProductId" value="@product.Id"/>
+                        <input type="checkbox" name="Products[@i].Selected"/>
+                        <a edit-for="@contentItem">
+                            <img src="@Orchard.AssetUrl(image.Path, 50, 50)" alt="@image.Text">
+                        </a>
+                    </td>
+                    <td>
+                        <a edit-for="@contentItem">
+                            <span>@product.Name</span>
+                        </a>
+                    </td>
+                    <td>@product.Price.ToCurrency(Model.Currency)</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    @await DisplayAsync(Model.Pager)
+</div>
+
+<script at="Foot" depends-on="jQuery">
+    $(document).ready(function() {
+        
+        $('#selectAll').click(function(e){
+            let table= $(e.target).closest('table');            
+            let checkboxes = $('td input:checkbox',table);
+            
+            checkboxes.prop('checked',this.checked);            
+            setValue(checkboxes, this.checked);
+        });
+        
+        $("td input:checkbox").on('change', function() {
+          setValue($(this), $(this).is(':checked'))
+        });
+        
+        function setValue(checkboxes, checked) {
+            if (checked) {
+                checkboxes.attr('value', 'true');
+            } else {
+                checkboxes.attr('value', 'false');
+            }            
+        }
+    });
+</script>

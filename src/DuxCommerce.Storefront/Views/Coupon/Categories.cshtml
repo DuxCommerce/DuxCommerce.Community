@@ -1,0 +1,60 @@
+﻿@using DuxCommerce.OrchardCore
+@using DuxCommerce.OrchardCore.Catalog.Categories
+@using DuxCommerce.Storefront.Extensions
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using OrchardCore.Contents.TagHelpers
+@using OrchardCore.ResourceManagement.TagHelpers
+@model DuxCommerce.Storefront.Views.Coupon.ViewModels.CouponCategoriesVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<h1>@T["Coupon - Categories"]</h1>
+
+@await Html.PartialAsync("_CouponLinks", Model.Links)
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th colspan="2">@T["Name"]</th>
+                <th class="text-end">
+                    <a class="btn btn-primary" asp-action="LinkCategories"
+                       asp-route-couponId="@Model.Coupon.Id">
+                        @T["Link"]
+                    </a>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                var promotedCategoryIds = Model.Coupon.Rule.Product.Categories;
+
+                foreach (var trailItem in Model.CategoryTrails)
+                {
+                    var contentItem = Model.CategoryMap[trailItem.CategoryId];
+                    var image = contentItem.GetImage<CategoryImagePart>();
+
+                    if (promotedCategoryIds.Contains(trailItem.CategoryId))
+                    {
+                        <tr>
+                            <td>
+                                <a edit-for="@contentItem">
+                                    <img src="@Orchard.AssetUrl(image.Path, 50, 50)" alt="@image.Text">
+                                </a>
+                            </td>
+                            <td>
+                                <a edit-for="@contentItem">@trailItem.FriendlyName</a>
+                            </td>
+                            <td class="text-end">
+                                <form asp-action="UnlinkCategories" asp-route-couponId="@Model.Coupon.Id" asp-route-categoryId="@trailItem.CategoryId" method="post">
+                                    <input class="btn btn-primary btn-sm float-end" type="submit" value="@T["Unlink"]"/>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

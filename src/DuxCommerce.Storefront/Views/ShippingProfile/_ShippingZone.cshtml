@@ -1,0 +1,63 @@
+@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.ShippingProfile.ViewModels.ShippingZoneVm
+
+<style asp-name="@ResourceNames.MultiSelect"></style>
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<div asp-validation-summary="ModelOnly"></div>
+<input asp-for="ZoneModel.ZoneId" type="hidden"/>
+<input asp-for="ZoneModel.GroupId" type="hidden"/>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="ZoneModel.Name">@T["Zone Name"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="ZoneModel.Name" class="form-control" required/>
+        <span asp-validation-for="ZoneModel.Name"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="ZoneModel.CountryStates">@T["Countries/States"]</label>
+    </div>
+    <div class="col-md-9">
+        <div class="multi-select-wrapper">
+            <select asp-for="ZoneModel.CountryStates" multiple id="zoneStates">
+                @foreach (var country in Model.Countries)
+                {
+                    <optgroup label="@country.Name">
+                        @{
+                            var states = Model.AllStates[country.TwoLetterCode];
+                            foreach (var state in states)
+                            {
+                                var stateId = $"{country.TwoLetterCode},{state.Id}";
+                                var stateIds = Model.ZoneModel.CountryStates;
+
+                                if (stateIds != null && stateIds.Contains(stateId))
+                                {
+                                    <option value="@stateId" selected>@state.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@stateId">@state.Name</option>
+                                }
+                            }
+                        }
+                    </optgroup>
+                }
+            </select>
+            <span asp-validation-for="ZoneModel.CountryStates"></span>
+        </div>
+    </div>
+</div>
+
+<script asp-name="@ResourceNames.MultiSelect"></script>
+
+<script>
+    $('#zoneStates').multiselect({
+        columns: 5,
+        search: true,
+        selectAll: true,
+        selectGroup: true
+    });
+</script>

@@ -1,0 +1,57 @@
+@using DuxCommerce.OrchardCore
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using OrchardCore.ResourceManagement.TagHelpers
+@model DuxCommerce.Storefront.Views.TaxZone.ViewModels.TaxRateVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+@{
+    string GetName(string taxCodeId)
+    {
+        return Model.TaxCodes.Single(x => x.Id == taxCodeId).Name;
+    }
+}
+
+<div asp-validation-summary="ModelOnly"></div>
+<input asp-for="ZoneId" type="hidden"/>
+<input asp-for="RateModel.Id" type="hidden"/>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="RateModel.Name">@T["Name"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="RateModel.Name" class="form-control" required/>
+        <span asp-validation-for="RateModel.Name"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="RateModel.CodeRates">@T["Rates"]</label>
+    </div>
+    <div class="col-md-9">
+        <table class="table mb-3">
+            <thead>
+            <tr>
+                <td class="col-md-6">@T["Tax Code"]</td>
+                <td class="col-md-6">@T["Rate"]</td>
+            </tr>
+            </thead>
+            <tbody>
+            @for (var index = 0; index < Model.RateModel.CodeRates.Length; index++)
+            {
+                <tr>
+                    <td>
+                        <input type="hidden" name="RateModel.CodeRates[@index].TaxCodeId" value="@Model.RateModel.CodeRates[index].TaxCodeId"/>
+                        <span>@GetName(Model.RateModel.CodeRates[index].TaxCodeId)</span>
+                        @* <span asp-validation-for="RateModel.CodeRates[@index].TaxCodeId"></span> *@
+                    </td>
+                    <td>
+                        <input name="RateModel.CodeRates[@index].Amount" value="@Model.RateModel.CodeRates[index].Amount" type="number" min="0" step="any"/>%
+                        @* <span asp-validation-for="RateModel.CodeRates[@index].Amount"></span> *@
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

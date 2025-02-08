@@ -1,0 +1,80 @@
+@using DuxCommerce.OrchardCore
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using OrchardCore.ResourceManagement.TagHelpers
+@model DuxCommerce.Storefront.Views.ProductOption.ViewModels.ProductOptionsVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<div asp-validation-summary="ModelOnly"></div>
+<h1>@T["Edit Product"] - @Model.Product.Name</h1>
+@await Html.PartialAsync("_ProductLinks", Model.Links)
+<div class="d-flex flex-row-reverse">
+    <a asp-action="Index" asp-controller="ProductVariant" asp-route-productId="@Model.Product.Id" class="btn btn-primary"
+       role="button">
+        @T["View Variants"]
+    </a>
+    <a asp-action="LinkOptions" asp-controller="AdminProduct" asp-route-productId="@Model.Product.Id" class="btn btn-primary"
+       role="button">
+        @T["Add Shared Options"]
+    </a>
+    <a asp-action="Create" asp-route-productId="@Model.Product.Id" class="btn btn-primary"
+       role="button">
+        @T["Add Option"]
+    </a>
+</div>
+<div class="row mb-5">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>@T["Option Name"]</th>
+                <th>@T["Display Name"]</th>
+                <th>@T["Display Type"]</th>
+                <th>@T["Display Order"]</th>
+                <th>@T["Choices"]</th>
+                <th>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var optionVm in Model.Options)
+            {
+                var option = optionVm.Option;
+
+                var choices = option.Choices
+                    .OrderBy(x => x.DisplayOrder)
+                    .ThenBy(x => x.CreatedAtUtc)
+                    .Select(x => x.Name);
+
+                <tr>
+                    <td>@option.OptionName</td>
+                    <td>@option.DisplayName</td>
+                    <td>@option.DisplayType</td>
+                    <td>@option.DisplayOrder</td>
+                    <td>@string.Join(", ", choices)</td>
+                    <td class="text-end">
+                        @if (optionVm.Shared)
+                        {
+                            <a asp-action="Edit" asp-controller="LinkedOption" asp-route-productId="@Model.Product.Id" asp-route-optionId="@option.Id" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                                <i class="fas fa-pen-to-square small"></i>
+                            </a>
+                            <a asp-action="UnlinkOption" method="post" asp-route-productId="@Model.Product.Id" asp-route-optionId="@option.Id" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Unlink"]" itemprop="RemoveUrl UnsafeUrl">
+                                <i class="fas fa-trash-alt small"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-action="Edit" asp-route-productId="@Model.Product.Id" asp-route-optionId="@option.Id" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                                <i class="fas fa-pen-to-square small"></i>
+                            </a>
+                            <a asp-action="Delete" method="post" asp-route-productId="@Model.Product.Id" asp-route-optionId="@option.Id" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Delete"]" itemprop="RemoveUrl UnsafeUrl">
+                                <i class="fas fa-trash-alt small"></i>
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

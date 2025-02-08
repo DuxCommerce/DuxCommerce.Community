@@ -1,0 +1,24 @@
+@model DuxCommerce.Storefront.Views.Shared.ViewModels.CheckoutAddressVm
+
+<div id="checkoutAddress">
+    @if (Model.Addresses.Any())
+    {
+        <div class="row mb-3 form-group">
+            <select asp-for="AddressId" asp-items="Model.Addresses" onchange="selectAddress(this.value, '@(Model.AddressVm.Suffix)');" class="form-control"></select>
+        </div>
+    }
+    <div id=@("addressForm" + Model.AddressVm.Suffix)>
+        <partial name="_EditAddress" for="AddressVm"/>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function selectAddress(selectedAddressId, suffix) {
+        let id = "addressForm" + suffix;
+        let addressForm = document.querySelector('[id$=' + id + ']');
+        addressForm.hidden=!!selectedAddressId;
+    }
+    
+    selectAddress("@Model.AddressId", "@Model.AddressVm.Suffix");
+</script>

@@ -1,0 +1,106 @@
+@using DuxCommerce.OrchardCore
+@using DuxCommerce.StoreBuilder.Carts.Requests
+@using DuxCommerce.StoreBuilder.Checkout.Requests
+@using DuxCommerce.Storefront.Extensions
+@model DuxCommerce.Storefront.Views.Checkout.ViewModels.CheckoutOptionsVm
+
+@{
+    if (Model.ShippingModel.MethodId == null && Model.ShippingOptions.Any())
+    {
+        var firstOption = Model.ShippingOptions.First();
+        Model.ShippingModel = new ShippingOptionModel
+        {
+            ProfileId = firstOption.ProfileId,
+            MethodId = firstOption.MethodId,
+            MethodName = firstOption.MethodName
+        };
+    }
+
+    if (Model.MethodModel.MethodType == null && Model.PaymentMethods.Any())
+    {
+        var firstOption = Model.PaymentMethods.First();
+        Model.MethodModel = new PaymentMethodModel
+        {
+            MethodType = firstOption.MethodType,
+            MethodName = firstOption.DisplayName
+        };
+    }
+}
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<div class="row checkout-options">
+    <div class="col-md-12">
+        @await Html.PartialAsync("_CheckoutSteps", Model.Steps)
+    </div>
+    <div class="col-md-8">
+        <div asp-validation-summary="ModelOnly"></div>
+        <form asp-controller="Checkout" asp-action="CheckoutOptions" method="post">
+            <div class="shipping-options mb-3">
+                <h2>@T["Shipping Options"]</h2>
+                <input type="hidden" id="shippingProfileId" asp-for="ShippingModel.ProfileId" required/>
+                <input type="hidden" id="shippingMethodId" asp-for="ShippingModel.MethodId" required/>
+                <input type="hidden" id="shippingMethodName" asp-for="ShippingModel.MethodName" required/>
+                <span asp-validation-for="ShippingModel.MethodName"></span>
+                @foreach (var option in Model.ShippingOptions)
+                {
+                    var selected = option.MethodId == Model.ShippingModel.MethodId;
+                    var displayName = $"{option.MethodName}({option.ShippingFee.ToCurrency(Model.MiniCart.Currency)})";
+                    <div class="row">
+                        <label>
+                            <input type="radio" name="shippingOption" checked="@selected"
+                                   value="@option.ProfileId;@option.MethodId;@option.MethodName"/>@displayName
+                        </label>
+                    </div>
+                }
+            </div>
+            <div class="payment-methods">
+                <h2>@T["Payment Methods"]</h2>
+                <input type="hidden" id="paymentMethodType" asp-for="MethodModel.MethodType" required/>
+                <input type="hidden" id="paymentMethodName" asp-for="MethodModel.MethodName" required/>
+                <span asp-validation-for="MethodModel.MethodName"></span>
+                @foreach (var method in Model.PaymentMethods)
+                {
+                    var selected = method.MethodType == Model.MethodModel.MethodType;
+                    var displayName = $"{method.DisplayName}";
+                    <div class="row">
+                        <label>
+                            <input type="radio" name="paymentMethod" id="@method.MethodType" checked="@selected"
+                                   value="@method.MethodType;@method.DisplayName"/>@displayName
+                        </label>
+                    </div>
+                }
+            </div>
+            <div class="form-group mt-3">
+                <input class="btn btn-primary float-end" type="submit" value="Next"/>
+                <a asp-action="CheckoutAddresses" class="btn btn-secondary float-start">Back</a>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <partial name="_MiniCart" for="MiniCart"/>
+    </div>
+</div>
+
+<script asp-name="@ResourceNames.JQuery"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+    $('input[type=radio][name="shippingOption"]').change(function() {
+        let values = $(this).val().split(';');
+        
+        $("#shippingProfileId").val(values[0]);
+        $("#shippingMethodId").val(values[1]);
+        $("#shippingMethodName").val(values[2]);
+    });
+    
+    $('input[type=radio][name="paymentMethod"]').click(function() {
+        let values = $(this).val().split(';');
+        
+        $("#paymentMethodType").val(values[0]);        
+        $("#paymentMethodName").val(values[1]);
+    });
+});
+    
+</script>

@@ -1,0 +1,28 @@
+﻿@using DuxCommerce.OrchardCore.Catalog.Categories
+@using DuxCommerce.Storefront.Extensions
+@using OrchardCore.Contents.TagHelpers
+@model DuxCommerce.Storefront.Views.StoreHome.ViewModels.CategoriesVm
+
+@if (Model.Categories.Any())
+{
+    <div class="category-grid row">
+        @foreach (var category in Model.Categories)
+        {
+            var categoryItem = Model.CategoryMap[category.Id];
+            var imageVm = categoryItem.GetImage<CategoryImagePart>();
+
+            <div class="col-xl-3 col-6">
+                <div class="featured-category mb-3">
+                    <div class="category-name mb-3">
+                        <span>@category.Name</span>
+                    </div>
+                    <div class="category-image">
+                        <a display-for="@categoryItem">
+                            <img src="@Orchard.AssetUrl(imageVm.Path)" alt="@imageVm.Text" class="rounded">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

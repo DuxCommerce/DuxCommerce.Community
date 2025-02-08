@@ -1,0 +1,46 @@
+@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.AdminCountry.ViewModels.CountryVm
+@{
+    var createRoute = new { CountryId = Model.CountryModel.Id };
+}
+
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class="col-md-6">@T["State Name"]</th>
+                <th class="col-md-3">@T["Code"]</th>
+                <th class="float-end">
+                    <a onclick="showPopup('@Url.Action("CreateState", "AdminCountry", createRoute, Context.Request.Scheme)', '@T["Add State"]')"
+                       class="btn btn-primary">
+                        @T["Add State"]
+                    </a>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var state in Model.States)
+            {
+                var editRoute = new { CountryId = Model.CountryModel.Id, StateId = state.Id };
+                <tr>
+                    <td>@state.Name</td>
+                    <td>@state.Code</td>
+                    <td class="text-end">
+                        <a onclick="showPopup('@Url.Action("EditState", "AdminCountry", editRoute, Context.Request.Scheme)', '@T["Edit State"]')" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                            <i class="fas fa-pen-to-square small"></i>
+                        </a>
+                        <a asp-action="DeleteState" asp-route-countryId="@Model.CountryModel.Id" asp-route-stateId="@state.Id" class="btn btn-primary btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Delete"]" itemprop="RemoveUrl UnsafeUrl">
+                            <i class="fas fa-trash-alt small"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<partial name="_Popup"/>
+
+<script asp-name="@ResourceNames.Popup"></script>

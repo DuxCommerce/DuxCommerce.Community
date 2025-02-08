@@ -1,0 +1,23 @@
+﻿@model DuxCommerce.Storefront.Views.Checkout.ViewModels.CheckoutStepsVm
+
+@{
+    string CssClass(bool display)
+    {
+        return display ? "step active" : "step";
+    }
+}
+
+<div class="checkout-steps">
+    <div class="@CssClass(Model.CheckAddresses)">
+        <i class="fas fa-address-card"></i>
+        <h2 class="step-name">@T["1. Addresses"]</h2>
+    </div>
+    <div class="@CssClass(Model.CheckoutOptions)">
+        <i class="fas fa-truck-fast"></i>
+        <h2 class="step-name">@T["2. Shipping & Payment"]</h2>
+    </div>
+    <div class="@CssClass(Model.ConfirmPayment)">
+        <i class="fas fa-money-bill"></i>
+        <h2 class="step-name">@T["3. Confirm"]</h2>
+    </div>
+</div>

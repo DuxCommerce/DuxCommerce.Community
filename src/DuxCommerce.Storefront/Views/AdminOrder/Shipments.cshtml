@@ -1,0 +1,206 @@
+@using DuxCommerce.OrchardCore
+@using DuxCommerce.OrchardCore.Catalog.Products
+@using DuxCommerce.StoreBuilder.Orders.SimpleTypes
+@using DuxCommerce.Storefront.Extensions
+@using OrchardCore.ResourceManagement.TagHelpers
+@model DuxCommerce.Storefront.Views.AdminOrder.ViewModels.OrderShipmentsVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<h1>@T["View Order"] - @Model.Order.OrderNumber</h1>
+@await Html.PartialAsync("_OrderLinks", Model.Links)
+<div class="row mb-3 order-shipments">
+    <div class="col-md-9">
+        @{
+            if (Model.Order.ShippingStatus != nameof(ShippingStatus.Shipped))
+            {
+                <div class="ship-items mb-3">
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <form asp-action="Shipments" asp-controller="AdminOrder" asp-route-id="@Model.Order.Id" method="post">
+                        <div class="row mb-3">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th class="col-md-1"></th>
+                                        <th>@T["Items"]</th>
+                                        <th>@T["Price"]</th>
+                                        <th>@T["Qty Ordered"]</th>
+                                        <th class="text-end">@T["To ship"]</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @for (var i = 0; i < Model.Shipment.Items.Length; i++)
+                                    {
+                                        var shipmentItem = Model.Shipment.Items[i];
+                                        var orderItem = Model.Order.Items.Single(x => x.Id == shipmentItem.OrderItemId);
+
+                                        var itemExists = Model.ProductMap.TryGetValue(orderItem.PrototypeId, out var contentItem);
+                                        var image = Model.ProductMap.GetImage<ProductImagePart>(orderItem.ProductId);
+
+                                        var orderItemId = $"Shipment.Items[{i}].OrderItemId";
+                                        var quantity = $"Shipment.Items[{i}].Quantity";
+                                        <tr>
+                                            <td>
+                                                @if (!itemExists)
+                                                {
+                                                    <img src="@Orchard.AssetUrl(image.Path, 100, 100)" alt="@image.Text">
+                                                }
+                                                else
+                                                {
+                                                    <a edit-for="@contentItem">
+                                                        <img src="@Orchard.AssetUrl(image.Path, 100, 100)" alt="@image.Text">
+                                                    </a>
+                                                }
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="@orderItemId" value="@shipmentItem.OrderItemId">
+                                                @if (!itemExists)
+                                                {
+                                                    <span>@orderItem.ProductName</span>
+                                                    <span>@orderItem.ChoiceNames</span>
+                                                }
+                                                else
+                                                {
+                                                    <a edit-for="@contentItem">
+                                                        <span>@orderItem.ProductName</span>
+                                                        <span>@orderItem.ChoiceNames</span>
+                                                    </a>
+                                                }
+                                            </td>
+                                            <td>
+                                                @orderItem.Price.ToCurrency(Model.Currency)
+                                            </td>
+                                            <td>
+                                                @orderItem.Quantity
+                                            </td>
+                                            <td class="text-end">
+                                                <input type="number" name="@quantity" min="0" class="quantity text-end" value="@shipmentItem.Quantity"/>
+                                            </td>
+                                        </tr>
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row mb-3 form-group">
+                                <div class="col-md-3">
+                                    <label class="form-label float-start">@T["Tracking Number"]</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input class="form-control" type="text" asp-for="Shipment.TrackingNumber"/>
+                                    <span asp-validation-for="Shipment.TrackingNumber"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3 form-group">
+                                <div class="col-md-3">
+                                    <label class="form-label float-start">@T["Note"]</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input class="form-control" type="text" asp-for="Shipment.Note"/>
+                                    <span asp-validation-for="Shipment.Note"></span>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <div>
+                                    <input class="btn btn-primary" type="submit" value="Ship"/>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            }
+
+            foreach (var shipment in Model.Order.Shipments)
+            {
+                <div class="order-shipment mb-3">
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-start">@T["Shipped"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <span>@shipment.CreatedAtUtc.ToLocalTime(Model.TimeZone)</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-start">@T["Tracking Number"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <span>@shipment.TrackingNumber</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label class="form-label float-start">@T["Note"]</label>
+                        </div>
+                        <div class="col-md-9">
+                            <span>@shipment.Note</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="col-md-1"></th>
+                                    <th>@T["Items"]</th>
+                                    <th>@T["Price"]</th>
+                                    <th class="text-end">@T["Quantity"]</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var shipmentItem in shipment.Items)
+                                {
+                                    var orderItem = Model.Order.Items.Single(x => x.Id == shipmentItem.OrderItemId);
+                                    var price = orderItem.Price - orderItem.PriceDiscount;
+
+                                    var itemExists = Model.ProductMap.TryGetValue(orderItem.PrototypeId, out var contentItem);
+                                    var image = Model.ProductMap.GetImage<ProductImagePart>(orderItem.ProductId);
+                                    <tr>
+                                        <td>
+                                            @if (!itemExists)
+                                            {
+                                                <img src="@Orchard.AssetUrl(image.Path, 100, 100)" alt="@image.Text">
+                                            }
+                                            else
+                                            {
+                                                <a edit-for="@contentItem">
+                                                    <img src="@Orchard.AssetUrl(image.Path, 100, 100)" alt="@image.Text">
+                                                </a>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (!itemExists)
+                                            {
+                                                <span>@orderItem.ProductName</span>
+                                                <span>@orderItem.ChoiceNames</span>
+                                            }
+                                            else
+                                            {
+                                                <a edit-for="@contentItem">
+                                                    <span>@orderItem.ProductName</span>
+                                                    <span>@orderItem.ChoiceNames</span>
+                                                </a>
+                                            }
+                                        </td>
+                                        <td>
+                                            @price.ToCurrency(Model.Currency)
+                                        </td>
+                                        <td class="text-end">
+                                            @shipmentItem.Quantity
+                                        </td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    <div class="col-md-3">
+        <h2>@T["Shipping Address"]</h2>
+        <partial name="_DisplayAddress" for="Order.ShippingAddress"/>
+    </div>
+</div>

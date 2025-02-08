@@ -1,0 +1,26 @@
+@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.Coupon.ViewModels.LinkProductsVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<h1>@T["Coupon"] - @Model.Coupon.Name</h1>
+<div class="row">
+    <form asp-action="LinkProducts" method="get">
+        <input type="hidden" name="couponId" value="@Model.Coupon.Id"/>
+        @await Html.PartialAsync("_ProductSearch", Model.ProductSearch)
+    </form>
+</div>
+<div class="row">
+    <form asp-action="LinkProducts" method="post">
+        <input type="hidden" name="couponId" value="@Model.Coupon.Id"/>
+        @await Html.PartialAsync("_ProductPicker", Model.ProductPicker)
+        <div class="d-flex justify-content-between">
+            <div>
+                <a asp-action="Products" asp-route-couponId="@Model.Coupon.Id" class="btn btn-secondary">@T["Back"]</a>
+            </div>
+            <div>
+                <button class="btn btn-primary" type="submit">@T["Link"]</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,40 @@
+@model DuxCommerce.Storefront.Views.Inventory.ViewModels.EditInventoryVm
+
+@{ Layout = null; }
+
+<form asp-controller="Inventory" asp-action="Edit" method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+    <input asp-for="Inventory.ProductId" type="hidden"/>
+
+    <div class="row mb-3 form-group">
+        <div class="col-md-3">
+            <label class="form-label float-end" asp-for="Inventory.Name">@T["Name"]</label>
+        </div>
+        <div class="col-md-9">
+            @Model.Inventory.Name @Model.Inventory.ChoiceNames
+        </div>
+    </div>
+    <div class="row mb-3 form-group">
+        <div class="col-md-3">
+            <label class="form-label float-end" asp-for="Inventory.AdjustBy">@T["Adjust by"]</label>
+        </div>
+        <div class="col-md-9">
+            <input asp-for="Inventory.AdjustBy" required>
+            <span asp-validation-for="Inventory.AdjustBy"></span>
+        </div>
+    </div>
+    <div class="row mb-3 form-group">
+        <div class="col-md-3">
+            <label class="form-label float-end" asp-for="Inventory.Reason">@T["Reason"]</label>
+        </div>
+        <div class="col-md-9">
+            <select asp-for="Inventory.Reason" asp-items="Model.Events"></select>
+            <span asp-validation-for="Inventory.Reason"></span>
+        </div>
+    </div>
+    <div>
+        <div>
+            <input class="btn btn-primary float-end" type="submit" value="@T["Save"]"/>
+        </div>
+    </div>
+</form>

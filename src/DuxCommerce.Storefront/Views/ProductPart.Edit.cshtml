@@ -1,0 +1,206 @@
+@using DuxCommerce.OrchardCore
+@using DuxCommerce.StoreBuilder.Catalog.DataTypes
+@model DuxCommerce.Storefront.Views.AdminProduct.ViewModels.ProductEditVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+<style asp-name="@ResourceNames.Trumbowyg"></style>
+
+@{ var display = Model.Product.ParentId == null ? "" : "d-none"; }
+
+@{
+    void DisplayChildren(IDictionary<string, IEnumerable<CategoryRow>> childMap, CategoryRow parent)
+    {
+        if (!childMap.ContainsKey(parent.Id))
+            return;
+
+        var children = childMap[parent.Id].OrderBy(x => x.SortOrder);
+        <ul class="list-group">
+            @foreach (var child in children)
+            {
+                var selected = Model.Product.CategoryIds.Contains(child.Id);
+                <li class="list-group-item">
+                    <input type="checkbox" name="ProductPart.Product.CategoryIds" id="category_@child.Id" value="@child.Id" checked="@selected"/>
+                    <label for="category_@child.Id">@child.Name</label>
+                    @{ DisplayChildren(childMap, child); }
+                </li>
+            }
+        </ul>
+    }
+}
+
+<div asp-validation-summary="ModelOnly"></div>
+<input asp-for="Product.Id" type="hidden"/>
+<div class="accordion">
+    <div class="accordion-item @display">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#basic">
+                @T["Basic Information"]
+            </button>
+        </h2>
+        <div id="basic" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+                <div class="row mb-3 form-group">
+                    <label asp-for="Product.Name" class="form-label">@T["Name"]</label>
+                    <input asp-for="Product.Name" class="form-control" required/>
+                    <span asp-validation-for="Product.Name"></span>
+                </div>
+                <div class="row mb-3 form-group">
+                    <label asp-for="Product.Summary" class="form-label">@T["Summary"]</label>
+                    <textarea id="productSummary" asp-for="Product.Summary" rows="2" class="form-control"></textarea>
+                </div>
+                <div class="row mb-3 form-group">
+                    <label asp-for="Product.Description" class="form-label">@T["Description"]</label>
+                    <textarea id="productDescription" asp-for="Product.Description" rows="5" class="form-control"></textarea>
+                </div>
+                <div class="row mb-3 form-group">
+                    <label asp-for="Product.TaxCodeId" class="form-label">@T["Tax Code"]</label>
+                    <select asp-for="Product.TaxCodeId" asp-items="Model.TaxCodes" class="form-control" required></select>
+                    <span asp-validation-for="Product.TaxCodeId"></span>
+                </div>
+                <div class="row mb-3 form-group">
+                    <label class="form-label" asp-for="Product.HasOptions">
+                        <input type="checkbox" asp-for="Product.HasOptions" class="check-box"/>@T["Has options like size and color"]
+                    </label>
+                </div>
+                <div class="row mb-3 form-group">
+                    <label class="form-label" asp-for="Product.Featured">
+                        <input type="checkbox" asp-for="Product.Featured" class="check-box"/>@T["Featured on store home page?"]
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#prices">
+                @T["Prices"]
+            </button>
+        </h2>
+        <div id="prices" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+                <div class="row mb-3 form-group">
+                    <label asp-for="Product.Price" class="form-label">@T["Your Price"]</label>
+                    <input asp-for="Product.Price" class="form-control" type="number" min="0" step="any" required/>
+                    <span asp-validation-for="Product.Price"></span>
+                </div>
+                <div class="row mb-3 form-group">
+                    <label asp-for="Product.Retail" class="form-label">@T["Retail Price"]</label>
+                    <input asp-for="Product.Retail" class="form-control" type="number" min="0" step="any" required/>
+                    <span asp-validation-for="Product.Retail"></span>
+                </div>
+                <div class="row mb-3 form-group">
+                    <label asp-for="Product.Cost" class="form-label">@T["Store Cost"]</label>
+                    <input asp-for="Product.Cost" class="form-control" type="number" min="0" step="any" required/>
+                    <span asp-validation-for="Product.Cost"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#inventory">
+                @T["Inventory"]
+            </button>
+        </h2>
+        <div id="inventory" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+                <div class="row mb-3 form-group">
+                    <label class="form-label" asp-for="Product.StockEnabled" class="form-label">
+                        <input type="checkbox" asp-for="Product.StockEnabled" class="check-box"/>@T["Track Stock"]
+                    </label>
+                    <span asp-validation-for="Product.StockEnabled"></span>
+                </div>
+                <div class="row mb-3 form-group">
+                    <label asp-for="Product.Sku" class="form-label">@T["SKU"]</label>
+                    <input asp-for="Product.Sku" class="form-control"/>
+                    <span asp-validation-for="Product.Sku"></span>
+                </div>
+                <div class="row mb-3 form-group">
+                    <label asp-for="Product.Barcode" class="form-label">@T["Barcode"]</label>
+                    <input asp-for="Product.Barcode" class="form-control"/>
+                    <span asp-validation-for="Product.Barcode"></span>
+                </div>
+                <div class="row mb-3 form-group">
+                    <label asp-for="Product.LowStockPoint" class="form-label">@T["Low Stock Point"]</label>
+                    <input asp-for="Product.LowStockPoint" class="form-control" type="number" min="0" step="1" required/>
+                    <span asp-validation-for="Product.LowStockPoint"></span>
+                </div>
+                <div class="row mb-3 form-group">
+                    <label class="form-label" asp-for="Product.AllowOutOfStock" class="form-label">
+                        <input type="checkbox" asp-for="Product.AllowOutOfStock" class="check-box"/>@T["Allow purchase when out of stock"]
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#shipping">
+                @T["Shipping"]
+            </button>
+        </h2>
+        <div id="shipping" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+                <div class="row mb-3 form-group">
+                    <label asp-for="Product.Length" class="form-label">@T["Length"]</label>
+                    <input asp-for="Product.Length" class="form-control" type="number" min="0" step="any" required/>
+                    <span asp-validation-for="Product.Length"></span>
+                </div>
+                <div class="row mb-3 form-group">
+                    <label asp-for="Product.Width" class="form-label">@T["Width"]</label>
+                    <input asp-for="Product.Width" class="form-control" type="number" min="0" step="any" required/>
+                    <span asp-validation-for="Product.Width"></span>
+                </div>
+                <div class="row mb-3 form-group">
+                    <label asp-for="Product.Height" class="form-label">@T["Height"]</label>
+                    <input asp-for="Product.Height" class="form-control" type="number" min="0" step="any" required/>
+                    <span asp-validation-for="Product.Height"></span>
+                </div>
+                <div class="row mb-3 form-group">
+                    <label asp-for="Product.Weight" class="form-label">@T["Weight"]</label>
+                    <input asp-for="Product.Weight" class="form-control" type="number" min="0" step="any" required/>
+                    <span asp-validation-for="Product.Weight"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item @display">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#categories">
+                @T["Categories"]
+            </button>
+        </h2>
+        <div id="categories" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+                <div class="row mb-3 form-group">
+                    <label asp-for="Product.CategoryIds" class="form-label">@T["Categories"]</label>
+                    @{
+                        if (Model.Categories.Parents.Any())
+                        {
+                            <ul class="list-group">
+                                @foreach (var parent in Model.Categories.Parents)
+                                {
+                                    var selected = Model?.Product?.CategoryIds.Contains(parent.Id);
+
+                                    <li class="list-group-item">
+                                        <input type="checkbox" name="ProductPart.Product.CategoryIds" id="category_@parent.Id" value="@parent.Id" checked="@selected">
+                                        <label for="category_@parent.Id">@parent.Name</label>
+                                        @{ DisplayChildren(Model?.Categories.ChildMap, parent); }
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script asp-name="@ResourceNames.Trumbowyg"></script>
+
+<script type="text/javascript">
+    $('#productSummary').trumbowyg();
+    
+    $('#productDescription').trumbowyg();
+</script>

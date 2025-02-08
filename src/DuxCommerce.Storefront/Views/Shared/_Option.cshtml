@@ -1,0 +1,45 @@
+@using DuxCommerce.Storefront.Views.ProductOption.ViewModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model DuxCommerce.Storefront.Views.Shared.ViewModels.SharedOptionVm
+
+<div asp-validation-summary="ModelOnly"></div>
+<input asp-for="Option.OptionId" type="hidden"/>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Option.OptionName">@T["Option Name"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="Option.OptionName" class="form-control" required/>
+        <span asp-validation-for="Option.OptionName"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Option.DisplayName">@T["Display Name"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="Option.DisplayName" class="form-control" required/>
+        <span asp-validation-for="Option.DisplayName"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Option.DisplayType">@T["Display Type"]</label>
+    </div>
+    <div class="col-md-9">
+        <select asp-for="Option.DisplayType" asp-items="Model.DisplayTypes" class="form-control"></select>
+        <span asp-validation-for="Option.DisplayType"></span>
+    </div>
+</div>
+@if (Model is PrivateOptionVm)
+{
+    <div class="row mb-3 form-group">
+        <div class="col-md-3">
+            <label class="form-label float-end" asp-for="Option.DisplayOrder">@T["Display Order"]</label>
+        </div>
+        <div class="col-md-9">
+            <input asp-for="Option.DisplayOrder" class="form-control" type="number" min="0" required/>
+            <span asp-validation-for="Option.DisplayOrder"></span>
+        </div>
+    </div>
+}

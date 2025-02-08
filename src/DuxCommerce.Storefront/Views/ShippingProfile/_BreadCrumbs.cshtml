@@ -1,0 +1,12 @@
+﻿@model DuxCommerce.Storefront.Views.ShippingProfile.ViewModels.BreadCrumbs
+
+<div class="breadcrumbs">
+    <ol class="breadcrumb justify-content-start">
+        <li class="breadcrumb-item">
+            <a asp-action="Index" asp-controller="ShippingProfile">@T["Shipping Profile"]</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a asp-action="Methods" asp-controller="ShippingProfile" asp-route-groupId="@Model.GroupId" asp-route-zoneId="@Model.ZoneId">@T["Shipping Methods"]</a>
+        </li>
+    </ol>
+</div>

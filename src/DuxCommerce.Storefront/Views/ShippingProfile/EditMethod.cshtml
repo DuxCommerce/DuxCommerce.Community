@@ -1,0 +1,149 @@
+@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.ShippingProfile.ViewModels.ShippingMethodVm
+
+@{ var createRoute = new { Model.GroupId, Model.ZoneId, MethodId = Model.Method.Id }; }
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<h1>@T["Edit Method"]</h1>
+
+@await Html.PartialAsync("_BreadCrumbs", Model.BreadCrumbs)
+
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Method.Name">@T["Method Name"]</label>
+    </div>
+    <div class="col-md-9">
+        <div class="input-group">
+            <input asp-for="Method.Name" class="form-control" required/>
+            <span asp-validation-for="Method.Name"></span>
+            <input class="btn btn-primary" type="button" onclick="renameMethod('@Model.GroupId', '@Model.ZoneId', '@Model.Method.Id'); return false;" value="Update"/>
+        </div>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Method.MethodType">@T["Method Type"]</label>
+    </div>
+    <div class="col-md-9">
+        <span>@Model.Method.MethodType</span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="Method.Rates">@T["Rates"]</label>
+    </div>
+    <div class="col-md-9">
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td class="col-md-3">@T["Min"]</td>
+                        <td class="col-md-3">@T["Max"]</td>
+                        <td class="col-md-3">@T["Rate"]</td>
+                        <td class="text-end">
+                            <a onclick="showPopup('@Url.Action("AddRate", "ShippingProfile", createRoute, Context.Request.Scheme)', '@T["Add Rate"]')"
+                               class="btn btn-primary">
+                                @T["Add"]
+                            </a>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @{
+                        foreach (var rate in Model.Method.Rates)
+                        {
+                            var editRoute = new { Model.GroupId, Model.ZoneId, MethodId = Model.Method.Id, RateId = rate.Id };
+                            <tr>
+                                <td>@rate.Min.ToString("0.00")</td>
+                                <td>@rate.Max.ToString("0.00")</td>
+                                <td>@rate.Fee.ToString("0.00")</td>
+                                <td class="text-end">
+                                    <a onclick="showPopup('@Url.Action("EditRate", "ShippingProfile", editRoute, Context.Request.Scheme)', '@T["Edit Rate"]')"
+                                       class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                                        <i class="fas fa-pen-to-square small"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-danger" type="button" onclick="deleteRate('@Model.GroupId', '@Model.ZoneId', '@Model.Method.Id', '@rate.Id'); return false;" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Delete"]">
+                                        <i class="fas fa-trash-alt small"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-flex justify-content-start">
+    <div>
+        <a asp-action="Methods" asp-route-groupId="@Model.GroupId" asp-route-zoneId="@Model.ZoneId" class="btn btn-secondary">@T["Back"]</a>
+    </div>
+</div>
+
+<partial name="_Popup"/>
+
+<script asp-name="@ResourceNames.Popup"></script>
+<script asp-name="@ResourceNames.JQuery"></script>
+
+<script type="text/javascript">
+
+    function renameMethod(groupId, zoneId, methodId) {
+        let token = document.querySelector('input[name="__RequestVerificationToken"]').getAttribute("value");
+        
+        let methodName = $("#Method_Name").val();
+        
+        let payload = {
+            groupId:groupId, 
+            zoneId:zoneId, 
+            methodId:methodId,
+            methodName: methodName
+        };
+        
+        $.ajax(
+            {
+                type: "POST",
+                url: "@Url.Action("RenameMethod")",
+                data: payload,
+                headers: { "RequestVerificationToken": token },
+                success: function(response) {
+                    if (response.code === 0) {
+                        window.location = `@Url.Action("EditMethod")?groupId=${groupId}&zoneId=${zoneId}&methodId=${methodId}`;
+                    }
+                    else {
+                        alert(response.message);  
+                    }
+                }
+            });
+    }
+
+    function deleteRate(groupId, zoneId, methodId, rateId) {
+        let token = document.querySelector('input[name="__RequestVerificationToken"]').getAttribute("value");
+                
+        let payload = {
+            groupId:groupId, 
+            zoneId:zoneId, 
+            methodId:methodId,
+            rateId: rateId
+        };
+        
+        $.ajax(
+            {
+                type: "DELETE",
+                url: "@Url.Action("DeleteRate")",
+                data: payload,
+                headers: { "RequestVerificationToken": token },
+                success: function(response) {
+                    if (response.code === 0) {
+                        window.location = `@Url.Action("EditMethod")?groupId=${groupId}&zoneId=${zoneId}&methodId=${methodId}`;
+                    }
+                    else {
+                        alert(response.message);  
+                    }
+                }
+            });
+    }
+    
+</script>

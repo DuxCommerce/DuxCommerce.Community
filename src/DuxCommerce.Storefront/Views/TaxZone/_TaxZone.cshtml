@@ -1,0 +1,228 @@
+@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.TaxZone.ViewModels.TaxZoneVm
+
+<style asp-name="@ResourceNames.MultiSelect"></style>
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<div asp-validation-summary="ModelOnly"></div>
+<input asp-for="ZoneModel.Id" type="hidden"/>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="ZoneModel.Name">@T["Zone Name"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="ZoneModel.Name" class="form-control" required/>
+        <span asp-validation-for="ZoneModel.Name"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="ZoneModel.Type">@T["Zone Type"]</label>
+    </div>
+    <div class="col-md-9">
+        @foreach (var zoneType in Model.ZoneTypes)
+        {
+            <div class="row">
+                <label>
+                    <input type="radio" asp-for="ZoneModel.Type" id="@zoneType.Type" value="@zoneType.Type"/>@zoneType.Name
+                </label>
+            </div>
+        }
+        <span asp-validation-for="ZoneModel.Type"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group" id="countryList">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="ZoneModel.ZoneCountries">@T["Countries"]</label>
+    </div>
+    <div class="col-md-9">
+        <div class="multi-select-wrapper">
+            <select asp-for="ZoneModel.ZoneCountries" multiple id="zoneCountries">
+                @{
+                    var countryCodes = Model.ZoneModel.ZoneCountries?.ToList();
+
+                    foreach (var country in Model.Countries)
+                    {
+                        if (countryCodes != null && countryCodes.Contains(country.TwoLetterCode))
+                        {
+                            <option value="@country.TwoLetterCode" selected>@country.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@country.TwoLetterCode">@country.Name</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+    </div>
+</div>
+<div class="row mb-3 form-group" id="stateList">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="ZoneModel.ZoneStates">@T["States"]</label>
+    </div>
+    <div class="col-md-9">
+        <div class="multi-select-wrapper">
+            <select asp-for="ZoneModel.ZoneStates" multiple id="zoneStates">
+                @{
+                    foreach (var country in Model.Countries)
+                    {
+                        <optgroup label="@country.Name">
+                            @{
+                                var states = Model.States[country.TwoLetterCode];
+
+                                foreach (var state in states)
+                                {
+                                    var stateId = $"{country.TwoLetterCode},{state.Id}";
+
+                                    if (Model.ZoneModel.ZoneStates.Contains(stateId))
+                                    {
+                                        <option value="@stateId" selected>@state.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@stateId">@state.Name</option>
+                                    }
+                                }
+                            }
+                        </optgroup>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+</div>
+<div class="row mb-3 form-group" id="postalCountry">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="ZoneModel.ZoneCountry">@T["Country"]</label>
+    </div>
+    <div class="col-md-9">
+        <select asp-for="ZoneModel.ZoneCountry" class="form-control">
+            @{
+                foreach (var country in Model.Countries)
+                {
+                    if (country.TwoLetterCode == Model.ZoneModel.ZoneCountry)
+                    {
+                        <option value="@country.TwoLetterCode" selected>@country.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@country.TwoLetterCode">@country.Name</option>
+                    }
+                }
+            }
+        </select>
+    </div>
+</div>
+<div class="row mb-3 form-group" id="postalCodes">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="ZoneModel.ZonePostalCodes">@T["Postal Codes"]</label>
+    </div>
+    <div class="col-md-9">
+        <textarea asp-for="ZoneModel.ZonePostalCodes" rows="5" class="form-control"></textarea>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="ZoneModel.PricesDisplayOption">@T["Price Display Option"]</label>
+    </div>
+    <div class="col-md-9">
+        <label class="d-flex">
+            <input type="radio" asp-for="ZoneModel.PricesDisplayOption" value="ShowPriceExcTax"/>
+            @T["Display product prices exclusive of tax"]
+        </label>
+        <label class="d-flex">
+            <input type="radio" asp-for="ZoneModel.PricesDisplayOption" value="ShowPriceIncTax"/>
+            @T["Display product prices inclusive of tax"]
+        </label>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="ZoneModel.ShowBothPricesOnListingPage">
+            @T["Show both Prices"]
+        </label>
+    </div>
+    <div class="col-md-9">
+        <label class="d-flex" asp-for="ZoneModel.ShowBothPricesOnListingPage">
+            <input type="checkbox" asp-for="ZoneModel.ShowBothPricesOnListingPage" class="check-box"/>
+            @T["On product listing page"]
+        </label>
+        <label class="d-flex" asp-for="ZoneModel.ShowBothPricesOnDetailPage">
+            <input type="checkbox" asp-for="ZoneModel.ShowBothPricesOnDetailPage" class="check-box"/>
+            @T["On product detail page"]
+        </label>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="ZoneModel.Enabled">
+            @T["Is this Tax Zone Enabled?"]
+        </label>
+    </div>
+    <div class="col-md-9">
+        <label class="d-flex" asp-for="ZoneModel.Enabled">
+            <input type="checkbox" asp-for="ZoneModel.Enabled" class="check-box"/>
+            @T["Enable this tax zone"]
+        </label>
+    </div>
+</div>
+
+<script asp-name="@ResourceNames.MultiSelect"></script>
+
+<script type="text/javascript">
+    $('#zoneCountries').multiselect({
+        columns: 3,
+        search: true,
+        selectAll: true
+    });
+
+    $('#zoneStates').multiselect({
+        columns: 3,
+        search: true,
+        selectAll: true,
+        selectGroup: true
+    });
+
+    $(document).ready(function() {
+        
+        function toggleZoneType(zoneType) {        
+            let countryList = $("#countryList");
+            let stateList = $("#stateList");
+            let postalCountry = $("#postalCountry");
+            let postalCodes = $("#postalCodes");
+            
+            switch (zoneType) {
+                case "CountryZone":
+                    countryList.show();
+                    stateList.hide();
+                    postalCountry.hide();
+                    postalCodes.hide();
+                    
+                    break;
+                case "StateZone":
+                    countryList.hide();
+                    stateList.show();
+                    postalCountry.hide();
+                    postalCodes.hide();
+                    
+                    break;
+                default: // PostalCodeZone
+                    countryList.hide();
+                    stateList.hide();
+                    postalCountry.show();
+                    postalCodes.show();
+                    
+                    break;
+            }
+        }
+        
+        $('input[type="radio"][name="ZoneModel.Type"]').click(function() {
+            let zoneType = $(this).attr("value");
+            
+            toggleZoneType(zoneType)
+        });
+        
+        toggleZoneType("@Model.ZoneModel.Type");    
+    });
+</script>

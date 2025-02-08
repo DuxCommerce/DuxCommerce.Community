@@ -1,0 +1,23 @@
+@model DuxCommerce.Storefront.Views.AdminCountry.ViewModels.StateVm
+
+<div asp-validation-summary="ModelOnly"></div>
+<input asp-for="StateModel.Id" type="hidden"/>
+<input asp-for="StateModel.CountryCode" type="hidden"/>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="StateModel.Name">@T["Name"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="StateModel.Name" class="form-control" required/>
+        <span asp-validation-for="StateModel.Name"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-3">
+        <label class="form-label float-end" asp-for="StateModel.Code">@T["Code"]</label>
+    </div>
+    <div class="col-md-9">
+        <input asp-for="StateModel.Code" class="form-control"/>
+        <span asp-validation-for="StateModel.Code"></span>
+    </div>
+</div>

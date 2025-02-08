@@ -1,0 +1,12 @@
+﻿@model DuxCommerce.Storefront.Views.TaxZone.ViewModels.BreadCrumbs
+
+<div class="breadcrumbs">
+    <ol class="breadcrumb justify-content-start">
+        <li class="breadcrumb-item">
+            <a asp-action="Index" asp-controller="TaxZone">@T["Tax Zones"]</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a asp-action="TaxRates" asp-controller="TaxZone" asp-route-zoneId="@Model.ZoneId">@T["Tax Rates"]</a>
+        </li>
+    </ol>
+</div>

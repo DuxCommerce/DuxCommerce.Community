@@ -1,0 +1,194 @@
+﻿@using DuxCommerce.OrchardCore
+@using DuxCommerce.OrchardCore.Catalog.Products
+@using DuxCommerce.Storefront.Extensions
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using OrchardCore.Contents.TagHelpers
+@model DuxCommerce.Storefront.Views.ShoppingCart.ViewModels.ShoppingCartVm
+
+@if (Model.Cart.Items.Length == 0)
+{
+    <div>
+        <span>@T["Your cart is empty."]</span>&nbsp;<a asp-controller="StoreHome" asp-action="index">@T["Go to products page."]</a>
+    </div>
+}
+else
+{
+    <div class="row shopping-cart">
+        <div class="col-md-9">
+            <h1>@T["Your Cart"]</h1>
+            <div asp-validation-summary="All"></div>
+            <div class="table-responsive">
+                <input type="hidden" asp-for="Cart.Id"/>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>@T["Product"]</th>
+                        <th>@T["Price"]</th>
+                        <th>@T["Quantity"]</th>
+                        <th class="text-end">@T["Subtotal"]</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @for (var index = 0; index < Model.Cart.Items.Length; index++)
+                    {
+                        var cartItem = Model.Cart.Items[index];
+
+                        var price = cartItem.ProductPrice - cartItem.PriceDiscount;
+                        var total = price * cartItem.Quantity;
+
+                        // Todo: Change this to cartItem.ProductId if variant images can be overridden
+                        var image = Model.ItemMap.GetImage<ProductImagePart>(cartItem.PrototypeId);
+
+                        var contentItem = Model.ItemMap[cartItem.PrototypeId];
+
+                        <tr>
+                            <td>
+                                <a display-for="@contentItem">
+                                    <img src="@Orchard.AssetUrl(image.Path, 100, 100)" alt="@image.Text">
+                                </a>
+                            </td>
+                            <td>
+                                <input form="update-cart-form" type="hidden" name="Items[@index].CartItemId" value="@cartItem.CartItemId">
+                                <a display-for="@contentItem">
+                                    <span>@cartItem.ProductName</span>
+                                    <span>@cartItem.ChoiceNames</span>
+                                </a>
+                            </td>
+                            <td>
+                                @if (cartItem.PriceDiscount > 0)
+                                {
+                                    <span class="listing-price">@cartItem.ProductPrice.ToCurrency(Model.Currency)</span>
+                                }
+                                <span class="actual-price">@price.ToCurrency(Model.Currency)</span>
+                            </td>
+                            <td>
+                                <input form="update-cart-form" class="text-center w-25" type="number" min="0" name="Items[@index].Quantity" value="@cartItem.Quantity"/>
+                            </td>
+                            <td class="text-end">
+                                <span>@total.ToCurrency(Model.Currency)</span>
+                            </td>
+                            <td class="text-end">
+                                <form asp-action="DeleteItem" asp-controller="ShoppingCart" method="post">
+                                    <input type="hidden" name="CartItemId" value="@cartItem.CartItemId"/>
+                                    <button class="btn" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Delete"]">
+                                        <i class="fas fa-trash-alt small"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <a class="btn btn-primary" asp-controller="StoreHome" asp-action="Index">
+                        <span>@T["Continue shopping"]</span>
+                    </a>
+                </div>
+                <div>
+                    <form id="update-cart-form" asp-action="Update" asp-controller="ShoppingCart" method="post">
+                        <button class="btn btn-primary float-end" type="submit">@T["Update"]</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <h2>@T["Summary"]</h2>
+            @{
+                if (Model.Cart.PromotionDiscount > 0m)
+                {
+                    <div class="d-flex justify-content-between border-bottom">
+                        <div>@T["Discount:"]</div>
+                        <div>
+                            <span>-@Model.Cart.PromotionDiscount.ToCurrency(Model.Currency)</span>
+                        </div>
+                    </div>
+                }
+
+                if (string.IsNullOrEmpty(Model.Cart.CouponCode))
+                {
+                    <div class="d-flex justify-content-between border-bottom">
+                        <div>@T["Coupon:"]</div>
+                        <div>
+                            <button type="button" class="btn btn-link" id="addCoupon">@T["Add Coupon"]</button>
+                            <button type="button" class="btn btn-link d-none" id="cancelAddCoupon">@T["Cancel"]</button>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <form asp-action="RemoveCoupon" method="post">
+                        <div class="d-flex justify-content-between border-bottom">
+                            <div>
+                                <span>@T["Coupon"]</span>
+                                <span>(@Model.Cart.CouponCode)</span>
+                                <div>
+                                    <input class="btn btn-link" type="submit" value="@T["Remove"]"/>
+                                </div>
+                            </div>
+                            <div>
+                                <span>-@Model.Cart.CouponDiscount.ToCurrency(Model.Currency)</span>
+                            </div>
+                        </div>
+                    </form>
+                }
+            }
+            <form asp-action="AddCoupon" method="post" id="addCouponForm" class="d-none">
+                <div class="d-flex justify-content-between border-bottom">
+                    <div>
+                        <input class="w-75" type="text" name="couponCode"/>
+                    </div>
+                    <div>
+                        <input class="btn btn-primary" type="submit" value="@T["Apply"]"/>
+                    </div>
+                </div>
+            </form>
+            <div class="d-flex justify-content-between">
+                <div>@T["Cart Total:"]</div>
+                <div>
+                    <span>@Model.Cart.CartTotal.ToCurrency(Model.Currency)</span>
+                </div>
+            </div>
+            <form asp-action="StartCheckout" asp-controller="ShoppingCart" method="post">
+                <div class="d-flex justify-content-end">
+                    <input class="btn btn-primary" type="submit" value="@T["Check out"]"/>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+<script asp-name="@ResourceNames.JQuery"></script>
+
+<script type="text/javascript">
+    
+    $(document).ready(function() {
+    
+        // Todo: move the script to shared file
+        
+        $("#addCoupon").click(function(){
+            $(this).addClass('d-none');
+            
+            let cancelAddCoupon = $("#cancelAddCoupon");
+            cancelAddCoupon.removeClass('d-none');
+            
+            let addCouponForm = $("#addCouponForm");
+            addCouponForm.removeClass('d-none');
+        });
+        
+        $("#cancelAddCoupon").click(function(){
+            $(this).addClass('d-none');
+            
+            let addCoupon = $("#addCoupon");
+            addCoupon.removeClass('d-none');
+            
+            let addCouponForm = $("#addCouponForm");
+            addCouponForm.addClass('d-none');
+        });
+        
+    });
+
+</script>

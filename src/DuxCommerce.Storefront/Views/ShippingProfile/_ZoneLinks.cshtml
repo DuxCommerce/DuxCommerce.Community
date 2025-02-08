@@ -1,0 +1,17 @@
+@model DuxCommerce.Storefront.Views.ShippingProfile.ViewModels.ShippingZoneLinks
+
+@{
+    string Display(bool display)
+    {
+        return display ? "active" : string.Empty;
+    }
+}
+
+<ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+        <a class="nav-link @Display(Model.ZoneLink)" asp-action="EditZone" asp-route-groupId="@Model.GroupId" asp-route-zoneId="@Model.ZoneId">@T["Shipping Zone"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @Display(Model.MethodsLink)" asp-action="Methods" asp-route-groupId="@Model.GroupId" asp-route-zoneId="@Model.ZoneId">@T["Shipping Methods"]</a>
+    </li>
+</ul>

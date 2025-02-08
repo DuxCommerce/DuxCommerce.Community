@@ -1,0 +1,27 @@
+@using DuxCommerce.OrchardCore
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using OrchardCore.ResourceManagement.TagHelpers
+@model DuxCommerce.Storefront.Views.Promotion.ViewModels.LinkCategoriesVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<h1>@T["Promotion"] - @Model.Promotion.Name</h1>
+<div class="row">
+    <form asp-action="LinkProducts" method="get">
+        <input type="hidden" name="promotionId" value="@Model.Promotion.Id"/>
+    </form>
+</div>
+<div class="row">
+    <form asp-action="LinkCategories" method="post">
+        <input type="hidden" name="promotionId" value="@Model.Promotion.Id"/>
+        @await Html.PartialAsync("_CategoryPicker", Model.CategoryPicker)
+        <div class="d-flex justify-content-between">
+            <div>
+                <a asp-action="Categories" asp-route-promotionId="@Model.Promotion.Id" class="btn btn-secondary">@T["Back"]</a>
+            </div>
+            <div>
+                <button class="btn btn-primary" type="submit">@T["Link"]</button>
+            </div>
+        </div>
+    </form>
+</div>

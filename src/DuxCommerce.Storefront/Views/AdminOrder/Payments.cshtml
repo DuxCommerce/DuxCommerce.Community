@@ -1,0 +1,98 @@
+@using DuxCommerce.OrchardCore
+@using DuxCommerce.StoreBuilder.Orders.SimpleTypes
+@using DuxCommerce.Storefront.Extensions
+@model DuxCommerce.Storefront.Views.AdminOrder.ViewModels.OrderPaymentsVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+@{
+    var payment = Model.Order.Payments.FirstOrDefault();
+    var orderPaid = payment?.Status == nameof(PaymentStatus.Paid);
+}
+
+<h1>@T["View Order"] - @Model.Order.OrderNumber</h1>
+@await Html.PartialAsync("_OrderLinks", Model.Links)
+<div class="row order-payments">
+    <div class="col-md-9">
+        <h2>@payment?.PaymentMethodName</h2>
+        <form asp-controller="AdminOrder" asp-action="Payments" asp-route-id="@Model.Order.Id" asp-route-paymentid="@payment?.Id" method="post">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <label class="form-label float-start">@T["Status"]</label>
+                </div>
+                <div class="col-md-9">
+                    <span>@payment?.Status</span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <label class="form-label float-start">@T["Amount"]</label>
+                </div>
+                <div class="col-md-9">
+                    <span>@payment?.Amount.ToCurrency(Model.Currency)</span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <label class="form-label float-start">@T["Last Updated"]</label>
+                </div>
+                <div class="col-md-9">
+                    <span>@payment?.LastUpdatedUtc.ToLocalTime(Model.TimeZone)</span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <label class="form-label float-start">@T["Created At"]</label>
+                </div>
+                <div class="col-md-9">
+                    <span>@payment?.CreatedAtUtc.ToLocalTime(Model.TimeZone)</span>
+                </div>
+            </div>
+            <div class="row mb-1 form-group">
+                <div class="col-md-3">
+                    <label class="form-label float-start">@T["Payment Reference"]</label>
+                </div>
+                <div class="col-md-9">
+                    @if (orderPaid)
+                    {
+                        <span>@payment?.PaymentReference</span>
+                    }
+                    else
+                    {
+                        <input type="text" class="form-control" asp-for="PaymentModel.PaymentReference"/>
+                        <span asp-validation-for="PaymentModel.PaymentReference"></span>
+                    }
+                </div>
+            </div>
+            <div class="row mb-1 form-group">
+                <div class="col-md-3">
+                    <label class="form-label float-start" asp-for="PaymentModel.Note">@T["Note"]</label>
+                </div>
+                <div class="col-md-9">
+                    @if (orderPaid)
+                    {
+                        <span>@payment?.Note</span>
+                    }
+                    else
+                    {
+                        <input type="text" class="form-control" asp-for="PaymentModel.Note"/>
+                        <span asp-validation-for="PaymentModel.Note"></span>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                @{
+                    if (!orderPaid)
+                    {
+                        <input class="btn btn-primary float-start" type="submit" value="Receive"/>
+                    }
+                }
+            </div>
+        </form>
+    </div>
+    <div class="col-md-3">
+        <h2>@T["Billing Address"]</h2>
+        <partial name="_DisplayAddress" for="Order.BillingAddress"/>
+    </div>
+</div>

@@ -1,0 +1,6 @@
+﻿@model DuxCommerce.Storefront.Views.AdminCustomer.ViewModels.CustomerOrdersVm
+
+<h1>@T["Edit Customer"]</h1>
+
+@await Html.PartialAsync("_CustomerLinks", Model.Links)
+@await Html.PartialAsync("_Orders", Model.OrdersVm)

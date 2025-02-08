@@ -1,0 +1,34 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model DuxCommerce.StoreBuilder.Catalog.Requests.OptionChoiceModel
+
+<div asp-validation-summary="ModelOnly"></div>
+<input asp-for="ChoiceId" type="hidden"/>
+<input asp-for="OptionId" type="hidden"/>
+
+<div class="row mb-3 form-group">
+    <div class="col-md-4">
+        <label class="form-label float-end" asp-for="Name">@T["Name"]</label>
+    </div>
+    <div class="col-md-8">
+        <input asp-for="Name" class="form-control" required/>
+        <span asp-validation-for="Name"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-4">
+        <label class="form-label float-end" asp-for="IsDefault">@T["Default?"]</label>
+    </div>
+    <div class="col-md-8">
+        <input type="checkbox" asp-for="IsDefault"/>
+        <span asp-validation-for="IsDefault"></span>
+    </div>
+</div>
+<div class="row mb-3 form-group">
+    <div class="col-md-4">
+        <label class="form-label float-end" asp-for="Name">@T["Display Order"]</label>
+    </div>
+    <div class="col-md-8">
+        <input asp-for="DisplayOrder" class="form-control" type="number" min="0" required/>
+        <span asp-validation-for="DisplayOrder"></span>
+    </div>
+</div>

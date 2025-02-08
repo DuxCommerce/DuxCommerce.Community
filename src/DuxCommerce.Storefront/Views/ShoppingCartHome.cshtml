@@ -1,0 +1,17 @@
+﻿@using DuxCommerce.OrchardCore
+@using OrchardCore.ResourceManagement.TagHelpers
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+@if (Model.Nav != null)
+{
+    <header>
+        @await DisplayAsync(Model.Nav)
+    </header>
+}
+@await DisplayAsync(Model.Content)
+@if (Model.Footer != null)
+{
+    <footer>
+        @await DisplayAsync(Model.Footer)
+    </footer>
+}

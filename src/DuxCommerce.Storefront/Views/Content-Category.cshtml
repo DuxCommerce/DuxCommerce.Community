@@ -1,0 +1,41 @@
+﻿@using DuxCommerce.OrchardCore
+@using DuxCommerce.Storefront.Views.Category.ViewModels
+@using DuxCommerce.Storefront.Views.Category.VmBuilders
+@using OrchardCore.DisplayManagement
+@using OrchardCore.DisplayManagement.ModelBinding
+@using OrchardCore.ResourceManagement.TagHelpers
+@inject IDisplayManager<CategoryHome> CategoryHomeDisplayManager
+@inject IUpdateModelAccessor UpdateModelAccessor
+@inject CategoryHomeBuilder CategoryHomeBuilder
+
+@{
+    var categoryId = Model.ContentItem.ContentItemId;
+    var categoryHome = await CategoryHomeBuilder.BuildModel(categoryId);
+    var model = await CategoryHomeDisplayManager.BuildDisplayAsync(categoryHome, UpdateModelAccessor.ModelUpdater);
+}
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+<script asp-name="@ResourceNames.JQuery" at="Foot"></script>
+
+@if (model.Nav != null)
+{
+    <nav>@await DisplayAsync(model.Nav)</nav>
+}
+
+<div class="products row">
+    @if (model.SideBar != null)
+    {
+        <div class="order-lg-first">
+            @await DisplayAsync(model.SideBar)
+        </div>
+    }
+
+    <div class="order-lg-last">
+        @await DisplayAsync(model.Content)
+    </div>
+</div>
+
+@if (Model.Footer != null)
+{
+    <footer>@await DisplayAsync(Model.Footer)</footer>
+}

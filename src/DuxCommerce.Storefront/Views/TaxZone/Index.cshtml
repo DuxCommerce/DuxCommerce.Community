@@ -1,0 +1,35 @@
+@model DuxCommerce.Storefront.Views.TaxZone.ViewModels.TaxZoneIndexVm
+
+<h1>@T["Tax Zones"]</h1>
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class="col-md-2">@T["Zone Name"]</th>
+                <th class="col-md">@T["Type"]</th>
+                <th class="col-md-4">
+                    <a class="btn btn-primary float-end" asp-action="CreateZone">@T["Add Zone"]</a>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var zone in Model.Zones)
+            {
+                <tr>
+                    <td>@zone.Name</td>
+                    <td>@zone.ZoneType</td>
+                    <td class="text-end">
+                        <a class="btn btn-primary btn-sm" asp-action="EditZone" asp-route-zoneId="@zone.Id" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                            <i class="fas fa-pen-to-square small"></i>
+                        </a>
+                        <a asp-action="DeleteZone" asp-route-zoneId="@zone.Id" class="btn btn-primary btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Delete"]" itemprop="RemoveUrl UnsafeUrl">
+                            <i class="fas fa-trash-alt small"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

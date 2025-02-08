@@ -1,0 +1,22 @@
+@model DuxCommerce.Storefront.Views.Category.ViewModels.SortOptionsVm
+
+@if (Model.ProductExists)
+{
+    <div class="d-lg-flex justify-content-end">
+        <input type="hidden" asp-for="PageLink"/>
+        <div class="d-flex align-items-center sort-options mb-3">
+            <label asp-for="SortOption" class="me-2">@T["Sort by"]</label>
+            <select asp-for="SortOption" asp-items="Model.SortOptions" onchange="handleSortOption(this);"></select>
+        </div>
+    </div>
+}
+
+<script at="Foot" depends-on="jQuery">
+    let pageLink = decodeURIComponent("@Model.PageLink")
+    
+    function handleSortOption(sortOptionsList) {
+        let sortOption = $(sortOptionsList).val();
+                
+        window.location.href = pageLink + sortOption;
+    }
+</script>

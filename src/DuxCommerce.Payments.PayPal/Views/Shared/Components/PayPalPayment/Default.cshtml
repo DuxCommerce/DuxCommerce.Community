@@ -1,0 +1,94 @@
+@model DuxCommerce.Payments.PayPal.Views.Shared.Components.PayPalPayment.PayPalPaymentVm
+
+<div id="paypalPaymentContainer"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=@Model.ClientId&currency=@Model.Currency&components=buttons,funding-eligibility"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        let token = document.querySelector('input[name="__RequestVerificationToken"]').getAttribute("value");
+        
+        let paypalOrderId = null;
+        let createdOrderId = null;
+        let createdPaymentId = null;
+                
+        let buttons = paypal.Buttons({
+            env: '@Model.Environment',
+            commit: true,
+        
+            createOrder: async function () {
+                if (paypalOrderId){
+                    return paypalOrderId;
+                }
+                
+                const response = await fetch('/PayPal/CreatePayPalOrder', {
+                       method: "POST",
+                       credentials: 'same-origin',
+                       headers: { "RequestVerificationToken": token }
+                   });
+                    
+                if (!response.ok) {
+                    throw new Error("@T["An error occurred when creating a PayPal order."]");
+                }
+                
+                const paypalOrder = await response.json();
+                
+                return paypalOrder.id;
+            },
+
+            onApprove: async function(data, actions) {
+                if (!createdOrderId) {                
+                    const response  = await fetch('/PayPal/CreateOrder', {
+                        method: "POST",
+                        credentials: 'same-origin',
+                        headers: { "RequestVerificationToken": token }
+                    })
+             
+                    if (!response.ok) {
+                        throw new Error("@T["An error occurred when creating the order."]")
+                    }
+                        
+                    const orderCreated = await response.json();
+                    
+                    if (orderCreated) {
+                        const { orderId } = orderCreated;
+                        createdOrderId = orderId;
+                    }                    
+                }
+                
+                if (createdOrderId && !createdPaymentId) {
+                    const response  = await fetch(`/PayPal/ProcessPayment?orderId=${createdOrderId}`, {
+                            method: "POST",
+                            credentials: 'same-origin',
+                            headers: { "RequestVerificationToken": token }
+                        })
+
+                    if (!response.ok) {
+                        throw new Error("@T["An error occurred before PayPal payment is finalized."]")
+                    }
+    
+                    const paymentCreated = await response.json();
+                    
+                    if (paymentCreated) {
+                        const { paymentId } = paymentCreated;
+                        createdPaymentId = paymentId;
+                    }
+                }
+                
+                if (createdOrderId && createdPaymentId) {
+                    window.location =  window.location.origin + '/Checkout/Confirmation?OrderId=' + createdOrderId;                     
+                }
+            },
+
+            onError: function (err) {
+                console.log(err);
+            }
+        });
+        
+        if (buttons) {
+            buttons.render('#paypalPaymentContainer');
+        }
+    });
+
+</script>

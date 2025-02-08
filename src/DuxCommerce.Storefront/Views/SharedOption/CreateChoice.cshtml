@@ -1,0 +1,11 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model DuxCommerce.Storefront.Views.SharedOption.ViewModels.SharedOptionChoiceVm
+
+@{ Layout = null; }
+
+<form asp-controller="SharedOption" asp-action="CreateChoice" asp-route-optionId="@Model.Choice.OptionId" method="post">
+    <partial name="_Choice" for="Choice"/>
+    <div>
+        <input class="btn btn-primary float-end" type="submit" value="@T["Save"]"/>
+    </div>
+</form>

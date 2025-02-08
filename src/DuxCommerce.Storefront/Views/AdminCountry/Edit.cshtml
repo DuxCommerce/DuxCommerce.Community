@@ -1,0 +1,36 @@
+@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.AdminCountry.ViewModels.CountryVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<h1>@T["Edit Country"]</h1>
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#country" type="button">
+            @T["Country"]
+        </button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#states" type="button">
+            @T["States"]
+        </button>
+    </li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane active" id="country">
+        <form asp-controller="AdminCountry" asp-action="Edit" asp-route-countryId="@Model.CountryModel.Id" method="post">
+            @await Html.PartialAsync("_Country", Model)
+            <div class="d-flex justify-content-between">
+                <div>
+                    <a asp-action="Index" class="btn btn-secondary">@T["Cancel"]</a>
+                </div>
+                <div>
+                    <button class="btn btn-primary" type="submit">@T["Save"]</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="tab-pane" id="states">
+        @await Html.PartialAsync("_States", Model)
+    </div>
+</div>

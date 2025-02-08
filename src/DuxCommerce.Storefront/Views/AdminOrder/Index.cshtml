@@ -1,0 +1,98 @@
+@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.AdminOrder.ViewModels.AdminOrdersVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+<style asp-name="@ResourceNames.FlatPicker"></style>
+
+<h1>@T["View Orders"]</h1>
+<form asp-action="Index" method="get">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label float-end" asp-for="Options.StartTime">@T["Start Time"]</label>
+                </div>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" asp-for="Options.StartTime" id="startTime"/>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label float-end" asp-for="Options.OrderStatus">@T["Order Status"]</label>
+                </div>
+                <div class="col-md-9">
+                    <select asp-for="Options.OrderStatus" asp-items="Model.OrderStatuses" class="form-control"></select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label float-end" asp-for="Options.EndTime">@T["End Time"]</label>
+                </div>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" asp-for="Options.EndTime" id="endTime"/>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label float-end" asp-for="Options.PaymentStatus">@T["Payment Status"]</label>
+                </div>
+                <div class="col-md-9">
+                    <select asp-for="Options.PaymentStatus" asp-items="Model.PaymentStatuses" class="form-control"></select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label float-end" asp-for="Options.EmailAddress">@T["Email Address"]</label>
+                </div>
+                <div class="col-md-9">
+                    <input asp-for="Options.EmailAddress" class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label float-end" asp-for="Options.ShippingStatus">@T["Shipping Status"]</label>
+                </div>
+                <div class="col-md-9">
+                    <select asp-for="Options.ShippingStatus" asp-items="Model.ShippingStatuses" class="form-control"></select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">@T["Search"]</button>
+        </div>
+    </div>
+</form>
+
+@await Html.PartialAsync("_Orders", Model.OrdersVm)
+
+@await DisplayAsync(Model.Pager)
+
+<script asp-name="@ResourceNames.FlatPicker"></script>
+
+<script>
+    flatpickr("#startTime", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+    });
+    
+    flatpickr("#endTime", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+    });
+</script>

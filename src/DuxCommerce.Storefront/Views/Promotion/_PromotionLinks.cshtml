@@ -1,0 +1,27 @@
+@using DuxCommerce.StoreBuilder.Marketing.DomainTypes
+@model DuxCommerce.Storefront.Views.Promotion.ViewModels.PromotionLinks
+
+@{
+    string Display(bool display)
+    {
+        return display ? "active" : string.Empty;
+    }
+}
+
+<ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+        <a class="nav-link @Display(Model.General)" asp-action="Edit" asp-route-promotionid="@Model.Promotion.Id">@T["General"]</a>
+    </li>
+    @if (Model.Promotion.Type == nameof(ProductPromotion) && Model.Promotion.Rule.Product.Type == nameof(ProductRule.Products))
+    {
+        <li class="nav-item">
+            <a class="nav-link @Display(Model.Products)" asp-action="Products" asp-route-promotionid="@Model.Promotion.Id">@T["Products"]</a>
+        </li>
+    }
+    else if (Model.Promotion.Type == nameof(ProductPromotion) && Model.Promotion.Rule.Product.Type == nameof(ProductRule.Categories))
+    {
+        <li class="nav-item">
+            <a class="nav-link @Display(Model.Categories)" asp-action="Categories" asp-route-promotionid="@Model.Promotion.Id">@T["Categories"]</a>
+        </li>
+    }
+</ul>

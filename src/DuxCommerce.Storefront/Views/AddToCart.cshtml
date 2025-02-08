@@ -1,0 +1,5 @@
+﻿@model DuxCommerce.Storefront.Views.Product.ViewModels.AddToCartVm
+
+@{ var display = Model.HasPublished ? "" : "d-none"; }
+
+<input id="addToCart" type="submit" class="btn btn-primary mb-3 @display" value="@T["Add to Cart"]"/>

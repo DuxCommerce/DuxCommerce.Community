@@ -1,0 +1,90 @@
+@using DuxCommerce.OrchardCore.Catalog.Products
+@using DuxCommerce.Storefront.Extensions
+@model DuxCommerce.Storefront.Views.Shared.ViewModels.MiniCartVm
+
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <tbody>
+            @{
+                var subTotal = 0m;
+
+                foreach (var item in Model.Cart.Items)
+                {
+                    var image = Model.ProductMap.GetImage<ProductImagePart>(item.ProductId);
+
+                    var price = item.ProductPrice - item.PriceDiscount;
+                    var itemTotal = price * item.Quantity;
+                    subTotal += itemTotal;
+
+                    <tr>
+                        <td>
+                            <img src="@Orchard.AssetUrl(image.Path, 50, 50)" alt="@image.Text">
+                        </td>
+                        <td>
+                            @item.Quantity X @item.ProductName @item.ChoiceNames
+                        </td>
+                        <td class="text-end">
+                            @itemTotal.ToCurrency(Model.Currency)
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="2">@T["Subtotal"]</td>
+                <td class="text-end">@subTotal.ToCurrency(Model.Currency)</td>
+            </tr>
+            @if (Model.Cart.PromotionDiscount > 0)
+            {
+                <tr>
+                    <td colspan="2">@T["Discount"]</td>
+                    <td class="text-end">-@Model.Cart.PromotionDiscount.ToCurrency(Model.Currency)</td>
+                </tr>
+            }
+            @if (Model.Cart.CouponDiscount > 0)
+            {
+                <tr>
+                    <td colspan="2">@T["Coupon"]</td>
+                    <td class="text-end">-@Model.Cart.CouponDiscount.ToCurrency(Model.Currency)</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="2">@T["Shipping"]</td>
+                <td class="text-end">
+                    @{
+                        var shippingTotal = Model.Cart.ShippingFee - Model.Cart.ShippingDiscount;
+                        var shippingText = shippingTotal.ToCurrency(Model.Currency);
+                    }
+                    @shippingText
+                </td>
+            </tr>
+
+            @if (Model.BreakDownTax)
+            {
+                foreach (var tax in Model.Taxes)
+                {
+                    <tr>
+                        <td colspan="2">@tax.Name</td>
+                        <td class="text-end">@tax.Amount.ToCurrency(Model.Currency)</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="2">@T["Tax"]</td>
+                    <td class="text-end">
+                        @Model.Cart.TaxTotal.ToCurrency(Model.Currency)
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="2">@T["Total"]</td>
+                <td class="text-end">@Model.Cart.CartTotal.ToCurrency(Model.Currency)</td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

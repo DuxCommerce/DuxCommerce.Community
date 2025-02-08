@@ -1,0 +1,14 @@
+@model DuxCommerce.Storefront.Views.TaxZone.ViewModels.TaxZoneVm
+
+<h1>@T["Create Zone"]</h1>
+<form asp-controller="TaxZone" asp-action="CreateZone" method="post">
+    @await Html.PartialAsync("_TaxZone", Model)
+    <div class="d-flex justify-content-between">
+        <div>
+            <a asp-action="Index" class="btn btn-secondary">@T["Back"]</a>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        </div>
+    </div>
+</form>

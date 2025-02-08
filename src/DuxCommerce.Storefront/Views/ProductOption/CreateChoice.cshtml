@@ -1,0 +1,13 @@
+@model DuxCommerce.Storefront.Views.ProductOption.ViewModels.PrivateOptionChoiceVm
+
+@{ Layout = null; }
+
+<form asp-controller="ProductOption" asp-action="CreateChoice" asp-route-optionId="@Model.Choice.OptionId" method="post">
+    <input asp-for="ProductId" type="hidden"/>
+    <partial name="_Choice" for="Choice"/>
+    <div>
+        <div>
+            <input class="btn btn-primary float-end" type="submit" value="@T["Save"]"/>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,16 @@
+@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.Checkout.ViewModels.ConfirmPaymentVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<div class="row payment-confirmation">
+    <div class="col-md-12">
+        @await Html.PartialAsync("_CheckoutSteps", Model.Steps)
+    </div>
+    <div class="col-md-8">
+        @await Component.InvokeAsync(Model.CheckoutViewComponent, Model.ShopperInfo)
+    </div>
+    <div class="col-md-4">
+        <partial name="_MiniCart" for="MiniCart"/>
+    </div>
+</div>

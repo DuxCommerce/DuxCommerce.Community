@@ -1,0 +1,61 @@
+﻿@using DuxCommerce.OrchardCore
+@model DuxCommerce.Storefront.Views.Checkout.ViewModels.CheckoutAddressesVm
+
+<script asp-name="@ResourceNames.JQuery"></script>
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<div class="row checkout-addresses">
+    <div class="col-md-12">
+        @await Html.PartialAsync("_CheckoutSteps", Model.Steps)
+    </div>
+    <div class="col-md-8">
+        <div asp-validation-summary="ModelOnly"></div>
+        <form asp-controller="Checkout" asp-action="CheckoutAddresses" method="post">
+            <h3>@T["Billing Address"]</h3>
+            <div class="row">
+                <partial name="_CheckoutAddress" for="BillingAddress"/>
+            </div>
+            <h3>@T["Shipping Address"]</h3>
+            <div class="row">
+                <label>
+                    <input type="radio" asp-for="SameAsBillingAddress" value="True"/>@T["Same as billing address"]
+                </label>
+            </div>
+            <div class="row">
+                <label>
+                    <input type="radio" asp-for="SameAsBillingAddress" value="False"/>@T["Use a different address"]
+                </label>
+            </div>
+            <div class="row" id="shippingAddress">
+                <partial name="_CheckoutAddress" for="ShippingAddress"/>
+            </div>
+            <div class="form-group mt-3">
+                <input class="btn btn-primary float-end" type="submit" value="Next"/>
+                <a asp-action="Index" asp-controller="ShoppingCart" class="btn btn-secondary float-start">@T["Back"]</a>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <partial name="_MiniCart" for="MiniCart"/>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+    
+    $('input[type=radio][name="SameAsBillingAddress"]').click(function() {        
+        let sameAsBillingAddress = $(this).val(); 
+        displayAddressForm(sameAsBillingAddress);
+    });
+           
+    function displayAddressForm(sameAsBillingAddress) {        
+        let shippingAddress = document.querySelector('[id$=shippingAddress]');        
+        shippingAddress.hidden = sameAsBillingAddress.toLowerCase() === 'true';
+    }
+        
+    displayAddressForm("@Model.SameAsBillingAddress");
+});
+    
+</script>

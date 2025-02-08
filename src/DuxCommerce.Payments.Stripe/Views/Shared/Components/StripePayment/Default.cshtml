@@ -1,0 +1,29 @@
+@using DuxCommerce.Payments.Stripe
+@model DuxCommerce.Payments.Stripe.Views.Shared.Components.StripePayment.StripePaymentVm
+
+<form id="payment-form">
+    <div id="payment-element">
+        <!-- Elements will create form elements here -->
+    </div>
+    <button id="submit">Pay now</button>
+    <div id="error-message">
+        <!-- Display error message to your customers here -->
+    </div>
+</form>
+
+<script asp-name="@ResourceNames.StripeJs"></script>
+<script asp-name="@ResourceNames.Payment"></script>
+
+<script type="text/javascript">
+
+document.addEventListener('DOMContentLoaded', async () => {
+    let publishableKey = '@Model.PublishableKey'
+    let clientSecret = '@Model.ClientSecret'
+    
+    let token = document.querySelector('input[name="__RequestVerificationToken"]').getAttribute("value");
+    let message = "@T["An error occurred before Stripe payment is finalized."]";
+    
+    await displayPaymentForm(publishableKey, clientSecret, token, message);
+});
+
+</script>

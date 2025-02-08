@@ -1,0 +1,45 @@
+@using DuxCommerce.OrchardCore
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using OrchardCore.ResourceManagement.TagHelpers
+@model DuxCommerce.Storefront.Views.ShippingProfile.ViewModels.AddShippingMethodVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<h1>@T["Add Method"]</h1>
+
+@await Html.PartialAsync("_BreadCrumbs", Model.BreadCrumbs)
+
+<form asp-controller="ShippingProfile" asp-action="AddMethod" method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+    <input asp-for="MethodModel.ZoneId" type="hidden"/>
+    <input asp-for="MethodModel.GroupId" type="hidden"/>
+    <div class="row mb-3 form-group">
+        <div class="col-md-3">
+            <label class="form-label float-end" asp-for="MethodModel.Name">@T["Method Name"]</label>
+        </div>
+        <div class="col-md-9">
+            <div class="input-group">
+                <input asp-for="MethodModel.Name" class="form-control" required/>
+                <span asp-validation-for="MethodModel.Name"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3 form-group">
+        <div class="col-md-3">
+            <label class="form-label float-end" asp-for="MethodModel.MethodType">@T["Method Type"]</label>
+        </div>
+        <div class="col-md-9">
+            <select asp-for="MethodModel.MethodType" asp-items="Model.MethodTypes" class="form-control">
+            </select>
+            <span asp-validation-for="MethodModel.MethodType"></span>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between">
+        <div>
+            <a asp-action="Methods" asp-route-groupId="@Model.MethodModel.GroupId" asp-route-zoneId="@Model.MethodModel.ZoneId" class="btn btn-secondary">@T["Cancel"]</a>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        </div>
+    </div>
+</form>

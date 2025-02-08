@@ -1,0 +1,51 @@
+﻿@using DuxCommerce.StoreBuilder.Settings.DataTypes
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model DuxCommerce.StoreBuilder.Customers.DataTypes.CustomerRow
+
+@{
+    async Task DisplayAddress(AddressRow address, string controller)
+    {
+        var routeData2 = new { customerId = Model.Id, addressId = address.Id };
+
+        <div class="col-md-3 mb-3">
+            <partial name="_DisplayAddress" for="@address"/>
+
+            <a onclick="showPopup('@Url.Action("EditAddress", controller, routeData2, Context.Request.Scheme)', '@T["Update Address"]')" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
+                <i class="fas fa-pen-to-square small"></i>
+            </a>
+
+            @if (address.Id != Model.BillingAddressId)
+            {
+                <form asp-action="DeleteAddress" method="post" asp-controller="@controller" asp-route-addressId="@address.Id" asp-route-customerId="@Model.Id" class="d-inline">
+                    <button class="btn btn-danger btn-sm" type="submit" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Delete"]">
+                        <i class="fas fa-trash-alt small"></i>
+                    </button>
+                </form>
+            }
+        </div>
+    }
+}
+
+<div class="row">
+    @{
+        var controller = (string)ViewData["Controller"];
+
+        if (Model != null)
+        {
+            var addresses = Model.AddressBook ?? Array.Empty<AddressRow>();
+            var billingAddress = addresses.FirstOrDefault(x => x.Id == Model.BillingAddressId);
+
+            if (billingAddress != null)
+                await DisplayAddress(billingAddress, controller);
+
+            var shippingAddresses = addresses.Where(x => x.Id != Model.BillingAddressId);
+
+            foreach (var shippingAddress in shippingAddresses)
+                await DisplayAddress(shippingAddress, controller);
+        }
+        else
+        {
+            <span>@T["You don't have any addresses."]</span>
+        }
+    }
+</div>

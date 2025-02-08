@@ -1,0 +1,16 @@
+﻿@using DuxCommerce.Storefront.Extensions
+@model DuxCommerce.Storefront.Views.Product.ViewModels.ProductPricesVm
+
+@{ var display = Model.Prices.ShowPriceIncTax ? "" : "d-none"; }
+
+<div class="d-flex price-inc-tax mb-3 @display">
+    <span class="price">@Model.Prices.PriceIncTax.ToCurrency(Model.Currency)</span>
+    <span>&nbsp;@T["inc tax"]</span>
+</div>
+
+@{ display = Model.Prices.ShowPriceExcTax ? "" : "d-none"; }
+
+<div class="d-flex price-excl-tax mb-3 @display">
+    <span class="price">@Model.Prices.PriceExcTax.ToCurrency(Model.Currency)</span>
+    <span>&nbsp;@T["excl tax"]</span>
+</div>

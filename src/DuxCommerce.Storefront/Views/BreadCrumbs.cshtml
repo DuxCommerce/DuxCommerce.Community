@@ -1,0 +1,32 @@
+@using DuxCommerce.OrchardCore.Catalog.Categories
+@using DuxCommerce.StoreBuilder.Catalog.DataTypes
+@using OrchardCore.ContentManagement
+@model DuxCommerce.Storefront.Views.Category.ViewModels.BreadCrumbsVm
+
+<div class="breadcrumbs">
+    <ol class="breadcrumb justify-content-start">
+
+        <li class="breadcrumb-item">
+            @{ var route = new { area = "DuxCommerce.Storefront", controller = "StoreHome", action = "Index" }; }
+            <a href="@Url.RouteUrl(route)">@T["Home"]</a>
+        </li>
+
+        @{
+            foreach (var contentItem in Model.CategoryItems.Reverse())
+            {
+                var category = (CategoryRow)contentItem.As<CategoryPart>().Row;
+
+                if (category.Id != Model.CategoryId)
+                {
+                    <li class="breadcrumb-item">
+                        <a display-for="@contentItem">@category.Name</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item active">@category.Name</li>
+                }
+            }
+        }
+    </ol>
+</div>

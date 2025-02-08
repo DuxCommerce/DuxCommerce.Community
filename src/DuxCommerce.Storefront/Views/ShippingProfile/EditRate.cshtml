@@ -1,0 +1,12 @@
+@model DuxCommerce.StoreBuilder.Shipping.Requests.ShippingRateModel
+
+@{ Layout = null; }
+
+<form asp-controller="ShippingProfile" asp-action="EditRate" method="post">
+    @await Html.PartialAsync("_ShippingRate", Model)
+    <div>
+        <div>
+            <input class="btn btn-primary float-end" type="submit" value="@T["Save"]"/>
+        </div>
+    </div>
+</form>

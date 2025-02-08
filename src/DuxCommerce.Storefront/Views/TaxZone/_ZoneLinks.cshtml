@@ -1,0 +1,17 @@
+@model DuxCommerce.Storefront.Views.TaxZone.ViewModels.TaxZoneLinks
+
+@{
+    string Display(bool display)
+    {
+        return display ? "active" : string.Empty;
+    }
+}
+
+<ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+        <a class="nav-link @Display(Model.ZoneLink)" asp-action="EditZone" asp-route-zoneId="@Model.ZoneId">@T["Tax Zone"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @Display(Model.RatesLink)" asp-action="TaxRates" asp-route-zoneId="@Model.ZoneId">@T["Tax Rates"]</a>
+    </li>
+</ul>
