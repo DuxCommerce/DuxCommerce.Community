@@ -188,4 +188,4 @@ node_modules/
 src/*.Web/Localization
 .idea
 /DuxCommerce.sln.DotSettings
-/src/DuxCommerce.Web/App_Data/logs/
+**/App_Data/logs
