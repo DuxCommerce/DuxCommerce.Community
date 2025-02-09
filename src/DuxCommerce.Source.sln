@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuxCommerce.Payments.Stripe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuxCommerce.Payments.Offline", "DuxCommerce.Payments.Offline\DuxCommerce.Payments.Offline.csproj", "{74346F6D-B85D-47D3-B176-A2386C855214}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuxCommerce.OrchardCore", "DuxCommerce.OrchardCore\DuxCommerce.OrchardCore.csproj", "{AC7834CF-CEDD-4380-A3EC-4B89FCB4F556}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{74346F6D-B85D-47D3-B176-A2386C855214}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74346F6D-B85D-47D3-B176-A2386C855214}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74346F6D-B85D-47D3-B176-A2386C855214}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC7834CF-CEDD-4380-A3EC-4B89FCB4F556}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC7834CF-CEDD-4380-A3EC-4B89FCB4F556}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC7834CF-CEDD-4380-A3EC-4B89FCB4F556}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC7834CF-CEDD-4380-A3EC-4B89FCB4F556}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
