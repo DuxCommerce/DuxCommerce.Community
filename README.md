@@ -4,7 +4,7 @@ DuxCommerce is a free eCommerce solution built on Orchard Core framework.
 
 ## Getting Started
 
-1. Clone DuxCommerce [soure code](https://github.com/DuxCommerce/DuxCommerce.Source).
+1. Clone this repository.
 
 2. Open `DuxCommerce.Source.sln` in Visual Studio and build the solution.
 
