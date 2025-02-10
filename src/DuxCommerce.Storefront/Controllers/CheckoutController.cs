@@ -59,9 +59,6 @@ public class CheckoutController(
 
         if (model.Validate(validationResults))
         {
-            if (!await cartStore.CartExists(shopperInfo.CartId))
-                return RedirectToAction("Index", "ShoppingCart");
-
             var addressesModel = new CheckoutAddressesModel
             {
                 BillingAddressId = model.BillingAddress.AddressId,
@@ -106,9 +103,6 @@ public class CheckoutController(
 
         if (ModelState.IsValid)
         {
-            if (!await cartStore.CartExists(shopperInfo.CartId))
-                return RedirectToAction("Index", "ShoppingCart");
-
             var shippingPaymentModel = new CheckoutOptionsModel
             {
                 ShippingOption = model.ShippingModel,
