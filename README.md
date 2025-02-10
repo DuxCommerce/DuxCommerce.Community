@@ -1,6 +1,6 @@
 # DuxCommerce: a free eCommerce solution for Orchard Core
 
-DuxCommerce is a free eCommerce solution built on Orchard Core framework, with the goal of making Orchard Core a competitive eCommerce plaform.
+DuxCommerce is a free eCommerce solution built on Orchard Core framework, with the goal of making Orchard Core a competitive eCommerce platform.
 
 ## Getting Started
 
@@ -8,14 +8,14 @@ DuxCommerce is a free eCommerce solution built on Orchard Core framework, with t
 
 2. Open `DuxCommerce.Source.sln` in Visual Studio and build the solution.
 
-3. Set `DuxCommerce.Web.csproj` as starup project and start it.
+3. Set `DuxCommerce.Web.csproj` as startup project and start it.
 
-4. Please use the following credentials to login as a store admin
+4. Please use the following credentials to log in as a store admin
 
     * **Username:** `admin`
     * **Password:** `P@ssw0rd01`
 
-    or as an online shopper
+    Or as an online shopper
 
     * **Username:** `shopper`
     * **Password:** `P@ssw0rd01`
