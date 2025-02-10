@@ -10,15 +10,15 @@ DuxCommerce is a free eCommerce solution built on Orchard Core framework, with t
 
 3. Set `DuxCommerce.Web.csproj` as starup project and start it.
 
-Please use the following credentials to login as a store admin
+4. Please use the following credentials to login as a store admin
 
-* **Username:** `admin`
-* **Password:** `P@ssw0rd01`
+    * **Username:** `admin`
+    * **Password:** `P@ssw0rd01`
 
-or as an online shopper
+    or as an online shopper
 
-* **Username:** `shopper`
-* **Password:** `P@ssw0rd01`
+    * **Username:** `shopper`
+    * **Password:** `P@ssw0rd01`
 
 ## License
 
