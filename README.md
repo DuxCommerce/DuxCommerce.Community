@@ -1,6 +1,6 @@
 # DuxCommerce: a free eCommerce solution for Orchard Core
 
-DuxCommerce is a powerful and free eCommerce solution built on the Orchard Core framework. It is designed to turn Orchard Core into a competitive and feature-rich eCommerce platform.
+DuxCommerce is a powerful and free eCommerce solution built on the Orchard Core framework. Its goal is to make Orchard Core a competitive and feature-rich eCommerce platform.
 
 ## How to Run Your Store
 
