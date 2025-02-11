@@ -1,4 +1,4 @@
-# Creating an online store using DuxCommerce
+# Creating an online store from scratch using DuxCommerce
 
 ## Install DuxCommerce
 
