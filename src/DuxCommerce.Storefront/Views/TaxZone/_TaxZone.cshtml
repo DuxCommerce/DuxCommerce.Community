@@ -33,13 +33,13 @@
 </div>
 <div class="row mb-3 form-group" id="countryList">
     <div class="col-md-3">
-        <label class="form-label float-end" asp-for="ZoneModel.ZoneCountries">@T["Countries"]</label>
+        <label class="form-label float-end" asp-for="ZoneModel.Countries">@T["Countries"]</label>
     </div>
     <div class="col-md-9">
         <div class="multi-select-wrapper">
-            <select asp-for="ZoneModel.ZoneCountries" multiple id="zoneCountries">
+            <select asp-for="ZoneModel.Countries" multiple id="zoneCountries">
                 @{
-                    var countryCodes = Model.ZoneModel.ZoneCountries?.ToList();
+                    var countryCodes = Model.ZoneModel.Countries?.ToList();
 
                     foreach (var country in Model.Countries)
                     {
@@ -59,11 +59,11 @@
 </div>
 <div class="row mb-3 form-group" id="stateList">
     <div class="col-md-3">
-        <label class="form-label float-end" asp-for="ZoneModel.ZoneStates">@T["States"]</label>
+        <label class="form-label float-end" asp-for="ZoneModel.States">@T["States"]</label>
     </div>
     <div class="col-md-9">
         <div class="multi-select-wrapper">
-            <select asp-for="ZoneModel.ZoneStates" multiple id="zoneStates">
+            <select asp-for="ZoneModel.States" multiple id="zoneStates">
                 @{
                     foreach (var country in Model.Countries)
                     {
@@ -75,7 +75,7 @@
                                 {
                                     var stateId = $"{country.TwoLetterCode},{state.Id}";
 
-                                    if (Model.ZoneModel.ZoneStates.Contains(stateId))
+                                    if (Model.ZoneModel.States.Contains(stateId))
                                     {
                                         <option value="@stateId" selected>@state.Name</option>
                                     }
@@ -94,14 +94,14 @@
 </div>
 <div class="row mb-3 form-group" id="postalCountry">
     <div class="col-md-3">
-        <label class="form-label float-end" asp-for="ZoneModel.ZoneCountry">@T["Country"]</label>
+        <label class="form-label float-end" asp-for="ZoneModel.Country">@T["Country"]</label>
     </div>
     <div class="col-md-9">
-        <select asp-for="ZoneModel.ZoneCountry" class="form-control">
+        <select asp-for="ZoneModel.Country" class="form-control">
             @{
                 foreach (var country in Model.Countries)
                 {
-                    if (country.TwoLetterCode == Model.ZoneModel.ZoneCountry)
+                    if (country.TwoLetterCode == Model.ZoneModel.Country)
                     {
                         <option value="@country.TwoLetterCode" selected>@country.Name</option>
                     }
@@ -116,10 +116,10 @@
 </div>
 <div class="row mb-3 form-group" id="postalCodes">
     <div class="col-md-3">
-        <label class="form-label float-end" asp-for="ZoneModel.ZonePostalCodes">@T["Postal Codes"]</label>
+        <label class="form-label float-end" asp-for="ZoneModel.PostalCodes">@T["Postal Codes"]</label>
     </div>
     <div class="col-md-9">
-        <textarea asp-for="ZoneModel.ZonePostalCodes" rows="5" class="form-control"></textarea>
+        <textarea asp-for="ZoneModel.PostalCodes" rows="5" class="form-control"></textarea>
     </div>
 </div>
 <div class="row mb-3 form-group">

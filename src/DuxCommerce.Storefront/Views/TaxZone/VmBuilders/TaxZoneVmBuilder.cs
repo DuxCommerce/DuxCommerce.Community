@@ -163,14 +163,14 @@ public class TaxZoneVmBuilder(
             Name = zone.Name,
             Type = zone.ZoneType,
 
-            ZoneCountries = zone.Countries ?? [],
+            Countries = zone.Countries ?? [],
 
-            ZoneStates = (zone.States ?? [])
+            States = (zone.States ?? [])
                 .SelectMany(c => { return c.StateIds.Select(s => $"{c.CountryCode},{s}"); }),
 
-            ZoneCountry = zone.PostalCodes?.CountryCode,
+            Country = zone.PostalCodes?.CountryCode,
 
-            ZonePostalCodes = string.Join(',', zone.PostalCodes?.PostalCodes ?? []),
+            PostalCodes = string.Join(',', zone.PostalCodes?.PostalCodes ?? []),
 
             PricesDisplayOption = zone.PriceDisplayOption,
             ShowBothPricesOnListingPage = zone.ShowBothPricesOnListing,

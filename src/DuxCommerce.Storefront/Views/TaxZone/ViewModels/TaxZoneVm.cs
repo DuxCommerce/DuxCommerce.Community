@@ -11,8 +11,8 @@ public class TaxZoneVm
     {
         Type = nameof(CountryZone),
         PricesDisplayOption = nameof(PriceDisplayOption.ShowPriceExcTax),
-        ZoneCountries = new List<string>(),
-        ZoneStates = new List<string>()
+        Countries = new List<string>(),
+        States = new List<string>()
     };
 
     public IEnumerable<TaxZoneTypeVm> ZoneTypes { get; set; }
