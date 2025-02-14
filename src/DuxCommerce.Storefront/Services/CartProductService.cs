@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DuxCommerce.StoreBuilder.Cart.Core;
+using DuxCommerce.StoreBuilder.Carts.Core;
 using DuxCommerce.StoreBuilder.Carts.DataTypes;
 using DuxCommerce.StoreBuilder.Catalog.DataStores;
 using OrchardCore.ContentManagement;

@@ -64,7 +64,7 @@ public class ShippingProfileVmBuilder(
             .SelectMany(g => g.Zones)
             .Single(z => z.Id == zoneId);
 
-        var countryStates = zone.CountryStates
+        var countryStates = zone.States
             .SelectMany(c => { return c.StateIds.Select(s => $"{c.CountryCode},{s}"); })
             .ToList();
 

@@ -10,7 +10,7 @@
     string GetCountryNames(ShippingZoneRow zone)
     {
         var countries = string.Empty;
-        foreach (var shippingCountry in zone.CountryStates)
+        foreach (var shippingCountry in zone.States)
         {
             if (countries != string.Empty)
                 countries += ",";

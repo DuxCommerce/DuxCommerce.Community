@@ -23,7 +23,7 @@ public class PayPalPaymentAdapter(
 {
     private static readonly List<string> ZeroDecimalCurrencies = new() { "HUF", "JPY", "TWD" };
 
-    public async Task<FlexiResult<Order>> CreateOrder(ShopperInfo shopperInfo)
+    public async Task<DuxResult<Order>> CreateOrder(ShopperInfo shopperInfo)
     {
         try
         {
@@ -36,7 +36,7 @@ public class PayPalPaymentAdapter(
             var response = await httpClient.Execute(request);
             var order = response.Result<Order>();
 
-            return new FlexiResult<Order>(order);
+            return new DuxResult<Order>(order);
         }
         catch (Exception ex)
         {
@@ -44,13 +44,13 @@ public class PayPalPaymentAdapter(
 
             logger.LogError(ex, message);
 
-            var error = new FlexiError(ErrorCode.ErrorOccurredCallingExternalService, Fields.CustomMessage, message);
+            var error = new DuxError(ErrorCode.ErrorOccurredCallingExternalService, Fields.CustomMessage, message);
 
-            return new FlexiResult<Order>(error);
+            return new DuxResult<Order>(error);
         }
     }
 
-    public async Task<FlexiResult<Order>> CaptureOrder(string orderId)
+    public async Task<DuxResult<Order>> CaptureOrder(string orderId)
     {
         try
         {
@@ -64,7 +64,7 @@ public class PayPalPaymentAdapter(
             var response = await httpClient.Execute(request);
             var order = response.Result<Order>();
 
-            return new FlexiResult<Order>(order);
+            return new DuxResult<Order>(order);
         }
         catch (Exception ex)
         {
@@ -72,9 +72,9 @@ public class PayPalPaymentAdapter(
 
             logger.LogError(ex, message);
 
-            var error = new FlexiError(ErrorCode.ErrorOccurredCallingExternalService, Fields.CustomMessage, message);
+            var error = new DuxError(ErrorCode.ErrorOccurredCallingExternalService, Fields.CustomMessage, message);
 
-            return new FlexiResult<Order>(error);
+            return new DuxResult<Order>(error);
         }
     }
 

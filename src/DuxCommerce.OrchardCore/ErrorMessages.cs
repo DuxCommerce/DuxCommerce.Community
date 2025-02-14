@@ -3,10 +3,10 @@ using DuxCommerce.StoreBuilder.ErrorTypes;
 
 namespace DuxCommerce.OrchardCore;
 
-public static class FlexiErrorExtensions
+public static class DuxErrorExtensions
 {
     // Todo: add some unit tests
-    public static string ToMessage(this FlexiError error)
+    public static string ToMessage(this DuxError error)
     {
         var message = ErrorMessages.All[error.ErrorCode];
 

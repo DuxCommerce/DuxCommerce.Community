@@ -109,7 +109,7 @@ public class ShoppingCartController(
         return await Redirect(_h[result.Error.ToMessage()]);
     }
 
-    private async Task<IActionResult> ProcessResult(FlexiResult<CartRow> result)
+    private async Task<IActionResult> ProcessResult(DuxResult<CartRow> result)
     {
         if (result.Succeeded)
             return RedirectToAction(nameof(Index));

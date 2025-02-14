@@ -10,16 +10,16 @@ public class PayPalPaymentUseCases(
     PayPalPaymentAdapter paypalPaymentAdapter,
     CheckoutUseCases checkoutUseCases)
 {
-    public async Task<FlexiResult<Order>> CreatePayPalOrder(ShopperInfo shopperInfo)
+    public async Task<DuxResult<Order>> CreatePayPalOrder(ShopperInfo shopperInfo)
     {
         var orderResult = await paypalPaymentAdapter.CreateOrder(shopperInfo);
 
         if (!orderResult.Succeeded)
-            return new FlexiResult<Order>(orderResult.Error);
+            return new DuxResult<Order>(orderResult.Error);
         
         var order = orderResult.Result;
         await checkoutUseCases.UpdatePaymentReference(shopperInfo, order.Id);
 
-        return new FlexiResult<Order>(orderResult.Result);
+        return new DuxResult<Order>(orderResult.Result);
     }
 }

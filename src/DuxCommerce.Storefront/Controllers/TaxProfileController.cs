@@ -45,7 +45,7 @@ public class TaxProfileController(
         
         if (ModelState.IsValid)
         {
-            FlexiResult<TaxProfileRow> result;
+            DuxResult<TaxProfileRow> result;
 
             if (string.IsNullOrEmpty(model.ProfileModel.Id))
                 result = await taxProfileUseCases.CreateProfile(model.ProfileModel);

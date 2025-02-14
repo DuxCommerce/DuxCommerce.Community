@@ -46,7 +46,7 @@ public class WebhookController(
         return Problem();
     }
 
-    private async Task<FlexiResult<OrderRow>> UpdatePaymentStatus(Event stripeEvent)
+    private async Task<DuxResult<OrderRow>> UpdatePaymentStatus(Event stripeEvent)
     {
         var intent = stripeEvent.Data.Object as PaymentIntent;
 

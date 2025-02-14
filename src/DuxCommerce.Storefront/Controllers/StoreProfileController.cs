@@ -45,7 +45,7 @@ public class StoreProfileController(
         
         if (ModelState.IsValid)
         {
-            FlexiResult<StoreProfileRow> result;
+            DuxResult<StoreProfileRow> result;
 
             model.Profile.Address = model.AddressVm.Address;
 

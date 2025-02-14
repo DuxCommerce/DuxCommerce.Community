@@ -9,15 +9,15 @@ public class StripePaymentUseCases(
     StripePaymentAdapter stripePaymentAdapter,
     CheckoutUseCases checkoutUseCases)
 {
-    public async Task<FlexiResult<string>> InitPayment(ShopperInfo shopperInfo)
+    public async Task<DuxResult<string>> InitPayment(ShopperInfo shopperInfo)
     {
         var initResult = await stripePaymentAdapter.InitPayment(shopperInfo);
 
         if (!initResult.Succeeded)
-            return new FlexiResult<string>(initResult.Error);
+            return new DuxResult<string>(initResult.Error);
 
         await checkoutUseCases.UpdatePaymentReference(shopperInfo, initResult.Result.PaymentIntentId);
 
-        return new FlexiResult<string>(initResult.Result.ClientSecret);
+        return new DuxResult<string>(initResult.Result.ClientSecret);
     }
 }

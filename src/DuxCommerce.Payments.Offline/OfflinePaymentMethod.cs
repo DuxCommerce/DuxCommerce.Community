@@ -12,9 +12,9 @@ public abstract class OfflinePaymentMethod : IPaymentMethod
 
     public Type CheckoutViewComponent => typeof(OfflinePaymentViewComponent);
         
-    public async Task<FlexiResult<PaymentResult>> ChargeAsync(IPaymentRequest request)
+    public async Task<DuxResult<PaymentResult>> ChargeAsync(IPaymentRequest request)
     {
-        return new FlexiResult<PaymentResult>(new PaymentResult());
+        return new DuxResult<PaymentResult>(new PaymentResult());
     }
 }
 

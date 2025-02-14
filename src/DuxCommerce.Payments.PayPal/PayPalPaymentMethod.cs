@@ -21,7 +21,7 @@ public class PayPalPaymentMethod(
 
     public Type CheckoutViewComponent => typeof(PayPalPaymentViewComponent);
 
-    public async Task<FlexiResult<PaymentResult>> ChargeAsync(IPaymentRequest request)
+    public async Task<DuxResult<PaymentResult>> ChargeAsync(IPaymentRequest request)
     {
         var order = await orderUseCases.GetOrder(request.OrderId);
         var paypalPayment = order.Payments.Single(x => x.PaymentMethodType == MethodType);
@@ -30,18 +30,18 @@ public class PayPalPaymentMethod(
         var captureResult = await paymentAdapter.CaptureOrder(paypalPayment.PaymentReference);
         
         if (!captureResult.Succeeded)
-            return new FlexiResult<PaymentResult>(captureResult.Error);
+            return new DuxResult<PaymentResult>(captureResult.Error);
 
         // Update payment status
         var updateResult = await UpdatePaymentStatus(paypalPayment.PaymentReference);
         
         if (!updateResult.Succeeded)
-            return new FlexiResult<PaymentResult>(updateResult.Error);
+            return new DuxResult<PaymentResult>(updateResult.Error);
 
-        return new FlexiResult<PaymentResult>(new PaymentResult(paypalPayment.PaymentReference));
+        return new DuxResult<PaymentResult>(new PaymentResult(paypalPayment.PaymentReference));
     }
 
-    private async Task<FlexiResult<OrderRow>> UpdatePaymentStatus(string paymentReference)
+    private async Task<DuxResult<OrderRow>> UpdatePaymentStatus(string paymentReference)
     {
         var request = new PaymentStatusModel
         {

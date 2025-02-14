@@ -20,7 +20,7 @@ public class StripePaymentAdapter(
     PaymentIntentService intentService,
     StripeSettingsUseCases settingsUseCases)
 {
-    public async Task<FlexiResult<StripePaymentIntent>> InitPayment(ShopperInfo shopperInfo)
+    public async Task<DuxResult<StripePaymentIntent>> InitPayment(ShopperInfo shopperInfo)
     {
         try
         {
@@ -36,7 +36,7 @@ public class StripePaymentAdapter(
 
             var intent = new StripePaymentIntent(paymentIntent.ClientSecret, paymentIntent.Id);
 
-            return new FlexiResult<StripePaymentIntent>(intent);
+            return new DuxResult<StripePaymentIntent>(intent);
         }
         catch (Exception ex)
         {
@@ -44,9 +44,9 @@ public class StripePaymentAdapter(
 
             logger.LogError(ex, message);
 
-            var error = new FlexiError(ErrorCode.ErrorOccurredCallingExternalService, Fields.CustomMessage, message);
+            var error = new DuxError(ErrorCode.ErrorOccurredCallingExternalService, Fields.CustomMessage, message);
 
-            return new FlexiResult<StripePaymentIntent>(error);
+            return new DuxResult<StripePaymentIntent>(error);
         }
     }
 

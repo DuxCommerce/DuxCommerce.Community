@@ -10,8 +10,8 @@ public class StripePaymentMethod : IPaymentMethod
 {
     public string MethodType => nameof(StripePaymentMethod);
     public Type CheckoutViewComponent => typeof(StripePaymentViewComponent);
-    public async Task<FlexiResult<PaymentResult>> ChargeAsync(IPaymentRequest request)
+    public async Task<DuxResult<PaymentResult>> ChargeAsync(IPaymentRequest request)
     {
-        return new FlexiResult<PaymentResult>(new PaymentResult());
+        return new DuxResult<PaymentResult>(new PaymentResult());
     }
 }
