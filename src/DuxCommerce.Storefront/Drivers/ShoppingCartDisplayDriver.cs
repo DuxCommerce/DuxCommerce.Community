@@ -7,7 +7,7 @@ namespace DuxCommerce.Storefront.Drivers;
 
 public class ShoppingCartDisplayDriver : DisplayDriver<ShoppingCartHome>
 {
-    public override IDisplayResult Display(ShoppingCartHome cartHome)
+    public override IDisplayResult Display(ShoppingCartHome cartHome, BuildDisplayContext context)
     {
         return Combine(
             Initialize<CategoryMenuVm>("CategoryMenu", model => UpdateMenuModel(model, cartHome)).Location("Nav:10"),

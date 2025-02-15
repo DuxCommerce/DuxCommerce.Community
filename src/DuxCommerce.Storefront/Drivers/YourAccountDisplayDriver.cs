@@ -6,7 +6,7 @@ namespace DuxCommerce.Storefront.Drivers;
 
 public class YourAccountDisplayDriver : DisplayDriver<UserMenu>
 {
-    public override IDisplayResult Display(UserMenu model)
+    public override IDisplayResult Display(UserMenu model, BuildDisplayContext context)
     {
         return View("YourAccount", model)
             .Location("Detail", "Content:1.2")
