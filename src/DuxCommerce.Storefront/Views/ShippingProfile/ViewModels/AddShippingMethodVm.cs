@@ -8,5 +8,6 @@ public class AddShippingMethodVm
 {
     public ShippingMethodModel MethodModel { get; set; } = new();
     public IEnumerable<SelectListItem> MethodTypes { get; set; }
-    public BreadCrumbs BreadCrumbs { get; set; }
+
+    public ShippingZoneLinks Links { get; set; }
 }

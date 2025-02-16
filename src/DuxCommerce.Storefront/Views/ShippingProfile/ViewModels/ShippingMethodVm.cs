@@ -7,5 +7,6 @@ public class ShippingMethodVm
     public string GroupId { get; set; }
     public string ZoneId { get; set; }
     public ShippingMethodRow Method { get; set; }
-    public BreadCrumbs BreadCrumbs { get; set; }
+
+    public ShippingZoneLinks Links { get; set; }
 }

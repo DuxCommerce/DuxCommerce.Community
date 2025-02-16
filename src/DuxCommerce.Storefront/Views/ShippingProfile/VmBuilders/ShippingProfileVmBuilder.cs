@@ -127,7 +127,7 @@ public class ShippingProfileVmBuilder(
         {
             MethodModel = new ShippingMethodModel { GroupId = groupId, ZoneId = zoneId },
             MethodTypes = methods.Select(x => new SelectListItem(x.Name, x.Type)),
-            BreadCrumbs = new BreadCrumbs { GroupId = groupId, ZoneId = zoneId }
+            Links = new ShippingZoneLinks { GroupId = groupId, ZoneId = zoneId, MethodsLink = true }
         };
     }
 
@@ -135,11 +135,7 @@ public class ShippingProfileVmBuilder(
     {
         var types = MethodTypes.GetAll();
         model.MethodTypes = types.Select(x => new SelectListItem(x.Name, x.Type));
-        model.BreadCrumbs = new BreadCrumbs
-        {
-            GroupId = model.MethodModel.GroupId,
-            ZoneId = model.MethodModel.ZoneId
-        };
+        model.Links = new ShippingZoneLinks { GroupId = model.MethodModel.GroupId, ZoneId = model.MethodModel.ZoneId, MethodsLink = true };
 
         return model;
     }
@@ -158,7 +154,7 @@ public class ShippingProfileVmBuilder(
             GroupId = groupId,
             ZoneId = zoneId,
             Method = method,
-            BreadCrumbs = new BreadCrumbs { GroupId = groupId, ZoneId = zoneId }
+            Links = new ShippingZoneLinks { GroupId = groupId, ZoneId = zoneId, MethodsLink = true }
         };
     }
 
