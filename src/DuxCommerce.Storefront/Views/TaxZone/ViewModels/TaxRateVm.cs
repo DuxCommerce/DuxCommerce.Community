@@ -9,5 +9,6 @@ public class TaxRateVm
     public string ZoneId { get; set; }
     public TaxRateModel RateModel { get; set; }
     public IEnumerable<TaxCodeRow> TaxCodes { get; set; }
-    public BreadCrumbs BreadCrumbs { get; set; }
+
+    public TaxZoneLinks Links { get; set; }
 }

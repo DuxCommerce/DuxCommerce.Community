@@ -94,7 +94,7 @@ public class TaxZoneVmBuilder(
             ZoneId = zoneId,
             RateModel = taxRate,
             TaxCodes = taxCodes,
-            BreadCrumbs = new BreadCrumbs { ZoneId = zoneId }
+            Links = new TaxZoneLinks { ZoneId = zoneId, RatesLink = true }
         };
     }
 
@@ -102,7 +102,7 @@ public class TaxZoneVmBuilder(
     {
         var taxCodes = (await taxCodeStore.GetAll()).ToList();
         model.TaxCodes = taxCodes;
-        model.BreadCrumbs = new BreadCrumbs { ZoneId = model.ZoneId };
+        model.Links = new TaxZoneLinks() { ZoneId = model.ZoneId, RatesLink = true };
 
         return model;
     }
@@ -119,7 +119,7 @@ public class TaxZoneVmBuilder(
             ZoneId = zoneId,
             RateModel = taxRateModel,
             TaxCodes = taxCodes,
-            BreadCrumbs = new BreadCrumbs { ZoneId = zoneId }
+            Links = new TaxZoneLinks {ZoneId = zoneId, RatesLink = true}
         };
     }
 
@@ -127,7 +127,7 @@ public class TaxZoneVmBuilder(
     {
         var taxCodes = (await taxCodeStore.GetAll()).ToList();
         model.TaxCodes = taxCodes;
-        model.BreadCrumbs = new BreadCrumbs { ZoneId = model.ZoneId };
+        model.Links = new TaxZoneLinks { ZoneId = model.ZoneId, RatesLink = true };
 
         return model;
     }

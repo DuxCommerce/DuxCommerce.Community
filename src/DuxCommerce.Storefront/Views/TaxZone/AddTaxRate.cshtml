@@ -1,9 +1,7 @@
 @model DuxCommerce.Storefront.Views.TaxZone.ViewModels.TaxRateVm
 
 <h1>@T["Add Rate"]</h1>
-
-@await Html.PartialAsync("_BreadCrumbs", Model.BreadCrumbs)
-
+@await Html.PartialAsync("_ZoneLinks", Model.Links)
 <form asp-controller="TaxZone" asp-action="AddTaxRate" method="post">
     @await Html.PartialAsync("_TaxRate", Model)
     <div class="d-flex justify-content-between">
