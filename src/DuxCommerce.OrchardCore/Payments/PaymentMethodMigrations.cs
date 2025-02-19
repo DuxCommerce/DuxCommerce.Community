@@ -29,8 +29,6 @@ public class PaymentMethodMigrations(IContentDefinitionManager definitionManager
                 .Column<string>(nameof(PaymentMethodIndex.RowId), column => column.NotNull().WithLength(26))
                 .Column<string>(nameof(PaymentMethodIndex.DisplayName), column => column.NotNull().WithLength(100))
                 .Column<string>(nameof(PaymentMethodIndex.MethodType), column => column.NotNull().WithLength(50))
-                .Column<string>(nameof(PaymentMethodIndex.SetupController), column => column.Nullable().WithLength(50))
-                .Column<string>(nameof(PaymentMethodIndex.SetupAction), column => column.Nullable().WithLength(50))
                 .Column<int>(nameof(PaymentMethodIndex.DisplayOrder), column => column.NotNull())
                 .Column<bool>(nameof(PaymentMethodIndex.Enabled), column => column.NotNull())
             );
@@ -44,5 +42,14 @@ public class PaymentMethodMigrations(IContentDefinitionManager definitionManager
             );
 
         return 2;
+    }
+
+    public async Task<int> UpdateFrom2Async()
+    {
+        await SchemaBuilder.AlterIndexTableAsync<PaymentMethodIndex>(table => table
+            .AddColumn<string>(nameof(PaymentMethodIndex.ModuleName),
+                column => column.NotNull().WithLength(200).WithDefault("")));
+        
+        return 3;
     }
 }
