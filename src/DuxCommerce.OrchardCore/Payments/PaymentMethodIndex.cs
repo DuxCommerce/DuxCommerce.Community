@@ -1,37 +1,23 @@
 using DuxCommerce.OrchardCore.Shared;
-using DuxCommerce.StoreBuilder.Payments.DataTypes;
 using YesSql.Indexes;
 
 namespace DuxCommerce.OrchardCore.Payments;
 
-public class PaymentMethodIndex : DuxIndex
+public class PaymentMethodIndex(
+    string rowId,
+    string displayName,
+    string methodType,
+    string moduleName,
+    int displayOrder,
+    bool enabled)
+    : DuxIndex
 {
-    public PaymentMethodIndex(
-        string rowId,
-        string displayName,
-        string methodType,
-        string setupController,
-        string setupAction,
-        string instructions,
-        int displayOrder,
-        bool enabled)
-    {
-        RowId = rowId;
-        DisplayName = displayName;
-        MethodType = methodType;
-        SetupController = setupController;
-        SetupAction = setupAction;
-        DisplayOrder = displayOrder;
-        Enabled = enabled;
-    }
-
-    public sealed override string RowId { get; set; }
-    public string DisplayName { get; set; }
-    public string MethodType { get; set; }
-    public string SetupController { get; set; }
-    public string SetupAction { get; set; }
-    public int DisplayOrder { get; set; }
-    public bool Enabled { get; set; }
+    public sealed override string RowId { get; set; } = rowId;
+    public string DisplayName { get; set; } = displayName;
+    public string MethodType { get; set; } = methodType;
+    public string ModuleName { get; set; } = moduleName;
+    public int DisplayOrder { get; set; } = displayOrder;
+    public bool Enabled { get; set; } = enabled;
 }
 
 public class PaymentMethodIndexProvider : IndexProvider<PaymentMethodPart>
@@ -47,9 +33,7 @@ public class PaymentMethodIndexProvider : IndexProvider<PaymentMethodPart>
                     row.Id,
                     row.DisplayName,
                     row.MethodType,
-                    row.SetupController,
-                    row.SetupAction,
-                    row.Instructions,
+                    row.ModuleName,
                     row.DisplayOrder,
                     row.Enabled);
             });

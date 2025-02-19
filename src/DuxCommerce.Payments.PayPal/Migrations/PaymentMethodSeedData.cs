@@ -5,6 +5,7 @@ namespace DuxCommerce.Payments.PayPal.Migrations;
 
 public static class PaymentMethodSeedData
 {
+    private const string ModuleName = "DuxCommerce.Payments.PayPal";
     public static IEnumerable<PaymentMethodRow> GetMethods()
     {
         return new List<PaymentMethodRow>
@@ -13,8 +14,7 @@ public static class PaymentMethodSeedData
             {
                 DisplayName = "PayPal", 
                 MethodType = nameof(PayPalPaymentMethod),
-                SetupController = "PayPal",
-                SetupAction = "Setup"
+                ModuleName = ModuleName
             }
         };
     }

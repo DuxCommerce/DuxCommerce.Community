@@ -1,5 +1,4 @@
 @using DuxCommerce.OrchardCore
-@using OrchardCore.Mvc.Core.Utilities
 @model DuxCommerce.Storefront.Views.PaymentMethod.ViewModels.PaymentMethodVm
 
 <h1>@T["Payment Methods"]</h1>
@@ -39,16 +38,10 @@
                                         <i class="fas fa-circle-check small"></i>
                                     </a>
                                 }
-
-                                // Note: the controller may be from different module
-                                var path = $"{method.SetupController}/{method.SetupAction}?methodtype={method.MethodType}";
-
-                                if (!string.IsNullOrEmpty(method.SetupAction))
-                                {
-                                    <a href="@Url.GetBaseUrl()/@path" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Configure"]">
-                                        <i class="fas fa-gear small"></i>
-                                    </a>
-                                }
+                                
+                                <a asp-action="Configure" asp-controller="settings" asp-area="@method.ModuleName" asp-route-methodtype="@method.MethodType" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Configure"]">
+                                    <i class="fas fa-gear small"></i>
+                                </a>
                             }
                         </td>
                     </tr>
