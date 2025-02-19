@@ -1,5 +1,4 @@
 @using DuxCommerce.OrchardCore
-@using OrchardCore.Mvc.Core.Utilities
 @model DuxCommerce.Payments.PayPal.Views.Settings.ViewModels.PayPalSettingsVm
 
 <style asp-name="@ResourceNames.MultiSelect"></style>
@@ -93,7 +92,7 @@
         </div>
         <div class="d-flex justify-content-between">
             <div>
-                <a href="@Url.GetBaseUrl()/Admin/PaymentMethod/Index" class="btn btn-secondary">@T["Cancel"]</a>
+                <a asp-action="Index" asp-controller="paymentmethod" asp-area="DuxCommerce.Storefront" class="btn btn-secondary">@T["Back"]</a>
             </div>
             <div>
                 <button class="btn btn-primary" type="submit">@T["Save"]</button>
