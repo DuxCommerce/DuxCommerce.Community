@@ -4,7 +4,7 @@ using OrchardCore.Modules.Manifest;
     Name = "DuxCommerce.Payments.Stripe",
     Author = "DuxCommerce Team",
     Website = "https://DuxCommerce.com",
-    Version = "1.0.0",
+    Version = "1.0.5",
     Description = "Stripe payment method for DuxCommerce",
     Category = "Commerce",
     Dependencies =
