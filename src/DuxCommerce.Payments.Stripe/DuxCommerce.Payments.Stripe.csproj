@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OrchardCore.Admin.Abstractions" Version="2.1.5" />
-    <PackageReference Include="OrchardCore.Module.Targets" Version="2.1.5" />
-    <PackageReference Include="OrchardCore.ContentTypes.Abstractions" Version="2.1.5" />
+    <PackageReference Include="OrchardCore.Admin.Abstractions" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.Module.Targets" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.ContentTypes.Abstractions" Version="2.1.6" />
     <PackageReference Include="Stripe.net" Version="43.9.0" />
   </ItemGroup>
 
