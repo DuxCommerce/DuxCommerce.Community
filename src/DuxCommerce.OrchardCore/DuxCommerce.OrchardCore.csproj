@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DuxCommerce.StoreBuilder" Version="1.0.2" />
+        <PackageReference Include="DuxCommerce.StoreBuilder" Version="1.0.5" />
         <PackageReference Include="FSharp.Core" Version="9.0.201" />
         <PackageReference Include="ISO3166" Version="1.0.4"/>
         <PackageReference Include="OrchardCore.Autoroute" Version="2.1.5" />
