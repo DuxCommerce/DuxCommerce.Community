@@ -4,7 +4,7 @@ using OrchardCore.Modules.Manifest;
     Name = "DuxCommerce.Payments.PayPal",
     Author = "DuxCommerce Team",
     Website = "https://DuxCommerce.com",
-    Version = "1.0.0",
+    Version = "1.0.5",
     Description = "PayPal payment method for DuxCommerce",
     Category = "Commerce",
     Dependencies =
