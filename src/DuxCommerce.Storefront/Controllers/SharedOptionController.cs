@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using OrchardCore.Admin;
 using OrchardCore.DisplayManagement.Notify;
+using OrchardCore.Navigation;
 
 namespace DuxCommerce.Storefront.Controllers;
 
@@ -199,5 +200,15 @@ public class SharedOptionController(
         await notifier.SuccessAsync(_h["Option choice deleted successfully"]);
 
         return RedirectToAction(nameof(Edit), new { optionId });
+    }
+
+    public async Task<IActionResult> Products(string optionId, PagerParameters pagerParameter)
+    {
+        if (!await authorizationService.AuthorizeAsync(User, PermissionProvider.ManageCategories))
+            return Forbid();
+
+        var model = await sharedOptionVmBuilder.BuildProductsModel(optionId, pagerParameter);
+
+        return View(model);
     }
 }

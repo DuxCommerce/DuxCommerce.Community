@@ -1,6 +1,5 @@
 using DuxCommerce.OrchardCore.Shared;
 using DuxCommerce.StoreBuilder.Catalog.Core;
-using DuxCommerce.StoreBuilder.Catalog.DataTypes;
 using OrchardCore.ContentManagement;
 using YesSql.Indexes;
 
@@ -39,7 +38,7 @@ public class ProductIndexProvider : IndexProvider<ContentItem>
                 if (!contentItem.Published) 
                     return null;
                 
-                var row = (ProductRow)contentItem.As<ProductPart>()?.Row;
+                var row = contentItem.As<ProductPart>()?.Row;
 
                 if (row == null)
                     return null;

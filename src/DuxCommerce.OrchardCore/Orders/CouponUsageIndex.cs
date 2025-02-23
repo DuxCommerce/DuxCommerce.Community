@@ -1,5 +1,4 @@
-﻿using DuxCommerce.StoreBuilder.Orders.DataTypes;
-using YesSql.Indexes;
+﻿using YesSql.Indexes;
 
 namespace DuxCommerce.OrchardCore.Orders;
 

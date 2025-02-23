@@ -1,5 +1,4 @@
 using DuxCommerce.OrchardCore.Shared;
-using DuxCommerce.StoreBuilder.Marketing.DataTypes;
 using YesSql.Indexes;
 
 namespace DuxCommerce.OrchardCore.Marketing.Coupons;
@@ -28,7 +27,7 @@ public class CouponIndexProvider : IndexProvider<CouponPart>
         context.For<CouponIndex>()
             .Map(x =>
             {
-                var row = (CouponRow)x.Row;
+                var row = x.Row;
 
                 return new CouponIndex(
                     row.Id,

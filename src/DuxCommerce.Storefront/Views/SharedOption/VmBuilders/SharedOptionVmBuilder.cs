@@ -5,14 +5,26 @@ using System.Threading.Tasks;
 using DuxCommerce.StoreBuilder.Catalog.DataStores;
 using DuxCommerce.StoreBuilder.Catalog.DataTypes;
 using DuxCommerce.StoreBuilder.Catalog.Requests;
+using DuxCommerce.Storefront.Services;
 using DuxCommerce.Storefront.Views.ProductOption.ViewModels;
 using DuxCommerce.Storefront.Views.Shared.ViewModels;
 using DuxCommerce.Storefront.Views.SharedOption.ViewModels;
+using Microsoft.AspNetCore.Routing;
+using OrchardCore.ContentManagement;
+using OrchardCore.DisplayManagement;
+using OrchardCore.Navigation;
 
 namespace DuxCommerce.Storefront.Views.SharedOption.VmBuilders;
 
-public class SharedOptionVmBuilder(IOptionStore optionStore)
+public class SharedOptionVmBuilder(
+    IOptionStore optionStore,
+    IProductOptionsStore productOptionsStore,
+    ProductService productService,
+    ProductOptionsService productOptionsService,
+    IShapeFactory shapeFactory)
 {
+    private readonly dynamic _new = shapeFactory;
+    
     public async Task<OptionIndexVm> BuildIndexModel()
     {
         var optionRows = await optionStore.GetAll();
@@ -88,6 +100,19 @@ public class SharedOptionVmBuilder(IOptionStore optionStore)
         };
 
         return new SharedOptionChoiceVm { Choice = choiceModel };
+    }
+
+    public async Task<LinkedProductsVm> BuildProductsModel(string optionId, PagerParameters pagerParameters)
+    {
+        var pager = new Pager(pagerParameters, 10);
+        var (count, products) = await productOptionsService.GetProducts(optionId, pager);
+        var pagerShape = (await _new.Pager(pager)).TotalItemCount(count).RouteData(new RouteData());
+
+        return new LinkedProductsVm()
+        {
+            Products = products,
+            Pager = pagerShape
+        };
     }
 
     private OptionModel ToOptionModel(OptionRow option)

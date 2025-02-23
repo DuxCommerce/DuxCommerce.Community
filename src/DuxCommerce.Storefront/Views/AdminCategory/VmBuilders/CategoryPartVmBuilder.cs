@@ -42,7 +42,7 @@ public class CategoryPartVmBuilder(
 
     public async Task<CategoryEditVm> BuildEditModel(CategoryPart part, CategoryEditVm model)
     {
-        var categoryRow = (CategoryRow)part.Row;
+        var categoryRow = part.Row;
 
         model.Category = ToCategoryModel(categoryRow);
         model.CategoryListItems = await GetParentCategories(categoryRow.Id);
@@ -63,7 +63,7 @@ public class CategoryPartVmBuilder(
 
         return new CategoryProductsVm
         {
-            Category = (CategoryRow)categoryItem.As<CategoryPart>().Row,
+            Category = categoryItem.As<CategoryPart>().Row,
             Products = products,
             Currency = currency,
             Links = links,

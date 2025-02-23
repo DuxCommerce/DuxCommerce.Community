@@ -42,8 +42,17 @@ public class ProductOptionsStore(ISession session, IIdGenerator generator)
     public async Task<int> GetLinkedProductCount(string optionId)
     {
         return await Session
-            .Query<ProductOptionsPart, ProductOptionsIndex>(index => index.OptionId == optionId)
+            .QueryIndex<ProductOptionsIndex>(index => index.OptionId == optionId)
             .CountAsync();
+    }
+
+    public async Task<IEnumerable<string>> GetLinkedProductIds(string optionId)
+    {
+        var indexes = await Session
+            .QueryIndex<ProductOptionsIndex>(index => index.OptionId == optionId)
+            .ListAsync();
+
+        return indexes.Select(x => x.ProductId);
     }
 
     public async Task<bool> Delete(string optionId)
