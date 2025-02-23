@@ -1,12 +1,11 @@
 ﻿@using DuxCommerce.OrchardCore
-@using DuxCommerce.StoreBuilder.Catalog.DataTypes
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using OrchardCore.ResourceManagement.TagHelpers
 @model DuxCommerce.Storefront.Views.LinkedOption.ViewModels.LinkedOptionVm
 
 <style asp-name="@ResourceNames.StoreStyles"></style>
 @{
-    var optionChoices = (Model.SharedOption.Choices ?? Array.Empty<ChoiceRow>())
+    var optionChoices = (Model.SharedOption.Choices ?? [])
         .OrderBy(x => x.DisplayOrder)
         .ThenBy(x => x.CreatedAtUtc);
 

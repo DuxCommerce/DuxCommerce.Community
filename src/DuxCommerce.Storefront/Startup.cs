@@ -37,7 +37,6 @@ using DuxCommerce.Storefront.Views.TaxProfile.VmBuilders;
 using DuxCommerce.Storefront.Views.TaxZone.VmBuilders;
 using DuxCommerce.Storefront.Views.YourAddresses.VmBuilders;
 using DuxCommerce.Storefront.Views.YourOrders.VmBuilders;
-using DuxCommerce.Storefront.Controllers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using OrchardCore.ContentManagement;
@@ -128,5 +127,6 @@ public class Startup : StartupBase
         services.AddScoped<CategoryProductService>();
         services.AddScoped<PromotionProductService>();
         services.AddScoped<CouponProductService>();
+        services.AddScoped<ProductOptionsService>();
     }
 }
