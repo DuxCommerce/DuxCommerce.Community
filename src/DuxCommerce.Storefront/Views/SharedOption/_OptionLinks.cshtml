@@ -1,0 +1,17 @@
+@model DuxCommerce.Storefront.Views.SharedOption.ViewModels.OptionLinks
+
+@{
+    string Display(bool display)
+    {
+        return display ? "active" : string.Empty;
+    }
+}
+
+<ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+        <a class="nav-link @Display(Model.OptionLink)" asp-action="Edit" asp-route-optionId="@Model.OptionId">@T["General"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @Display(Model.ProductsLink)" asp-action="Products" asp-route-optionId="@Model.OptionId">@T["Products"]</a>
+    </li>
+</ul>

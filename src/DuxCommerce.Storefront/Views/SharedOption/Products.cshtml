@@ -11,7 +11,7 @@
 <style asp-name="@ResourceNames.StoreStyles"></style>
 
 <h1>@T["Products"]</h1>
-
+@await Html.PartialAsync("_OptionLinks", Model.Links)
 <div class="row">
     <div class="table-responsive">
         <table class="table table-hover">

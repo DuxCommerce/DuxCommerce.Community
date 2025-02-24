@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -57,12 +56,13 @@ public class SharedOptionVmBuilder(
     {
         var optionRow = await optionStore.Get(optionId);
 
-        var choices = (optionRow.Choices ?? Array.Empty<ChoiceRow>())
+        var choices = (optionRow.Choices ?? [])
             .OrderBy(x => x.DisplayOrder)
             .ThenBy(x => x.CreatedAtUtc);
 
         return new SharedOptionVm
         {
+            Links = new OptionLinks { OptionId = optionId, OptionLink = true },
             Option = ToOptionModel(optionRow),
             Choices = choices,
             DisplayTypes = OptionDisplayType.GetAll()
@@ -73,7 +73,9 @@ public class SharedOptionVmBuilder(
     {
         var optionRow = await optionStore.Get(model.Option.OptionId);
 
-        var choices = (optionRow.Choices ?? Array.Empty<ChoiceRow>())
+        model.Links = new OptionLinks { OptionId = model.Option.OptionId, OptionLink = true };
+        
+        var choices = (optionRow.Choices ?? [])
             .OrderBy(x => x.DisplayOrder)
             .ThenBy(x => x.CreatedAtUtc);
 
@@ -108,8 +110,9 @@ public class SharedOptionVmBuilder(
         var (count, products) = await productOptionsService.GetProducts(optionId, pager);
         var pagerShape = (await _new.Pager(pager)).TotalItemCount(count).RouteData(new RouteData());
 
-        return new LinkedProductsVm()
+        return new LinkedProductsVm
         {
+            Links = new OptionLinks { OptionId = optionId, ProductsLink = true},
             Products = products,
             Currency = currency,
             Pager = pagerShape
