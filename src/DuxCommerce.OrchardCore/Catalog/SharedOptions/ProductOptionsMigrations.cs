@@ -23,6 +23,7 @@ public class ProductOptionsMigrations(IContentDefinitionManager definitionManage
             .CreateMapIndexTableAsync<ProductOptionsIndex>(table => table
                 .Column<string>(nameof(ProductOptionsIndex.RowId), column => column.NotNull().WithLength(26))
                 .Column<string>(nameof(ProductOptionsIndex.ProductId), column => column.NotNull().WithLength(26))
+                .Column<string>(nameof(ProductOptionsIndex.OptionId), column => column.NotNull().WithLength(26))
             );
 
         await SchemaBuilder
@@ -30,6 +31,14 @@ public class ProductOptionsMigrations(IContentDefinitionManager definitionManage
                 .CreateIndex(
                     $"IDX_{nameof(ProductOptionsIndex)}_{nameof(ProductOptionsIndex.ProductId)}",
                     nameof(ProductOptionsIndex.ProductId),
+                    nameof(DuxDocument.DocumentId))
+            );
+
+        await SchemaBuilder
+            .AlterIndexTableAsync<ProductOptionsIndex>(table => table
+                .CreateIndex(
+                    $"IDX_{nameof(ProductOptionsIndex)}_{nameof(ProductOptionsIndex.OptionId)}",
+                    nameof(ProductOptionsIndex.OptionId),
                     nameof(DuxDocument.DocumentId))
             );
 
