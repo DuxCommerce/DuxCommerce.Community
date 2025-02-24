@@ -24,7 +24,7 @@ public class ProductOptionsVmBuilder(
         var options = await GetAllOptions(productId);
 
         var productItem = await productStore.GetItem<ContentItem>(productId);
-        var productRow = (ProductRow)productItem.As<ProductPart>().Row;
+        var productRow = productItem.As<ProductPart>().Row;
 
         return new ProductOptionsVm
         {
@@ -46,18 +46,6 @@ public class ProductOptionsVmBuilder(
             .Select(x => new OptionVm { Option = x });
 
         return sharedOptionVms.Concat(privateOptionVms).OrderBy(x => x.Option.DisplayOrder);
-    }
-
-    public async Task<ProductOptionsVm> BuildIndexModel(string productId, ProductOptionsVm model)
-    {
-        var productItem = await productStore.GetItem<ContentItem>(productId);
-        var productRow = (ProductRow)productItem.As<ProductPart>().Row;
-
-        model.Product = productRow;
-
-        model.Links = new ProductLinksVm { ContentItem = productItem, OptionsLink = true };
-
-        return model;
     }
 
     public PrivateOptionVm BuildCreateModel(string productId)
@@ -103,7 +91,7 @@ public class ProductOptionsVmBuilder(
         var optionsRow = await productOptionsStore.GetByProductId(productId);
         var option = optionsRow.PrivateOptions.Single(x => x.Id == model.Option.OptionId);
 
-        var choices = (option.Choices ?? Array.Empty<ChoiceRow>())
+        var choices = (option.Choices ?? [])
             .OrderBy(x => x.DisplayOrder)
             .ThenBy(x => x.CreatedAtUtc);
 
