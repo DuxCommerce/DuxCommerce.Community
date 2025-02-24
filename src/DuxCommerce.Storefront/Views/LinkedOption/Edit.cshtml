@@ -13,6 +13,7 @@
 }
 
 <h1>@T["Edit Option"]</h1>
+@await Html.PartialAsync("_ProductLinks", Model.Links)
 <form asp-action="Edit" asp-route-productId="@Model.ProductOptions.ProductId"
       asp-route-optionId="@Model.SharedOption.Id" method="post" enctype="multipart/form-data">
     <div class="row mb-3 form-group">

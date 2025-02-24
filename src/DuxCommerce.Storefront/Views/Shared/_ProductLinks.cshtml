@@ -1,5 +1,4 @@
 @using DuxCommerce.OrchardCore.Catalog.Products
-@using DuxCommerce.StoreBuilder.Catalog.DataTypes
 @using DuxCommerce.Storefront
 @using OrchardCore.ContentManagement
 @model DuxCommerce.Storefront.Views.AdminProduct.ViewModels.ProductLinksVm
@@ -12,7 +11,7 @@
 
     if (Model.ContentItem != null)
     {
-        var product = (ProductRow)Model.ContentItem.As<ProductPart>().Row;
+        var product = Model.ContentItem.As<ProductPart>().Row;
 
         <ul class="nav nav-tabs mb-3">
             <li class="nav-item">

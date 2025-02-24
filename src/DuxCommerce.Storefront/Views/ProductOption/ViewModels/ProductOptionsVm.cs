@@ -6,7 +6,7 @@ namespace DuxCommerce.Storefront.Views.ProductOption.ViewModels;
 
 public class ProductOptionsVm
 {
+    public ProductLinksVm Links { get; set; }
     public ProductRow Product { get; set; }
     public IEnumerable<OptionVm> Options { get; set; }
-    public ProductLinksVm Links { get; set; }
 }
