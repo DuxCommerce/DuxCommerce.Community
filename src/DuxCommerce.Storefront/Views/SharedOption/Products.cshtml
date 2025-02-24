@@ -1,24 +1,36 @@
-﻿@using DuxCommerce.OrchardCore.Catalog.Products
+﻿@using DuxCommerce.OrchardCore
+@using DuxCommerce.OrchardCore.Catalog.Products
 @using DuxCommerce.Storefront.Extensions;
+@using OrchardCore.Autoroute.Models
 @using OrchardCore.ContentManagement
 @using OrchardCore.Contents.TagHelpers
+@using OrchardCore.ResourceManagement.TagHelpers
 
 @model DuxCommerce.Storefront.Views.SharedOption.ViewModels.LinkedProductsVm
+
+<style asp-name="@ResourceNames.StoreStyles"></style>
+
+<h1>@T["Products"]</h1>
 
 <div class="row">
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
             <tr>
-                <th></th>
+                <th class="col-md-1">@T["Image"]</th>
                 <th>@T["Name"]</th>
+                <th>@T["Permalink"]</th>
+                <th>@T["SKU"]</th>
+                <th>@T["Track Stock?"]</th>
+                <th>@T["Price"]</th>
             </tr>
             </thead>
             <tbody>
-            @for (var i = 0; i < Model.Products.Count(); i++)
+            @for (var index = 0; index < Model.Products.Count(); index++)
             {
-                var contentItem = Model.Products.ElementAt(i);
+                var contentItem = Model.Products.ElementAt(index);
                 var image = contentItem.GetImage<ProductImagePart>();
+                var routePart = contentItem.As<AutoroutePart>();
                 var product = contentItem.As<ProductPart>().Row;
 
                 <tr>
@@ -32,6 +44,12 @@
                             <span>@product.Name</span>
                         </a>
                     </td>
+                    <td>@routePart.Path</td>
+                    <td>@product.Sku</td>
+                    <td>
+                        <input type="checkbox" name="Enabled" checked="@product.StockEnabled" disabled/>
+                    </td>
+                    <td>@product.Price.ToCurrency(Model.Currency)</td>
                 </tr>
             }
             </tbody>

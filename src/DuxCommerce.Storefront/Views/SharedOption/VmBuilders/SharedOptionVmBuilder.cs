@@ -5,22 +5,21 @@ using System.Threading.Tasks;
 using DuxCommerce.StoreBuilder.Catalog.DataStores;
 using DuxCommerce.StoreBuilder.Catalog.DataTypes;
 using DuxCommerce.StoreBuilder.Catalog.Requests;
+using DuxCommerce.StoreBuilder.Settings.UseCases;
 using DuxCommerce.Storefront.Services;
 using DuxCommerce.Storefront.Views.ProductOption.ViewModels;
 using DuxCommerce.Storefront.Views.Shared.ViewModels;
 using DuxCommerce.Storefront.Views.SharedOption.ViewModels;
 using Microsoft.AspNetCore.Routing;
-using OrchardCore.ContentManagement;
 using OrchardCore.DisplayManagement;
 using OrchardCore.Navigation;
 
 namespace DuxCommerce.Storefront.Views.SharedOption.VmBuilders;
 
 public class SharedOptionVmBuilder(
-    IOptionStore optionStore,
-    IProductOptionsStore productOptionsStore,
-    ProductService productService,
     ProductOptionsService productOptionsService,
+    CurrencyUseCases currencyUseCases,
+    IOptionStore optionStore,
     IShapeFactory shapeFactory)
 {
     private readonly dynamic _new = shapeFactory;
@@ -104,6 +103,7 @@ public class SharedOptionVmBuilder(
 
     public async Task<LinkedProductsVm> BuildProductsModel(string optionId, PagerParameters pagerParameters)
     {
+        var currency = await currencyUseCases.GetCurrency();
         var pager = new Pager(pagerParameters, 10);
         var (count, products) = await productOptionsService.GetProducts(optionId, pager);
         var pagerShape = (await _new.Pager(pager)).TotalItemCount(count).RouteData(new RouteData());
@@ -111,6 +111,7 @@ public class SharedOptionVmBuilder(
         return new LinkedProductsVm()
         {
             Products = products,
+            Currency = currency,
             Pager = pagerShape
         };
     }
