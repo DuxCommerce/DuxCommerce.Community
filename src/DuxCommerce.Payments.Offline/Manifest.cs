@@ -4,7 +4,7 @@ using OrchardCore.Modules.Manifest;
     Name = "DuxCommerce.Payments.Offline",
     Author = "DuxCommerce Team",
     Website = "https://DuxCommerce.com",
-    Version = "1.0.5",
+    Version = "1.1.0",
     Description = "Offline payment methods for DuxCommerce",
     Category = "Commerce",
     Dependencies =
