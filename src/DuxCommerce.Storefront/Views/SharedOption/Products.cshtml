@@ -1,18 +1,40 @@
-﻿@model DuxCommerce.Storefront.Views.SharedOption.ViewModels.LinkedProductsVm
+﻿@using DuxCommerce.OrchardCore.Catalog.Products
+@using DuxCommerce.Storefront.Extensions;
+@using OrchardCore.ContentManagement
+@using OrchardCore.Contents.TagHelpers
 
-@{
-    Layout = null;
-}
+@model DuxCommerce.Storefront.Views.SharedOption.ViewModels.LinkedProductsVm
 
-<!DOCTYPE html>
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th></th>
+                <th>@T["Name"]</th>
+            </tr>
+            </thead>
+            <tbody>
+            @for (var i = 0; i < Model.Products.Count(); i++)
+            {
+                var contentItem = Model.Products.ElementAt(i);
+                var image = contentItem.GetImage<ProductImagePart>();
+                var product = contentItem.As<ProductPart>().Row;
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
+                <tr>
+                    <td>
+                        <a edit-for="@contentItem">
+                            <img src="@Orchard.AssetUrl(image.Path, 50, 50)" alt="@image.Text">
+                        </a>
+                    </td>
+                    <td>
+                        <a edit-for="@contentItem">
+                            <span>@product.Name</span>
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
 </div>
-</body>
-</html>
