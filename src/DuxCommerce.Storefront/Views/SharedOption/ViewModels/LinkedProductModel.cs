@@ -7,6 +7,7 @@ namespace DuxCommerce.Storefront.Views.SharedOption.ViewModels;
 
 public class LinkedProductsVm
 {
+    public OptionLinks Links { get; set; }
     public IEnumerable<ContentItem> Products { get; set; } = new List<ContentItem>();
     public CurrencyRow Currency { get; set; }
     [BindNever] public dynamic Pager { get; set; }

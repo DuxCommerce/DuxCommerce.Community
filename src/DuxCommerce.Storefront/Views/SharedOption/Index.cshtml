@@ -35,9 +35,6 @@
                     <td>@option.DisplayType</td>
                     <td>@string.Join(", ", choices)</td>
                     <td class="text-end">
-                        <a asp-action="Products" asp-route-optionId="@option.Id" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["View Products"]">
-                            <i class="fas fa-eye small"></i>
-                        </a>
                         <a asp-action="Edit" asp-route-optionId="@option.Id" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="@T["Edit"]">
                             <i class="fas fa-pen-to-square small"></i>
                         </a>
