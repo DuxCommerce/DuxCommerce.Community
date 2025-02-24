@@ -22,10 +22,6 @@
     <ItemGroup>
       <ProjectReference Include="..\DuxCommerce.OrchardCore\DuxCommerce.OrchardCore.csproj" />
     </ItemGroup>
-    
-    <ItemGroup>
-      <Content Include="Views\SharedOption\Products.cshtml" />
-    </ItemGroup>
   
     <Target Name="CopyAssets" AfterTargets="Build">
         <ItemGroup>
