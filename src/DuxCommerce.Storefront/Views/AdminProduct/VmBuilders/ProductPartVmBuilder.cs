@@ -104,7 +104,8 @@ public class ProductPartVmBuilder(
         var taxCodes = await GetTaxCodes();
         model.TaxCodes = taxCodes;
 
-        model.Categories = await GetCategories();
+        var trails = await categoryUseCases.GetCategoryTrails();
+        model.CategoryItems = trails.ToListItems();
     }
 
     private async Task<List<SelectListItem>> GetTaxCodes()
