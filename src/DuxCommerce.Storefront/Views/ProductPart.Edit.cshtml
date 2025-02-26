@@ -1,32 +1,11 @@
 @using DuxCommerce.OrchardCore
-@using DuxCommerce.StoreBuilder.Catalog.DataTypes
 @model DuxCommerce.Storefront.Views.AdminProduct.ViewModels.ProductEditVm
 
+<style asp-name="@ResourceNames.MultiSelect"></style>
 <style asp-name="@ResourceNames.StoreStyles"></style>
 <style asp-name="@ResourceNames.Trumbowyg"></style>
 
 @{ var display = Model.Product.ParentId == null ? "" : "d-none"; }
-
-@{
-    void DisplayChildren(IDictionary<string, IEnumerable<CategoryRow>> childMap, CategoryRow parent)
-    {
-        if (!childMap.ContainsKey(parent.Id))
-            return;
-
-        var children = childMap[parent.Id].OrderBy(x => x.SortOrder);
-        <ul class="list-group">
-            @foreach (var child in children)
-            {
-                var selected = Model.Product.CategoryIds.Contains(child.Id);
-                <li class="list-group-item">
-                    <input type="checkbox" name="ProductPart.Product.CategoryIds" id="category_@child.Id" value="@child.Id" checked="@selected"/>
-                    <label for="category_@child.Id">@child.Name</label>
-                    @{ DisplayChildren(childMap, child); }
-                </li>
-            }
-        </ul>
-    }
-}
 
 <div asp-validation-summary="ModelOnly"></div>
 <input asp-for="Product.Id" type="hidden"/>
@@ -50,7 +29,8 @@
                 </div>
                 <div class="row mb-3 form-group">
                     <label asp-for="Product.Description" class="form-label">@T["Description"]</label>
-                    <textarea id="productDescription" asp-for="Product.Description" rows="5" class="form-control"></textarea>
+                    <textarea id="productDescription" asp-for="Product.Description" rows="5"
+                              class="form-control"></textarea>
                 </div>
                 <div class="row mb-3 form-group">
                     <label asp-for="Product.TaxCodeId" class="form-label">@T["Tax Code"]</label>
@@ -58,13 +38,38 @@
                     <span asp-validation-for="Product.TaxCodeId"></span>
                 </div>
                 <div class="row mb-3 form-group">
+                    <label class="form-label float-end" asp-for="Product.CategoryIds">@T["Categories"]</label>
+                    <div class="multi-select-wrapper">
+                        <select asp-for="Product.CategoryIds" multiple id="categoryList">
+                            @{
+                                var categoryItems = Model.CategoryItems ?? new List<SelectListItem>();
+
+                                foreach (var categoryItem in categoryItems)
+                                {
+                                    if (Model.Product.CategoryIds.Contains(categoryItem.Value))
+                                    {
+                                        <option value="@categoryItem.Value" selected>@categoryItem.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@categoryItem.Value">@categoryItem.Text</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                    <span asp-validation-for="Product.CategoryIds"></span>
+                </div>
+                <div class="row mb-3 form-group">
                     <label class="form-label" asp-for="Product.HasOptions">
-                        <input type="checkbox" asp-for="Product.HasOptions" class="check-box"/>@T["Has options like size and color"]
+                        <input type="checkbox" asp-for="Product.HasOptions"
+                               class="check-box"/>@T["Has options like size and color"]
                     </label>
                 </div>
                 <div class="row mb-3 form-group">
                     <label class="form-label" asp-for="Product.Featured">
-                        <input type="checkbox" asp-for="Product.Featured" class="check-box"/>@T["Featured on store home page?"]
+                        <input type="checkbox" asp-for="Product.Featured"
+                               class="check-box"/>@T["Featured on store home page?"]
                     </label>
                 </div>
             </div>
@@ -122,12 +127,14 @@
                 </div>
                 <div class="row mb-3 form-group">
                     <label asp-for="Product.LowStockPoint" class="form-label">@T["Low Stock Point"]</label>
-                    <input asp-for="Product.LowStockPoint" class="form-control" type="number" min="0" step="1" required/>
+                    <input asp-for="Product.LowStockPoint" class="form-control" type="number" min="0" step="1"
+                           required/>
                     <span asp-validation-for="Product.LowStockPoint"></span>
                 </div>
                 <div class="row mb-3 form-group">
                     <label class="form-label" asp-for="Product.AllowOutOfStock" class="form-label">
-                        <input type="checkbox" asp-for="Product.AllowOutOfStock" class="check-box"/>@T["Allow purchase when out of stock"]
+                        <input type="checkbox" asp-for="Product.AllowOutOfStock"
+                               class="check-box"/>@T["Allow purchase when out of stock"]
                     </label>
                 </div>
             </div>
@@ -164,43 +171,18 @@
             </div>
         </div>
     </div>
-    <div class="accordion-item @display">
-        <h2 class="accordion-header">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#categories">
-                @T["Categories"]
-            </button>
-        </h2>
-        <div id="categories" class="accordion-collapse collapse show">
-            <div class="accordion-body">
-                <div class="row mb-3 form-group">
-                    <label asp-for="Product.CategoryIds" class="form-label">@T["Categories"]</label>
-                    @{
-                        if (Model.Categories.Parents.Any())
-                        {
-                            <ul class="list-group">
-                                @foreach (var parent in Model.Categories.Parents)
-                                {
-                                    var selected = Model?.Product?.CategoryIds.Contains(parent.Id);
-
-                                    <li class="list-group-item">
-                                        <input type="checkbox" name="ProductPart.Product.CategoryIds" id="category_@parent.Id" value="@parent.Id" checked="@selected">
-                                        <label for="category_@parent.Id">@parent.Name</label>
-                                        @{ DisplayChildren(Model?.Categories.ChildMap, parent); }
-                                    </li>
-                                }
-                            </ul>
-                        }
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
+<script asp-name="@ResourceNames.MultiSelect"></script>
 <script asp-name="@ResourceNames.Trumbowyg"></script>
 
 <script type="text/javascript">
-    $('#productSummary').trumbowyg();
+    $('#categoryList').multiselect({
+        columns: 1,
+        search: false,
+        selectAll: false
+    });
     
+    $('#productSummary').trumbowyg();
     $('#productDescription').trumbowyg();
 </script>

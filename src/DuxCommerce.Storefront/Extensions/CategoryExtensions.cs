@@ -40,7 +40,7 @@ public static class CategoryExtensions
         return listItems;
     }
 
-    public static string GetFriendlyName(this IEnumerable<CategoryRow> trail)
+    private static string GetFriendlyName(this IEnumerable<CategoryRow> trail)
     {
         const string separator = " > ";
 
@@ -61,7 +61,7 @@ public static class CategoryExtensions
     {
         var itemMap = contentItems.ToDictionary(x => x.ContentItemId);
 
-        var allCategories = contentItems.Select(x => (CategoryRow)x.As<CategoryPart>().Row);
+        var allCategories = contentItems.Select(x => x.As<CategoryPart>().Row);
         var (parents, childMap) = CategoryCore.splitCategories(allCategories);
 
         return new CategoryMenuVm
@@ -76,11 +76,11 @@ public static class CategoryExtensions
     {
         var items = contentItems.Where(x =>
         {
-            var categoryRow = (CategoryRow)x.As<CategoryPart>().Row;
+            var categoryRow = x.As<CategoryPart>().Row;
             return categoryRow.Featured;
         }).ToList();
 
-        var categoryRows = items.Select(x => (CategoryRow)x.As<CategoryPart>().Row);
+        var categoryRows = items.Select(x => x.As<CategoryPart>().Row);
 
         return new CategoriesVm
         {
@@ -91,7 +91,7 @@ public static class CategoryExtensions
 
     public static IEnumerable<CategoryTrail> ToCategoryTrails(this IEnumerable<ContentItem> contentItems)
     {
-        var categoryRows = contentItems.Select(x => (CategoryRow)x.As<CategoryPart>().Row);
+        var categoryRows = contentItems.Select(x => x.As<CategoryPart>().Row);
         var trails = CategoryCore.getCategoryTrails(categoryRows);
 
         return trails.Select(trail =>
