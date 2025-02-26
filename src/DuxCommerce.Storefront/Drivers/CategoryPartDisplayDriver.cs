@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using DuxCommerce.OrchardCore.Catalog.Categories;
 using DuxCommerce.StoreBuilder.Catalog.Core;
-using DuxCommerce.StoreBuilder.Catalog.DataTypes;
 using DuxCommerce.Storefront.Views.AdminCategory.ViewModels;
 using DuxCommerce.Storefront.Views.AdminCategory.VmBuilders;
 using OrchardCore.ContentManagement.Display.ContentDisplay;
@@ -31,26 +30,23 @@ public class CategoryPartDisplayDriver(CategoryPartVmBuilder categoryPartVmBuild
             return await EditAsync(part, context);
 
         part.Row.Id = part.ContentItem.ContentItemId;
-        part.Row = CategoryCore.updateCategory((CategoryRow)part.Row, viewModel.Category);
+        part.Row = CategoryCore.updateCategory(part.Row, viewModel.Category);
 
         return await EditAsync(part, context);
     }
 
     private void BuildLinksModel(CategoryPart part, CategoryLinksVm viewModel)
     {
-        if (part.ContentItem?.Id > 0)
-        {
-            viewModel.ContentItem = part.ContentItem;
-
-            viewModel.EditLink = true;
-        }
+        if (!(part.ContentItem?.Id > 0)) return;
+        
+        viewModel.ContentItem = part.ContentItem;
+        viewModel.EditLink = true;
     }
 
     private Task BuildModel(CategoryPart part, CategoryEditVm viewModel)
     {
-        if (part.ContentItem.Id > 0)
-            return categoryPartVmBuilder.BuildEditModel(part, viewModel);
-
-        return categoryPartVmBuilder.BuildCreateModel(viewModel);
+        return part.ContentItem.Id > 0
+            ? categoryPartVmBuilder.BuildEditModel(part, viewModel)
+            : categoryPartVmBuilder.BuildCreateModel(viewModel);
     }
 }
