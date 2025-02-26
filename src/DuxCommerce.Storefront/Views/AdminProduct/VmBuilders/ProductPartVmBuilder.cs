@@ -114,18 +114,6 @@ public class ProductPartVmBuilder(
         return taxCodes.Select(x => new SelectListItem(x.Name, x.Id)).ToList();
     }
 
-    private async Task<AdminCategoriesVm> GetCategories()
-    {
-        var categories = await categoryStore.GetAll();
-        var (parents, childMap) = CategoryCore.splitCategories(categories);
-
-        return new AdminCategoriesVm
-        {
-            Parents = parents,
-            ChildMap = childMap
-        };
-    }
-
     private ProductModel ToProductModel(ProductRow product)
     {
         return new ProductModel
