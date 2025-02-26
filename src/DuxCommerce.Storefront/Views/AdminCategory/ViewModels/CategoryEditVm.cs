@@ -7,5 +7,5 @@ namespace DuxCommerce.Storefront.Views.AdminCategory.ViewModels;
 public class CategoryEditVm
 {
     public CategoryModel Category { get; set; } = new();
-    public IEnumerable<SelectListItem> CategoryListItems { get; set; } = new List<SelectListItem>();
+    public IEnumerable<SelectListItem> CategoryItems { get; set; } = new List<SelectListItem>();
 }

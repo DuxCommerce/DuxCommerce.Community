@@ -35,7 +35,7 @@ public class CategoryPartVmBuilder(
     public async Task<CategoryEditVm> BuildCreateModel(CategoryEditVm editVm)
     {
         var model = editVm ?? new CategoryEditVm();
-        model.CategoryListItems = await GetParentCategories();
+        model.CategoryItems = await GetParentCategories();
 
         return model;
     }
@@ -45,7 +45,7 @@ public class CategoryPartVmBuilder(
         var categoryRow = part.Row;
 
         model.Category = ToCategoryModel(categoryRow);
-        model.CategoryListItems = await GetParentCategories(categoryRow.Id);
+        model.CategoryItems = await GetParentCategories(categoryRow.Id);
 
         return model;
     }

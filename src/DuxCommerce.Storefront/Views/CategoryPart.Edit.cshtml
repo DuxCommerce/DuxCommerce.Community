@@ -27,7 +27,7 @@
 </div>
 <div class="row mb-3 form-group">
     <label class="form-label float-end" asp-for="Category.ParentId">@T["Parent Category"]</label>
-    <select asp-for="Category.ParentId" asp-items="Model.CategoryListItems" class="form-control"></select>
+    <select asp-for="Category.ParentId" asp-items="Model.CategoryItems" class="form-control"></select>
     <span asp-validation-for="Category.ParentId"></span>
 </div>
 
