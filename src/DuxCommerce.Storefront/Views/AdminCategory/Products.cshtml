@@ -1,6 +1,5 @@
 @using DuxCommerce.OrchardCore
 @using DuxCommerce.OrchardCore.Catalog.Products
-@using DuxCommerce.StoreBuilder.Catalog.DataTypes
 @using DuxCommerce.Storefront.Extensions
 @using OrchardCore.ContentManagement
 @model DuxCommerce.Storefront.Views.AdminCategory.ViewModels.CategoryProductsVm
@@ -28,7 +27,7 @@
             @foreach (var contentItem in Model.Products)
             {
                 var image = contentItem.GetImage<ProductImagePart>();
-                var product = (ProductRow)contentItem.As<ProductPart>().Row;
+                var product = contentItem.As<ProductPart>().Row;
 
                 <tr>
                     <td>

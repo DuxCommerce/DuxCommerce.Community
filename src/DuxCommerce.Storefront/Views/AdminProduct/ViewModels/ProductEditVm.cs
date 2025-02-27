@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using DuxCommerce.StoreBuilder.Catalog.Requests;
 using Microsoft.AspNetCore.Mvc.Rendering;

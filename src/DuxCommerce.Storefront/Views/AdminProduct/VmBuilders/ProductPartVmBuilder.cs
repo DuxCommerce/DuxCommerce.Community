@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DuxCommerce.OrchardCore.Catalog.Products;
-using DuxCommerce.StoreBuilder.Catalog.Core;
 using DuxCommerce.StoreBuilder.Catalog.DataStores;
 using DuxCommerce.StoreBuilder.Catalog.DataTypes;
 using DuxCommerce.StoreBuilder.Catalog.Requests;
@@ -32,6 +30,7 @@ public class ProductPartVmBuilder(
     IOptionStore optionStore,
     IShapeFactory shapeFactory)
 {
+    public ICategoryStore CategoryStore { get; } = categoryStore;
     private readonly dynamic _new = shapeFactory;
 
     public async Task<ProductIndexVm> BuildIndexModel(ProductSearchVm searchVm, PagerParameters pagerParameters)
@@ -62,7 +61,7 @@ public class ProductPartVmBuilder(
 
     public Task BuildEditModel(ProductPart part, ProductEditVm model)
     {
-        var product = (ProductRow)part.Row;
+        var product = part.Row;
 
         model.Product = ToProductModel(product);
         model.Links = new ProductLinksVm { ContentItem = part.ContentItem, EditLink = true };

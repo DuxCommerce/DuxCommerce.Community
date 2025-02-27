@@ -106,7 +106,7 @@ public class InventoryVmBuilder(
     {
         return contentItems
             .Select(x => x.As<ProductPart>())
-            .Select(x => (ProductRow)x.Row)
+            .Select(x => x.Row)
             .Select(ToInventoryModel)
             .ToList();
     }

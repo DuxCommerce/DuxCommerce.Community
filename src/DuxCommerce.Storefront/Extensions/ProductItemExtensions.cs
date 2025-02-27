@@ -11,7 +11,7 @@ public static class ProductItemExtensions
     public static List<ProductRow> ToProductRows(this IEnumerable<ContentItem> contentItems)
     {
         return contentItems
-            .Select(x => (ProductRow)x.As<ProductPart>().Row)
+            .Select(x => x.As<ProductPart>().Row)
             .ToList();
     }
 }

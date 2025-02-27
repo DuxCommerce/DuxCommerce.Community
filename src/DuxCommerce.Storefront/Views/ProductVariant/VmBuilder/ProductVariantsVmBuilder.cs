@@ -18,7 +18,7 @@ public class ProductVariantsVmBuilder(IProductStore productStore)
         var variants = await productStore.GetVariants(productId);
 
         var productItem = await productStore.GetItem<ContentItem>(productId);
-        var productRow = (ProductRow)productItem.As<ProductPart>().Row;
+        var productRow = productItem.As<ProductPart>().Row;
 
         return new ProductVariantsVm
         {
@@ -31,7 +31,7 @@ public class ProductVariantsVmBuilder(IProductStore productStore)
     public async Task<ProductVariantsVm> BuildIndexModel(string productId, ProductVariantsVm model)
     {
         var productItem = await productStore.GetItem<ContentItem>(productId);
-        var productRow = (ProductRow)productItem.As<ProductPart>().Row;
+        var productRow = productItem.As<ProductPart>().Row;
 
         model.Product = productRow;
 

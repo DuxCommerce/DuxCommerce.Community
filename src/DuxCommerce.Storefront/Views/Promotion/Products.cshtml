@@ -32,7 +32,7 @@
             @foreach (var contentItem in Model.Products)
             {
                 var image = contentItem.GetImage<ProductImagePart>();
-                var product = (ProductRow)contentItem.As<ProductPart>().Row;
+                var product = contentItem.As<ProductPart>().Row;
 
                 <tr>
                     <td>
